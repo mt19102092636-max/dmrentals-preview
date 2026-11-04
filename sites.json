@@ -1,15 +1,7 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-04T18:13:20+08:00",
+  "updatedAt": "2026-11-04T18:34:36+08:00",
   "sites": [
-    {
-      "slug": "activity-product-inventory",
-      "name": "活动商品库存列表",
-      "summary": "集中查看活动商品下商家的报名库存、订单占用和派单资格，并支持商家维护库存。",
-      "path": "previews/activity-product-inventory/",
-      "createdAt": "2026-11-04T13:42:34+08:00",
-      "updatedAt": "2026-11-04T13:42:34+08:00"
-    },
     {
       "slug": "butler-customer-drop-pool",
       "name": "本管家客户掉落与公海管理",
