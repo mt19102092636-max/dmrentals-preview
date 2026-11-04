@@ -1,7 +1,7 @@
 # dmrentals-preview
 雕马 HTML 原型预览库：集中保存、公开访问并持续更新多个 HTML 页面
 
-- [在线预览目录](https://jieqiqiu987-cmyk.github.io/dmrentals-preview/)
+- [在线预览目录](https://mt19102092636-max.github.io/dmrentals-preview/)
 - [新增、更新、删除指令模板](./指令模板.md)
 - [发布 Skill](./skills/dmrentals-preview/SKILL.md)
 

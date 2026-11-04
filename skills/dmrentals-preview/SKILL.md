@@ -1,12 +1,12 @@
 ---
 name: dmrentals-preview
-description: 将 HTML 原型新增、更新或删除到 jieqiqiu987-cmyk/dmrentals-preview，并发布 GitHub Pages 可分享链接。用户要求管理雕马预览库时使用。
+description: 将 HTML 原型新增、更新或删除到 mt19102092636-max/dmrentals-preview，并发布 GitHub Pages 可分享链接。用户要求管理雕马预览库时使用。
 ---
 
 # 雕马预览库发布
 
-目标仓库：https://github.com/jieqiqiu987-cmyk/dmrentals-preview
-预览入口：https://jieqiqiu987-cmyk.github.io/dmrentals-preview/
+目标仓库：https://github.com/mt19102092636-max/dmrentals-preview
+预览入口：https://mt19102092636-max.github.io/dmrentals-preview/
 
 ## 工作流程
 
