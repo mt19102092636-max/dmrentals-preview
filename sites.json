@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-04T18:34:36+08:00",
+  "updatedAt": "2026-11-05T13:57:43+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -9,6 +9,14 @@
       "path": "previews/butler-customer-drop-pool/",
       "updatedAt": "2026-11-04T18:13:20+08:00",
       "createdAt": "2026-11-04T18:13:20+08:00"
+    },
+    {
+      "slug": "alipay-lead-auto-allocation",
+      "name": "支付宝运营留资自动分配",
+      "summary": "支付宝运营留资自动进入电销客资池，联动客户列表、分配日志、操作记录及客资转化看板，附增量 PRD 与变更标记。",
+      "path": "previews/alipay-lead-auto-allocation/",
+      "updatedAt": "2026-11-05T13:57:43+08:00",
+      "createdAt": "2026-11-05T13:57:43+08:00"
     }
   ]
 }
