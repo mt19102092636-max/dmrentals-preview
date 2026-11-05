@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-05T15:29:09+08:00",
+  "updatedAt": "2026-11-05T15:47:35+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -13,9 +13,9 @@
     {
       "slug": "alipay-lead-auto-allocation",
       "name": "支付宝运营留资自动分配",
-      "summary": "基础配置新增支付宝表单来源，运营留资展示同步状态，联动电销自动分配、简要操作记录与客资转化看板。",
+      "summary": "配置支付宝表单来源及渠道释义，联动运营留资状态、电销自动分配、简要操作记录与转化看板。",
       "path": "previews/alipay-lead-auto-allocation/",
-      "updatedAt": "2026-11-05T15:29:09+08:00",
+      "updatedAt": "2026-11-05T15:47:35+08:00",
       "createdAt": "2026-11-05T13:57:43+08:00"
     }
   ]
