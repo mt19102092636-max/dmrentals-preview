@@ -91,6 +91,7 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 .report-original-details[open] .expand-result,.report-original-details:not([open]) .collapse-result{display:none}.report-original-details h3{font-size:14px}.report-original-details p{margin:5px 0;color:#606266}
 .comparison-months{width:100%;display:flex;align-items:end;flex-wrap:wrap;gap:8px;margin-bottom:3px}.comparison-months>div{display:flex;flex-wrap:wrap;gap:8px 13px}.comparison-month{display:flex;align-items:end;gap:4px}.comparison-month button{font-size:12px;padding:4px 7px}.comparison-table th:not(:first-child){min-width:150px}.comparison-table th:first-child,.comparison-table td:first-child{position:sticky;left:0;background:#f5f7f7;z-index:1}.comparison-table td small{display:inline-block}.comparison-delta{color:#426b61}
 .trend-card{margin:12px 0;padding:12px;border:1px solid #dce6e2;border-radius:6px}.trend-card header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.trend-card h2{margin:0;font-size:15px}.trend-legend{display:flex;gap:6px 14px;flex-wrap:wrap;margin:6px 0;color:#51635d;font-size:12px}.trend-legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:middle}.trend-chart{display:block;width:100%;height:auto;min-height:155px}.trend-chart text{fill:#596963;font-size:11px}.trend-chart circle:hover,.trend-chart circle:focus{r:5;outline:none}.trend-card .muted{margin:4px 0}
+.trend-card{position:relative}.trend-point{cursor:crosshair}.trend-point:hover .trend-marker,.trend-point:focus .trend-marker{r:5}.trend-point:focus{outline:none}.trend-tooltip{position:absolute;z-index:3;pointer-events:none;max-width:calc(100% - 16px);padding:6px 9px;border-radius:5px;background:#253934;color:#fff;font-size:12px;line-height:1.4;box-shadow:0 2px 8px #0002}
 </style>
 </head>
 <body>
@@ -936,13 +937,39 @@ function trendChart(){
       const px=x(monthly?Number(point.date.slice(-2)):index),py=y(point.value);
       path+=(penDown?'L':'M')+px+' '+py+' ';
       penDown=true;
-      return '<circle cx="'+px+'" cy="'+py+'" r="2.8" fill="'+line.color+'"><title>'+line.label+' '+point.date+' · '+fmt(point.value)+' '+unit+'</title></circle>';
+      const label=line.label+' '+point.date+' · '+fmt(point.value)+' '+unit;
+      return '<g class="trend-point" tabindex="0" role="img" aria-label="'+label+'">'+
+        '<circle cx="'+px+'" cy="'+py+'" r="9" fill="transparent"/>'+
+        '<circle class="trend-marker" cx="'+px+'" cy="'+py+'" r="2.8" fill="'+line.color+'" pointer-events="none"/></g>';
     }).join('');
     return '<path d="'+path+'" fill="none" stroke="'+line.color+'" stroke-width="2"/>'+dots;
   }).join('');
-  return heading+'<p class="muted">单位 '+unit+(monthly?' · 按月内日序对齐':'')+' · 悬停数据点查看日期与数值</p>'+
-    '<svg class="trend-chart" viewBox="0 0 780 200" role="img" aria-label="每日'+(trendMetric==='count'?'调用次数':'调用费用')+'折线图">'+grid+labels+lines+'</svg></section>';
+  return heading+'<p class="muted">单位 '+unit+(monthly?' · 按月内日序对齐':'')+' · 悬停或聚焦数据点立即查看日期与数值</p>'+
+    '<svg class="trend-chart" viewBox="0 0 780 200" role="group" aria-label="每日'+(trendMetric==='count'?'调用次数':'调用费用')+'折线图">'+grid+labels+lines+'</svg><div class="trend-tooltip" aria-hidden="true" hidden></div></section>';
 }
+function showTrendTooltip(event){
+  const point=event.target.closest('.trend-point');
+  if(!point)return;
+  const card=point.closest('.trend-card');
+  const tooltip=card.querySelector('.trend-tooltip');
+  const marker=point.querySelector('.trend-marker').getBoundingClientRect();
+  const bounds=card.getBoundingClientRect();
+  tooltip.textContent=point.getAttribute('aria-label');
+  tooltip.hidden=false;
+  const x=marker.left+marker.width/2-bounds.left;
+  tooltip.style.left=Math.max(8,Math.min(x-tooltip.offsetWidth/2,bounds.width-tooltip.offsetWidth-8))+'px';
+  tooltip.style.top=Math.max(4,marker.top-bounds.top-tooltip.offsetHeight-8)+'px';
+}
+function hideTrendTooltip(event){
+  const point=event.target.closest('.trend-point');
+  if(!point||point.contains(event.relatedTarget))return;
+  point.closest('.trend-card').querySelector('.trend-tooltip').hidden=true;
+}
+const trendEvents=$('content');
+trendEvents.addEventListener('pointerover',showTrendTooltip);
+trendEvents.addEventListener('pointerout',hideTrendTooltip);
+trendEvents.addEventListener('focusin',showTrendTooltip);
+trendEvents.addEventListener('focusout',hideTrendTooltip);
 function exportCosts(){
   const headers=['日期','产品名称','服务商名称','单价（元/次）','调用次数','调用费用（元）','计费次数','异常次数'];
   const byRule=comparisonMode==='rule';
