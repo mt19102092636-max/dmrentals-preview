@@ -1,0 +1,1476 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>风控基座 · 三方调用成本监控</title>
+  <style>
+*{box-sizing:border-box}body{margin:0;background:#eef2f1;color:#243532;font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,select{font:inherit}button,a{cursor:pointer}button:focus-visible,a:focus-visible,[role=separator]:focus-visible{outline:2px solid #247b66;outline-offset:3px}[hidden]{display:none!important}button,.button{border:1px solid #d8dedc;border-radius:4px;background:#fff;padding:7px 13px;color:#34413f;text-decoration:none;white-space:nowrap}button:hover,.button:hover{border-color:#7fba76;color:#398443}button:disabled{opacity:.42;cursor:default}.primary{background:#65a957;border-color:#65a957;color:white}.primary:hover{background:#508c43;color:white}.link{background:none;border:0;padding:2px 0;color:#246ab1}.prototype-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:#fff;border-bottom:1px solid #dce6e2}.prototype-brand{display:flex;align-items:center;gap:12px;font-weight:750;font-size:17px}.prototype-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#136651;color:#fff}.prototype-status,.muted,small{color:#62716d;font-size:12px}.prototype-workspace{display:grid;grid-template-columns:154px minmax(0,1fr);gap:12px;padding:14px;align-items:start}.prototype-rail{padding:14px 10px;background:#fff;border:1px solid #dde6e2;border-radius:8px}.eyebrow{font-size:11px;letter-spacing:.12em;color:#42786a;font-weight:750}.prototype-rail strong{display:block;margin:5px 0 14px}.prototype-rail button,.prototype-rail a{display:block;text-align:left;width:100%;margin:5px 0;white-space:normal}.prototype-rail button[aria-current=true]{background:#e7f3ed;border-color:#c6e0d3;color:#136651;font-weight:700}.prototype-layout{display:grid;grid-template-columns:minmax(0,var(--left,72fr)) 10px minmax(280px,var(--right,28fr));gap:6px;min-width:0;align-items:start}.prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr) 54px}.prd-collapsed .prototype-resizer,.prd-collapsed .prd-panel-content,.prd-collapsed .prd-panel-head h2{display:none}.prd-collapsed .prd-toggle{writing-mode:vertical-rl}.prototype-resizer{height:100%;min-height:50px;cursor:col-resize;touch-action:none;display:grid;place-items:center}.prototype-resizer:after{content:"";width:4px;height:46px;border-radius:4px;background:#afc6be}.prototype-board,.prototype-prd{min-width:0;background:#fff;border:1px solid #dce6e2;border-radius:8px;overflow:hidden}.prototype-prd{max-height:calc(100vh - 94px);overflow:auto;position:sticky;top:12px}.prd-panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;background:#f7fbf9;border-bottom:1px solid #e2ebe6;position:sticky;top:0;z-index:1}.prd-panel-head h2{font-size:15px;margin:0}.prd-panel-content{padding:4px 14px 14px}.prd-section{border-bottom:1px solid #e7eeeb;padding:10px 0}.prd-section:last-child{border:0}.prd-section summary{cursor:pointer;color:#176754;font-weight:700}.prd-section p,.prd-section li,.modal-context-prd li{font-size:13px;line-height:1.65}.prd-section ul,.modal-context-prd ul{padding-left:19px;margin:8px 0}.prd-section li+li,.modal-context-prd li+li{margin-top:5px}
+.appbar{background:#1d1d1d;color:#eee;display:flex;align-items:center;gap:12px;padding:10px 15px;min-height:49px}.appbar .appmark{color:#89cb77;font-size:19px}.appbar .account{margin-left:auto}.appbody{display:grid;grid-template-columns:minmax(0,1fr);min-height:620px}.appnav{border-right:1px solid #e6e9ec;padding:12px 0;color:#52605f;font-size:12px}.appnav div{padding:9px 11px}.appnav .selected{background:#ecf3fd;border-right:2px solid #70a3ef;color:#2868af}.appnav .group{font-weight:700;margin-top:12px}.breadcrumb{padding:10px 13px;border-bottom:1px solid #e6e9ec;color:#586866;font-size:12px}.tabs{padding:0 13px;display:flex;gap:16px;overflow:auto;border-bottom:1px solid #e6e9ec;white-space:nowrap;font-size:12px}.tabs>*{padding:11px 0}.tabs button{background:transparent;border:0;border-radius:0}.tabs button[aria-current=true]{color:#508c43;border-bottom:2px solid #7abd6d;font-weight:700}.content{padding:16px 13px 20px;min-width:0}h1{font-size:22px;margin:2px 0 3px}.heading{display:flex;align-items:start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:13px}.heading p{margin:0}.heading>div+div{display:flex;gap:6px;flex-wrap:wrap}.filters select{max-width:min(215px,65vw)}.filters{padding:11px;background:#f5f6fa;border:1px solid #e8ebf0;border-radius:4px;display:flex;align-items:end;flex-wrap:wrap;gap:8px;margin-bottom:13px}.filters label{display:grid;gap:4px;font-size:12px;color:#475652}.filters input,.filters select{min-width:0;border:1px solid #d8dedc;border-radius:4px;height:33px;padding:3px 6px;background:#fff;color:#243532}.filters button{height:33px;padding:4px 11px}.error{color:#a3312a;margin:0 0 8px;font-size:13px}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:8px}.metric{border:1px solid #e1e8e4;border-radius:5px;padding:9px;background:#fff;min-width:0}.metric small{display:block}.metric b{display:block;font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}.metric:first-child{background:#f0f8ef;border-color:#d4e7d0}.anomaly{margin:12px 0;padding:8px 10px;background:#fff8e9;border:1px solid #f4e2b7;border-radius:4px;color:#805219;display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;font-size:12px}.anomaly .link{color:#795018;text-decoration:underline}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:14px 0 8px;flex-wrap:wrap}.section-head h2{font-size:15px;margin:0}.segments{display:flex;gap:4px;flex-wrap:wrap}.segments button{padding:4px 8px;font-size:12px}.segments button[aria-pressed=true]{background:#edf6ea;border-color:#b6d7ae;color:#367037}.scroll{overflow:auto;border:1px solid #e3e8e6;border-radius:4px;max-width:100%}table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid #e6ebea}th{background:#f4f6fa;color:#4a5956}tr:last-child td{border-bottom:0}tr:nth-child(even){background:#fafbfc}.subrow td:first-child{padding-left:20px;color:#65746f}.num{font-variant-numeric:tabular-nums}.pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:9px;font-size:12px}.pager button{padding:3px 8px}.pill{display:inline-block;border-radius:4px;padding:1px 5px;background:#eef4ef;color:#336a39}.warn{background:#fff0db;color:#8c4d08}.empty{padding:22px;text-align:center;color:#667570}
+dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24px));max-width:none;max-height:calc(100% - 24px);color:inherit}dialog::backdrop{background:#17262170;backdrop-filter:blur(3px)}.modal-context-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;align-items:start;gap:12px}.modal,.modal-context-prd{background:#fff;border-radius:7px;padding:15px;min-width:0}.modal h2,.modal-context-prd h2{font-size:17px;margin:0 0 10px}.modal-context-prd h3{font-size:14px;color:#176754;margin:10px 0 4px}.modal-head{display:flex;justify-content:space-between;align-items:start}.modal-foot{display:flex;justify-content:flex-end;margin-top:12px}.pairs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}.pairs div{background:#f5f7f7;padding:7px 9px}.pairs dt{color:#5c6d67;font-size:12px}.pairs dd{margin:2px 0 0;overflow-wrap:anywhere}
+@media(max-width:1120px){.prototype-layout,.prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr)}.prototype-resizer{display:none}.prototype-prd{position:static;max-height:none}.prd-collapsed .prd-toggle{writing-mode:initial}}
+@media(max-width:690px){.prototype-workspace{display:block;padding:8px}.prototype-rail{margin-bottom:8px}.prototype-role-nav{display:flex;gap:6px;flex-wrap:wrap}.prototype-role-nav>*{flex:1 1 100px}.prototype-rail strong{margin:3px 0}.prototype-topbar{padding:9px}.prototype-status{display:none}.appbody{display:block;min-height:0}.appnav{display:none}.content{padding:12px 9px}.modal-context-layout{grid-template-columns:minmax(0,1fr)}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.appbar{background:#1b1b1b;min-height:56px;padding:0 14px;white-space:nowrap;overflow:auto}
+.appbar .appmark{display:grid;place-items:center;width:29px;height:31px;border-radius:4px;background:#313131;color:#55c45d}
+.appmodules{display:flex;align-items:stretch;height:56px;color:#d1d1d1;gap:3px}
+.appmodules span{display:grid;place-items:center;padding:0 8px;font-size:12px;position:relative}
+.appmodules .active{background:#505050;color:white;border-radius:5px}
+.appmodules .active:after{content:"";width:19px;height:3px;border-radius:3px;background:#409eff;position:absolute;bottom:5px}
+.appbody{grid-template-columns:145px minmax(0,1fr);background:#f0f2f5}
+.appnav{background:white;padding:3px 0;color:#303133}
+.appnav div{padding:12px 9px}
+.appnav .appsub{padding-left:23px}
+.appnav .selected{color:#409eff;background:#ecf5ff;border-right:2px solid #409eff}
+.appmain{min-width:0}
+.breadcrumb{background:#fff;padding:13px;color:#606266}
+.appsurface{margin:8px;background:white}
+.tabs{gap:26px;margin:0 12px;padding:0;align-items:stretch}
+.tabs>*{padding:12px 0;font-size:13px;color:#303133}
+.tabs button[aria-current=true]{color:#55bc55;border-color:#5bc45b}
+.content{padding:15px 14px 24px}
+.rule-filters{display:block;padding:14px 15px;margin-bottom:14px;background:#f4f6fa;border-color:#e0e7f1}
+.rule-inputs,.rule-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.rule-inputs label{display:flex;align-items:center;gap:7px;white-space:nowrap;color:#51565e}
+.rule-inputs input,.rule-inputs select{width:136px}
+.rule-actions{justify-content:flex-end;margin-top:16px;gap:7px}
+.rule-actions .primary{background:#58c85c;border-color:#58c85c}
+.rule-actions .added{color:#378f3e;border-color:#a6dca5;background:#f1faf0}
+.rule-table table{min-width:1100px}
+.rule-table th,.rule-table td{border:1px solid #dce3ed;padding:9px 10px}
+.rule-table th{color:#303133;background:#f4f6fa}
+.rule-table td{color:#606266}
+.rule-table td:first-child{min-width:140px}
+.rule-table td:nth-child(3){min-width:275px;white-space:normal}
+.rule-table td:last-child,.rule-table th:last-child{text-align:center;background:#fff}
+.rule-table th:last-child{background:#f4f6fa}
+.rule-table td:last-child button{display:block;margin:auto}
+.rule-table tr:nth-child(even) td{background:#f7f7f7}
+.rule-table .link{color:#409eff}
+.rule-table .danger{color:#ef7777}
+.rule-conditions>div+div{margin-top:7px}
+.rule-conditions b{margin-right:5px;color:#454545;font-weight:550}
+.rule-tag{display:inline-block;margin:1px 3px 1px 0;padding:0 4px;background:#f1f1f3;border:1px solid #e7e7ea;border-radius:3px;color:#797f87;font-size:11px}
+.rule-status{display:inline-block;width:34px;height:17px;border-radius:20px;background:#d9dce4;vertical-align:middle;padding:2px}
+.rule-status:before{content:"";display:block;width:13px;height:13px;border-radius:50%;background:white}
+.rule-status.on{background:#60c85e}
+.rule-status.on:before{margin-left:auto}
+@media(max-width:690px){.appbody{display:block}.appmodules{display:none}.appsurface{margin:5px}.content{padding:10px 8px}.tabs{gap:14px}.rule-inputs label{justify-content:space-between;flex:1 1 190px}.rule-inputs input,.rule-inputs select{width:130px}.rule-actions{justify-content:flex-start}}
+.shop-tabs{display:flex;flex-wrap:wrap;gap:7px;padding:10px;border:1px solid #e4e9f1;border-radius:5px;margin:12px 0}.shop-tabs button[aria-pressed=true]{background:#409eff;border-color:#409eff;color:white}
+.shop-order{border:1px solid #e0e7f0;border-radius:5px;overflow:hidden;margin-bottom:10px}.shop-order header{padding:8px 10px;background:#f3f5f8;display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#5f6876}.shop-order section{padding:12px 10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:9px}.shop-order footer{padding:7px 10px;border-top:1px solid #edf0f5}.shop-order .link{color:#409eff}
+.report-products details{margin-top:8px;border:1px solid #e1e8ef;border-radius:4px;padding:8px}.report-products summary{cursor:pointer;color:#246ab1}.modal-foot{gap:8px}.export-options label{display:block;margin:8px 0}
+
+.shop-scroll{overflow:auto}.shop-grid{display:grid;grid-template-columns:1.28fr .92fr 1.14fr 1.05fr 1.05fr .72fr;min-width:1060px}
+.shop-column-head{background:#f4f6f9;font-weight:650;margin-bottom:12px;border-radius:4px;text-align:center;padding:8px}
+.shop-order{min-width:1060px}.shop-order header{align-items:center;gap:14px}.shop-order header .old-actions{margin-left:auto;color:#639bff}
+.shop-order .shop-data>div{min-height:132px;padding:8px 10px;border-right:1px solid #e6eaf1;color:#606266;font-size:12px}
+.shop-order .shop-data p{margin:0 0 5px}.shop-order .shop-data>div:last-child{text-align:center}
+.shop-order .shop-data h4{margin:0 0 7px;color:#303133}.shop-order .shop-data strong{color:#303133}
+.shop-order .shop-meta{padding:5px 10px;color:#666;font-size:12px;border-top:1px solid #edf0f5}.shop-order .shop-meta a{color:#409eff;text-decoration:none}
+.shop-badge{display:inline-block;color:#409eff;background:#ecf5ff;border-radius:3px;padding:2px 6px;margin-right:5px}.shop-badge.green{color:#459453;background:#edf8ed}
+.shop-tabs .badge{display:inline-block;margin-left:5px;background:#f36c72;color:white;border-radius:12px;padding:0 5px;font-size:11px}.shop-tabs button[aria-pressed=true] .badge{background:white;color:#409eff}
+.shop-form .rule-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 14px}.shop-form .rule-inputs label{justify-content:space-between}
+.shop-form .rule-inputs input,.shop-form .rule-inputs select{width:125px}
+.shop-form .rule-inputs[hidden]{display:none}.shop-form .rule-inputs+.rule-inputs{margin-top:10px}
+.shop-form button[aria-disabled=true],.report-actions button[aria-disabled=true]{cursor:default}
+.report-tabs{display:flex;gap:24px;border-bottom:1px solid #dcdfe6;margin-bottom:18px;overflow:auto}
+.report-tabs button{border:0;background:white;border-radius:0;padding:9px 0}.report-tabs button[aria-pressed=true]{color:#69ac58;border-bottom:2px solid #77b864}
+.report-notice,.report-risk{color:#946826;background:#faf2e4;border:1px solid #eddfc6;border-radius:8px;padding:12px 14px;margin:12px 0}
+.report-notice p{margin:3px 0;font-size:12px;line-height:1.75}.report-actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.report-actions h1{font-size:18px;margin:0}.report-actions div{display:flex;gap:6px;flex-wrap:wrap}.report-actions button{font-size:12px;padding:5px 7px;border-color:#a9cea0;color:#568a49}
+.report-privacy{padding:8px;color:#92703b;background:#fdf7e8;font-size:12px;margin:10px 0}
+.report-card{border:1px solid #e6e8ec;border-radius:8px;overflow:hidden;margin:12px 0}.report-card h2{font-size:15px;padding:9px 12px;margin:0;border-bottom:1px solid #e6e8ec}
+.report-card .pairs{gap:1px;background:#eee;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.report-card .pairs div{background:#fff}
+.report-card .report-products{padding:4px 10px 10px}.report-section-title{color:#66aa56;border-bottom:1px solid #dcdfe6;font-size:14px;padding:0 0 8px}
+.report-empty{padding:28px 10px;text-align:center;color:#9a9da6}.report-empty strong{display:block;color:#737781}
+.report-back{display:inline-block;margin:12px 0;color:#409eff}
+.report-actions h1 small{display:inline-block;margin-left:8px;font-weight:400}.report-actions .report-cost-trigger{background:#f0f8ed}
+.report-result-title{display:flex;gap:8px;align-items:center;margin:9px 0;font-size:14px}.report-result-title small{padding:0 6px;border-radius:8px;background:#edf4e9;color:#588748}
+.report-result-table th{width:37%;font-weight:500;background:#f7f8fa}.report-result-table td{white-space:normal}.report-result-table .scroll{border-color:#eef0f2}
+.report-original-details{margin:10px 0}.report-original-details>summary{width:fit-content;cursor:pointer;color:#409eff;background:#ecf5ff;border:1px solid #badcff;padding:3px 10px;border-radius:4px}
+.report-original-details[open] .expand-result,.report-original-details:not([open]) .collapse-result{display:none}.report-original-details h3{font-size:14px}.report-original-details p{margin:5px 0;color:#606266}
+.comparison-months{width:100%;display:flex;align-items:end;flex-wrap:wrap;gap:8px;margin-bottom:3px}.comparison-months>div{display:flex;flex-wrap:wrap;gap:8px 13px}.comparison-month{display:flex;align-items:end;gap:4px}.comparison-month button{font-size:12px;padding:4px 7px}.comparison-table th:not(:first-child){min-width:150px}.comparison-table th:first-child,.comparison-table td:first-child{position:sticky;left:0;background:#f5f7f7;z-index:1}.comparison-table td small{display:inline-block}.comparison-delta{color:#426b61}
+.trend-card{margin:12px 0;padding:12px;border:1px solid #dce6e2;border-radius:6px}.trend-card header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.trend-card h2{margin:0;font-size:15px}.trend-legend{display:flex;gap:6px 14px;flex-wrap:wrap;margin:6px 0;color:#51635d;font-size:12px}.trend-legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:middle}.trend-chart{display:block;width:100%;height:auto;min-height:155px}.trend-chart text{fill:#596963;font-size:11px}.trend-chart circle:hover,.trend-chart circle:focus{r:5;outline:none}.trend-card .muted{margin:4px 0}
+</style>
+</head>
+<body>
+<header class="prototype-topbar"><div class="prototype-brand"><span class="prototype-mark">雕</span> 风控基座 · 三方调用成本监控</div><span class="prototype-status">需求评审原型 · 模拟数据</span></header>
+<div class="prototype-workspace">
+<aside class="prototype-rail"><span class="eyebrow">评审导航</span><strong>运营后台</strong><nav class="prototype-role-nav" aria-label="原型页面"><button data-view="base" aria-current="true">风控基座</button><button data-view="prices">产品单价配置</button><button data-view="overview">每日调用费用对比</button><button data-view="commerce">商城订单列表</button></nav></aside>
+<div class="prototype-layout" id="layout">
+<main class="prototype-board">
+<header class="appbar"><span class="appmark" aria-hidden="true">♧</span><b>运营后台管理系统</b><div class="appmodules" aria-label="后台模块"><span id="opsModule" class="active">运营</span><span id="shopModule">商城</span><span>资产</span><span>CRM</span><span>分销</span><span>商学院</span><span>工单</span></div><span class="account">admin ⌄</span></header>
+<div class="appbody">
+<aside class="appnav" id="opsNav" aria-label="后台菜单位置"><div>◷　数据</div><div>▣　营销中心</div><div>♧　活动管理</div><div>◎　首页与页面配置</div><div>▤　分类管理</div><div>⊙　全局内容　⌃</div><div class="appsub">帮助中心</div><div class="appsub">页面banner设置</div><div class="appsub">注解设置</div><div class="appsub">商家流量分配</div><div class="appsub selected">平台风控设置</div><div class="appsub">派单规则设置</div><div>☏　消息中心</div><div>♙　权限管理</div><div>⚙　系统管理</div><div>✧　AI管理</div></aside>
+<aside class="appnav" id="shopNav" aria-label="商城菜单位置" hidden><div>▣　订单管理　⌃</div><div class="appsub selected">订单列表</div><div class="appsub">逾期订单列表</div><div class="appsub">预授权到期列表</div><div class="appsub">小红书订单列表</div><div class="appsub">购买申请列表</div><div class="appsub">转单池</div><div class="appsub">用户开票列表</div><div class="appsub">争议订单</div><div class="appsub">订单分组管理</div><div class="appsub">提前完结订单列表</div><div>售后管理</div><div>催收管理</div><div>同城管理</div><div>商品管理</div><div>字典</div><div>核销管理</div></aside>
+<div class="appmain"><div class="breadcrumb">☰　 <span id="crumbRoot">全局内容 / 平台风控设置</span><span id="crumb"></span></div><div class="appsurface"><div class="tabs" id="riskTabs" aria-label="平台风控设置页签"><span>雕马快租平台风控</span><span>雕马闪租平台风控</span><span>雕马快租补充资料</span><button type="button" class="risk-tab" data-view="base">风控基座</button></div>
+<div class="content" id="content"></div></div></div>
+</div>
+</main>
+<div class="prototype-resizer" id="divider" role="separator" aria-label="调整原型与需求说明宽度，双击或按 Home 恢复默认" aria-orientation="vertical" aria-valuemin="55" aria-valuemax="80" tabindex="0" title="拖动调整 · 双击恢复默认"></div>
+<aside class="prototype-prd"><div class="prd-panel-head"><h2>需求说明 · PRD</h2><button class="prd-toggle" id="prdToggle" aria-controls="prd" aria-expanded="true">收起</button></div><div class="prd-panel-content" id="prd"></div></aside>
+</div></div>
+<dialog id="detail" aria-labelledby="modalTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="modalTitle">调用记录详情</h2><button aria-label="关闭详情" data-close>×</button></div><div id="modalBody"></div><div class="modal-foot"><button data-close>关闭</button></div></section><aside class="modal-context-prd" id="modalPrd"></aside></div></dialog>
+<dialog id="priceDialog" aria-labelledby="priceTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="priceTitle">配置产品单价</h2><button aria-label="关闭单价配置" data-close>×</button></div><p id="priceProduct"></p><form id="priceForm"><div class="filters"><label>生效日期<input type="date" name="date" required></label><label>单价（元/次）<input name="unit" inputmode="decimal" placeholder="例如 0.35" required></label></div><p id="priceHint" class="muted"></p><p id="priceError" class="error" role="alert" hidden></p><div class="modal-foot"><button type="button" data-close>取消</button><button class="primary" type="submit">保存单价</button></div></form></section><aside class="modal-context-prd"><h2>配置产品单价 · 弹窗说明</h2><h3>一、字段说明</h3><ul><li>产品与厂商由所选行带入。</li><li>生效日期按北京时间自然日，从该日零点开始适用。</li><li>单价单位为元/次，支持 0 至 99999.99，最多 2 位小数。0 表示免费。</li></ul><h3>二、按钮与计费规则</h3><ul><li>保存新增生效版本。同一产品和日期已有单价时，以最后保存的价格计费，旧值保留在历史表，并重算该版本覆盖期间的估算费用。</li><li>取消、× 或 Esc 关闭弹窗，放弃本次编辑。</li></ul></aside></div></dialog>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const catalog = [
+  [
+    "示例服务商 01",
+    [
+      "示例产品 01",
+      "示例产品 02",
+      "示例产品 03",
+      "示例产品 04",
+      "示例产品 05",
+      "示例产品 06",
+      "示例产品 07",
+      "示例产品 08",
+      "示例产品 09",
+      "示例产品 10",
+      "示例产品 11",
+      "示例产品 12",
+      "示例产品 13"
+    ]
+  ],
+  [
+    "示例服务商 02",
+    [
+      "示例产品 14"
+    ]
+  ],
+  [
+    "示例服务商 03",
+    [
+      "示例产品 15",
+      "示例产品 16"
+    ]
+  ],
+  [
+    "示例服务商 04",
+    [
+      "示例产品 17",
+      "示例产品 18",
+      "示例产品 19"
+    ]
+  ],
+  [
+    "示例服务商 05",
+    [
+      "示例产品 20"
+    ]
+  ],
+  [
+    "示例服务商 06",
+    [
+      "示例产品 21"
+    ]
+  ],
+  [
+    "示例服务商 07",
+    [
+      "示例产品 22"
+    ]
+  ],
+  [
+    "示例服务商 08",
+    [
+      "示例产品 23",
+      "示例产品 24",
+      "示例产品 25",
+      "示例产品 26",
+      "示例产品 27",
+      "示例产品 28",
+      "示例产品 29",
+      "示例产品 30"
+    ]
+  ]
+];
+const products = catalog.flatMap(([vendor,names])=>names.map(name=>({vendor,name})));
+products.forEach((p,i)=>{
+  p.id=i+1;
+  p.interfaces=[['模拟接口 '+String(p.id).padStart(2,'0'),[3500,1500,5000,2500,1200][i%5],i%3===0]];
+});
+const priceKey='risk-cost-product-prices-v1';
+const priceLogKey='risk-cost-product-price-log';
+let priceLogs={};
+try{priceLogs=JSON.parse(localStorage.getItem(priceLogKey))||{}}catch{}
+let customPrices={};
+try{customPrices=JSON.parse(localStorage.getItem(priceKey))||{}}catch{}
+function versions(p){
+  const saved=customPrices[p.id]||{};
+  const demo={};
+  for(const date of ['2026-09-01','2026-11-01']){
+    if(!Object.keys(saved).some(start=>start<=date))demo[date]={unit:p.interfaces[0][1],demo:true};
+  }
+  return Object.entries({...demo,...saved}).map(([date,v])=>[date,{...v,unit:Math.round(v.unit/100)*100}]).sort(([a],[b])=>b.localeCompare(a));
+}
+function priceAt(p,date){return versions(p).find(([start])=>start<=date)?.[1]||null}
+function dateRange(from,to){
+  const result=[];
+  for(let day=new Date(from+'T00:00:00Z');day.toISOString().slice(0,10)<=to;day.setUTCDate(day.getUTCDate()+1)){
+    result.push(day.toISOString().slice(0,10));
+  }
+  return result;
+}
+const demoEnd='2026-11-07';
+const demoStart='2026-09-01';
+const novemberDates=dateRange('2026-11-01',demoEnd);
+const dates=dateRange(demoStart,demoEnd);
+const bizs = ['雕马快租','雕马闪租'];
+const initial={from:novemberDates[0],to:demoEnd,biz:'',product:'',rule:'',status:'',kind:'',order:''};
+const defaultMonth=demoEnd.slice(0,7), defaultBaseline='2026-10';
+const defaultComparisonMonths=[defaultBaseline,defaultMonth];
+let comparisonMonths=[...defaultComparisonMonths];
+let timeMode='single', reportMonth=defaultMonth, comparisonMode='product', selectedRuleDay=null, view='base', filters={...initial}, page=1, shown=[];
+const money = (units,precision=2) => units===null?'待核价':'¥'+(units/10000).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:precision});
+const unitMoney = units=>money(units);
+const productLabel = p=>p.name+'｜'+p.vendor;
+const num = n => n.toLocaleString('zh-CN');
+function stats(rows){
+  return rows.reduce((s,r)=>{
+    s.total++;
+    s.billed+=Number(r.bill);
+    s.failed+=Number(r.status!=='成功');
+    s.repeated+=Number(r.kind!=='首次');
+    if(r.status!=='成功'||r.kind!=='首次'){
+      s.abnormal++;
+      s.abnormalCost+=r.fee??0;
+    }
+    s.cost+=r.fee??0;
+    s.unpriced+=Number(r.fee===null);
+    return s;
+  },{total:0,cost:0,unpriced:0,billed:0,failed:0,repeated:0,abnormal:0,abnormalCost:0});
+}
+function within(r){return r.date>=filters.from&&r.date<=filters.to&&(!filters.biz||r.biz===filters.biz)}
+function scoped(){
+  return calls.filter(r=>within(r)&&(!filters.product||r.p.name===filters.product));
+}
+const field = (name,label,values,placeholder='全部') => '<label>'+label+'<select name="'+name+'"><option value="">'+placeholder+'</option>'+values.map(value=>{
+  const [v,display]=Array.isArray(value)?value:[value,value];
+  return '<option value="'+v+'">'+display+'</option>';
+}).join('')+'</select></label>';
+const button = (label,action,cls='') => '<button type="button" class="'+cls+'" data-action="'+action+'">'+label+'</button>';
+const table = (cols,rows) => '<div class="scroll" tabindex="0" aria-label="横向滚动查看完整表格"><table><thead><tr>'+cols.map(c=>'<th scope="col">'+c+'</th>').join('')+'</tr></thead><tbody>'+(rows||'<tr><td class="empty" colspan="'+cols.length+'">暂无符合条件的数据</td></tr>')+'</tbody></table></div>';
+const row = (cells,cls='')=>'<tr class="'+cls+'">'+cells.map(c=>'<td>'+c+'</td>').join('')+'</tr>';
+function title(name,description,action=''){
+  return '<div class="heading"><div><h1>'+name+'</h1><p class="muted">'+description+'</p></div>'+action+'</div>';
+}
+function comparisonMonthField(value='',baseline=false){
+  return '<div class="comparison-month"><label>'+ (baseline?'基准月':'对比月份')+
+    '<input required type="month" min="2000-01" max="9999-12" name="comparisonMonth" value="'+value+'"></label>'+
+    (baseline?'':'<button type="button" data-action="move-month:left" aria-label="左移月份" title="左移月份">←</button>'+
+      '<button type="button" data-action="move-month:right" aria-label="右移月份" title="右移月份">→</button>'+button('移除','remove-month'))+'</div>';
+}
+function updateMonthOrderButtons(){
+  const fields=$('comparisonMonthFields');
+  if(!fields)return;
+  [...fields.children].slice(1).forEach((item,index,months)=>{
+    item.querySelector('[data-action="move-month:left"]').disabled=index===0;
+    item.querySelector('[data-action="move-month:right"]').disabled=index===months.length-1;
+  });
+}
+function filterForm(){
+  const monthView=view==='overview'&&timeMode!=='day';
+  let timeFields='<label>开始日期<input required type="date" name="from"></label><label>结束日期<input required type="date" name="to"></label>';
+  if(monthView)timeFields='<label>统计月份<input required type="month" min="2000-01" max="9999-12" name="month"></label>';
+  if(monthView&&timeMode==='month'){
+    timeFields='<div class="comparison-months"><div id="comparisonMonthFields">'+comparisonMonths.map((value,index)=>comparisonMonthField(value,index===0)).join('')+
+      '</div>'+button('＋ 添加月份','add-month')+'</div>';
+  }
+  return '<form class="filters" id="filters">'+timeFields+field('biz','适用业务',bizs)+(view==='overview'&&comparisonMode==='rule'?field('rule','风控规则',ruleRows.map(rule=>rule[0]),'全部规则'):field('product','三方产品',products.map(p=>[p.name,productLabel(p)]),'全部产品'))+(view==='records'?field('status','调用结果',['成功','失败','超时'])+field('kind','请求类型',['首次','超时重试','疑似重复'])+'<label>订单号<input name="order" placeholder="输入完整订单号" inputmode="numeric" size="14"></label>':'')+'<button class="primary">查询</button>'+button('重置','reset')+'</form><p class="error" id="error" role="alert" hidden></p>';
+}
+
+const ruleRows=[
+  [
+    "示例规则 01",
+    0,
+    7,
+    1,
+    "1.40",
+    true,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "手机设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 02",
+    1,
+    7,
+    2,
+    "1.40",
+    false,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "办公设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 03",
+    1,
+    1,
+    3,
+    "0.20",
+    false,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "摄影设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 04",
+    1,
+    2,
+    4,
+    "0.40",
+    true,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "手机设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 05",
+    1,
+    4,
+    5,
+    "0.80",
+    false,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "办公设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 06",
+    0,
+    3,
+    6,
+    "0.60",
+    false,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "摄影设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 07",
+    1,
+    6,
+    7,
+    "1.20",
+    true,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "手机设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 08",
+    1,
+    4,
+    8,
+    "0.80",
+    false,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "办公设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 09",
+    0,
+    5,
+    9,
+    "1.00",
+    false,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "摄影设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ],
+  [
+    "示例规则 10",
+    0,
+    1,
+    10,
+    "0.20",
+    true,
+    "2026-11-01 09:00:00",
+    [
+      [
+        "商品品类",
+        "手机设备"
+      ],
+      [
+        "商家",
+        "示例店铺"
+      ]
+    ],
+    [
+      2,
+      6,
+      1,
+      3,
+      1,
+      3
+    ]
+  ]
+];
+const ruleProductStarts=[0,3,6,10,12,15,18,21,24,29];
+const ruleProducts=ruleRows.map((rule,index)=>products.slice(ruleProductStarts[index],ruleProductStarts[index]+rule[2]));
+const calls = [], matchedOrders = [];
+[...novemberDates,...dateRange(demoStart,'2026-10-31')].forEach(date=>{
+  const d=Number(date.slice(-2))-1;
+  const volume=date.startsWith('2026-11')?32+d*3:26+d%9+(date.startsWith('2026-10')?3:0);
+  for(let i=0;i<volume;i++){
+    const order={date,biz:bizs[i%2],id:date.replaceAll('-','')+String(i+1).padStart(4,'0')};
+    const matchingRules=ruleRows.map((rule,index)=>({rule,index})).filter(({rule})=>rule[1]===i%2);
+    order.ruleId=matchingRules[(Math.floor(i/2)+d)%matchingRules.length].index;
+    matchedOrders.push(order);
+    products.forEach((p,pi)=>p.interfaces.forEach(([api,,payFailure],ai)=>{
+      if(!ruleProducts[order.ruleId].includes(p)||(i+d+pi)%7===0)return;
+      const spike=d===5&&pi===0;
+      const timeout=spike||(i+d+pi*3+ai)%23===0;
+      const failed=!timeout&&(i*3+d+pi+ai)%31===0;
+      function push(status,kind){
+        const bill=status==='成功'||payFailure;
+        const number=calls.length+1;
+        calls.push({...order,id:String(number).padStart(8,'0'),order:order.id,p,api,get price(){return priceAt(p,date)?.unit??null},bill,get fee(){return !bill?0:this.price},status,kind,time:date+' '+String(9+Math.floor(i/6)).padStart(2,'0')+':'+String((i%6)*10+(pi%5)*2+ai).padStart(2,'0')+':'+(kind==='首次'?'00':kind==='超时重试'?'05':'09')});
+      }
+      push(timeout?'超时':failed?'失败':'成功','首次');
+      if(timeout)push((i+d)%7===0?'超时':'成功','超时重试');
+      else if((i+d+pi+ai)%41===0)push('成功','疑似重复');
+    }));
+  }
+});
+let ruleFilters={name:'',biz:'',state:''};
+
+const shopStatuses=['已取消','待付款','平台待审核','商家待审核','待发货','待收货','租用中','归还中','交易完成','商家超时确认','超时发货','逾期归还','逾期付款','待补充资料','完结中'];
+const shopOrders=matchedOrders.map((order,index)=>({...order,status:shopStatuses[index%shopStatuses.length]}))
+  .sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+const shopDefaults={from:novemberDates[0],to:dates.at(-1),biz:'',order:'',status:'平台待审核'};
+let shopFilters={...shopDefaults}, shopPage=1, showShopFilters=false, reportOrder=null, reportAudience='运营后台';
+function shopMatches(includeStatus=true){
+  return shopOrders.filter(order=>order.date>=shopFilters.from&&order.date<=shopFilters.to&&
+    (!shopFilters.biz||order.biz===shopFilters.biz)&&(!shopFilters.order||order.id===shopFilters.order)&&
+    (!includeStatus||!shopFilters.status||order.status===shopFilters.status));
+}
+function orderCost(order){
+  const requests=calls.filter(call=>call.order===order.id);
+  const total=stats(requests);
+  const estimate=ruleEstimate(order.ruleId,order.date);
+  const fee=total.unpriced?null:total.cost;
+  return {requests,total,estimate,fee,delta:fee===null||estimate===null?null:fee-estimate};
+}
+function commerce(){
+  const matched=shopMatches(), allStatuses=shopMatches(false), pageSize=5;
+  const pages=Math.max(1,Math.ceil(matched.length/pageSize));
+  shopPage=Math.min(shopPage,pages);
+  const statusButtons=[['','全部'],...shopStatuses.map(status=>[status,status])].map(([value,label])=>{
+    const count=value?allStatuses.filter(o=>o.status===value).length:0;
+    return '<button type="button" data-action="shop-status:'+value+'" aria-pressed="'+(shopFilters.status===value)+'">'+label+(count?'<span class="badge">'+num(count)+'</span>':'')+'</button>';
+  }).join('');
+  const referenceFields=(labels)=>labels.map(label=>'<label>'+label+'<input placeholder="请选择或输入" disabled></label>').join('');
+  const form='<form class="filters rule-filters shop-form" id="shopFilters"><div class="rule-inputs">'+
+    '<label>订单编号<input name="order" placeholder="请输入订单编号"></label>'+
+    referenceFields(['外部订单编号','订单类型'])+field('biz','平台类型',bizs,'请选择平台类型')+
+    referenceFields(['订单来源','取消类型','订单分组','订单标签','业务场景','收货人手机号','收货人地区','下单人姓名','收货人姓名','下单人手机号','合伙人手机号','下单人身份证号','详细地址查询','下单企业名称','物流单号','品类','店铺名称','商品名称'])+
+    field('status','订单状态',shopStatuses,'请选择订单状态')+referenceFields(['订单状态（多选）'])+
+    '<label>创建时间<input name="from" type="date" required></label><label>至<input name="to" type="date" required></label>'+
+    referenceFields(['逾期状态','订单完结','续租时间范围','增租时间范围','完结状态','起租时间','上链状态','投保状态','平台冻结押金','付款方式','履约方式','自提状态','推广渠道','推广人手机号','推广人姓名','风控等级','公域私域','广告ID','派单方式','关联活动'])+'</div>'+
+    '<div class="rule-inputs" '+(showShopFilters?'':'hidden')+'>'+referenceFields(['派单状态'])+'</div>'+
+    '<div class="rule-actions"><button type="button" aria-disabled="true" class="added">订单分组管理</button><button type="submit" class="primary">查询</button>'+button('重置','shop-reset')+
+    '<button type="button" aria-disabled="true">导出</button>'+
+    '<button type="button" data-action="shop-export" '+(matched.length?'':'disabled')+'>导出风控数据</button>'+
+    button(showShopFilters?'收起筛选':'更多筛选','shop-more')+'</div></form>';
+  const cards=matched.slice((shopPage-1)*pageSize,shopPage*pageSize).map(order=>{
+    const route='#report/'+order.id;
+    return '<article class="shop-order"><header><span>订单信息：<b style="color:#409eff">'+order.id+'</b></span><span>创建时间：'+order.date+' 16:55:34</span>'+
+      '<span>店铺：示例租赁旗舰店</span><span style="color:#60bd67">预计 17 点前发货</span><span class="old-actions">收款方式　│　修改收货地址　│　备注　│　取消订单　│　更多</span></header>'+
+      '<div class="shop-meta"><span class="shop-badge">'+order.biz+'</span><span class="shop-badge green">个人订单</span>线上推广</div>'+
+      '<div class="shop-grid shop-data"><div><h4>全新 · 手机租赁示例</h4><p>套餐：白色｜128GB｜租完归还</p><p>数量：1 件</p><p>购买价：¥0.00</p></div>'+
+      '<div><p>商品押金：¥0.50</p><p>评估金额：¥0.50</p><p>减免金额：¥0.00</p><p>芝麻冻结：¥0.00</p><p>订单押金：¥0.00</p></div>'+
+      '<div><p>商品租金：¥0.10（无优惠）</p><p>运费：¥0.00</p><p>月租金：账单未生成</p><p>总租金：¥0.10</p><p>租期：2 天，1 期</p></div>'+
+      '<div><p>示例收货人</p><p>1** **** ****</p><p>广东省 广州市</p><p>*******</p></div>'+
+      '<div><p>退款金额：¥0.00</p><p>已付金额：¥0.00</p><p>账单金额：¥0.00</p><p>租赁大订单签约授权</p></div>'+
+      '<div><strong>'+order.status+'</strong><p>（私域）</p><p>自动代扣</p></div></div>'+
+      '<div class="shop-meta">UID：—　│　姓名：**　│　手机号：1** **** ****　│　身份证号：********　│　年龄：—　│　人脸识别：—　　'+
+      '<a href="'+route+'" target="_blank" rel="noopener">风控报告</a>　│　租赁协议　│　订单存证　│　查看个人信息</div>'+
+      '<div class="shop-meta">下单次数（包括已取消）：—　│　在途订单：—　│　履约已完结订单：—</div>'+
+      '<div class="shop-meta">增值服务　—</div><div class="shop-meta">平台服务费：—　│　平台推广费：—　│　商家结算：—</div>'+
+      '<div class="shop-meta">订单分组：—</div><div class="shop-meta">客户备注：—　　平台风控：—　　风控过程：—</div></article>';
+  }).join('');
+  const columns=['商品信息','押金','租金/到期','收货信息','租金实付款','订单状态'];
+  return form+'<p id="shopError" role="alert" class="error" hidden></p>'+
+    '<div class="shop-tabs" aria-label="订单状态">'+statusButtons+'</div>'+
+    '<div class="shop-scroll" tabindex="0" aria-label="订单列表横向滚动"><div class="shop-grid shop-column-head">'+columns.map(label=>'<span>'+label+'</span>').join('')+'</div>'+
+    (cards||'<p class="empty">暂无符合条件的订单</p>')+'</div>'+
+    '<div class="pager"><span>共 '+num(matched.length)+' 单 · 第 '+shopPage+' / '+pages+' 页</span>'+
+    '<button data-action="shop-page:-1" '+(shopPage===1?'disabled':'')+'>上一页</button>'+
+    '<button data-action="shop-page:1" '+(shopPage===pages?'disabled':'')+'>下一页</button></div>';
+}
+function showReportCost(order){
+  const {requests,total,estimate,fee,delta}=orderCost(order);
+  const fields=[['订单号',order.id],['命中规则',ruleRows[order.ruleId][0]],['调用费用（预估）',money(fee)],
+    ['规则预估',money(estimate)],['差额',delta===null?'—':money(delta)],
+    ['调用／计费次数',total.total+' / '+total.billed],['失败或超时／重试或疑似重复',total.failed+' / '+total.repeated],
+    ['异常调用费用',total.unpriced?'待核价':money(total.abnormalCost)]];
+  const sections=[...new Set(requests.map(call=>call.p))].map(p=>{
+    const data=requests.filter(call=>call.p===p);
+    const subtotal=stats(data);
+    const rows=data.map(call=>row([call.id,call.time,call.api,call.status,call.kind,call.bill?'计费':'不计费',money(call.price),money(call.fee)])).join('');
+    return '<details><summary>'+productLabel(p)+' · '+subtotal.total+' 次 · '+money(subtotal.unpriced?null:subtotal.cost)+'</summary>'+
+      table(['请求编号','调用时间','接口','结果','请求类型','计费状态','单价','费用'],rows)+'</details>';
+  }).join('');
+  infoDialog('三方调用费用','<dl class="pairs">'+fields.map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>'+
+    '<h3>按产品查看调用明细</h3><div class="report-products">'+(sections||'<p class="muted">本订单没有三方调用记录。</p>')+'</div>',
+    '<h3>一、费用口径</h3><ul><li>调用费用为本单计费请求按调用日生效单价估算的金额。规则预估为配置产品各计费一次的金额，差额为调用费用减规则预估。</li><li>异常费用按失败、超时、重试或疑似重复请求去重汇总。缺失单价时标为待核价。</li></ul>'+
+    section('二、订单费用字段',fieldItems(['订单号','命中规则','调用费用','规则预估','差额','调用次数','计费次数','失败或超时次数','重试或疑似重复次数','异常费用（元）']))+
+    section('三、产品与请求字段',fieldItems(['产品｜厂商','调用次数','调用费用','请求编号','调用时间','接口','结果','请求类型','计费状态','单价','费用']))+
+    '<h3>四、操作</h3><ul><li>展开产品可查逐次请求。关闭或按 Esc 返回报告原位置。</li></ul>');
+}
+function productRiskResults(){
+  const results=[
+    ['在网状态','低 · 手机状态正常'],['三要素核验','手机三要素均一致'],['在网时长','低 · 在网时长 2 年以上'],
+    ['法院涉诉案件数','0 起'],['法院案件案号','—'],['身份证二要素核验','低 · 比对结果一致'],
+    ['限高被执行人','未命中'],['失信被执行人详情','未命中'],
+    ['3C租赁申请机构数 1/3/6/12月','0 / 1 / 2 / 2'],['3C租赁申请次数 1/3/6/12月','0 / 2 / 3 / 3'],
+    ['借贷申请机构数 1/3/6/12月','0 / 1 / 1 / 2'],['借贷申请次数 1/3/6/12月','0 / 1 / 2 / 3'],
+    ['团伙欺诈风险','低风险'],['身份证号手机号归属地','低 · 归属省一致'],['银行、非银行风险','未命中'],
+    ['高风险借贷','未命中'],['偿债压力等级','低风险'],['网贷放款次数 1/3/6/12月','0 / 0 / 0 / 1'],
+    ['网贷还款异常次数 近1/3/6/12月','0 / 0 / 0 / 0'],['支付能力等级','低风险'],['欺诈风险等级','中风险'],
+    ['租赁行业共租风险','低风险'],['当日/7/30日申请商家数','0 / 1 / 1'],['综合风险等级','中风险'],
+    ['公安不良人员记录','正常人员'],['租赁通用评分','72.40 分'],['逾期风险','3.2%'],['风险建议','建议按流程审核'],
+    ['平台黑名单','未命中'],['当前逾期订单数','—'],['当前逾期金额','—'],['最长逾期天数','—'],
+    ['历史逾期次数','1 次'],['历史逾期订单数','1 笔'],['在租笔数','0 笔'],['设备总价值','0 元']
+  ];
+  const detail=[['法院信息详情个人高级版','法院涉诉案件详情','查询成功，未查询到相关信息'],
+    ['法院被执行人限高版','限高及失信被执行人详情','未命中'],
+    ['申请意向 -3C 租赁','3C租赁申请行为','近 1 / 3 / 6 / 12 月机构数为 0 / 1 / 2 / 2'],
+    ['共租风险（专业版）','共租风险等级','低风险']];
+  return '<h2 class="report-section-title">产品风控结论</h2><div class="report-result-title"><b>兜底</b><small>'+results.length+'</small></div>'+
+    '<div class="report-result-table"><div class="scroll"><table><tbody>'+results.map(([label,value])=>'<tr><th scope="row">'+label+'</th><td>'+value+'</td></tr>').join('')+'</tbody></table></div></div>'+
+    '<details class="report-original-details" open><summary><span class="expand-result">展开详情</span><span class="collapse-result">收起详情</span> '+detail.length+'</summary>'+
+    detail.map(([title,label,value])=>'<section class="report-card"><h2>'+title+'</h2><div class="report-products"><p>'+label+'</p><p>'+value+'</p></div></section>').join('')+'</details>';
+}
+function report(){
+  const tabs=['运营后台','商家后台','CRM后台'].map(label=>'<button data-action="report-audience:'+label+'" aria-pressed="'+(reportAudience===label)+'">'+label+'</button>').join('');
+  const actions=['获取完整风控报告','获取对应策略风控报告','风控列表管理','历史风控管理','AI 风控分析'];
+  const fields=[['姓名','示例用户'],['年龄','28 岁'],['手机号','1** **** ****'],['手机归属地','广东广州'],['身份证号','******************'],['运营商','电信'],['户籍','广东广州'],['定位信息','—']];
+  const costButton=reportAudience==='运营后台'&&reportOrder?button('查看调用费用','report-cost','report-cost-trigger'):'';
+  return '<div class="report-tabs" aria-label="风控报告视角">'+tabs+'</div>'+
+    '<div class="report-notice"><b>ⓘ　免责声明</b><p>本风控报告基于用户提交的信息及平台可获取的数据分析生成，旨在为商家决策提供参考信息。报告内容不代表平台对用户信用、履约能力的保证或承诺。商家应结合自身经营策略、风险偏好及实际情况独立判断并做出最终决策。</p></div>'+
+    '<div class="report-actions"><h1>▤　风控报告'+(reportOrder?'<small>'+reportOrder.date+' 14:30:00</small>':'')+'</h1><div>'+actions.map(label=>'<button type="button" aria-disabled="true">'+label+'</button>').join('')+costButton+'</div></div>'+
+    '<div class="report-privacy">ⓘ　风控报告涉及用户的个人隐私信息，请按平台要求使用。</div>'+
+    '<div class="report-risk"><b>！　综合风险等级：中风险</b></div>'+
+    '<section class="report-card"><h2>基础信息</h2><dl class="pairs">'+fields.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+value+'</dd></div>').join('')+'</dl></section>'+
+    productRiskResults()+
+    '<a class="report-back" href="#commerce">返回订单列表</a>';
+}
+function showRiskExport(){
+  const count=shopMatches().length;
+  if(!count)return;
+  infoDialog('导出风控数据','<p>按已查询条件导出全部 '+num(count)+' 笔订单，包含其他分页。</p>'+
+    '<div class="export-options"><label><input type="radio" name="exportKind" value="summary" checked> 订单风控汇总（每单一行）</label>'+
+    '<label><input type="radio" name="exportKind" value="requests"> 产品调用明细（每次请求一行）</label></div>'+
+    '<p id="exportStatus" class="muted" role="status"></p>'+button('下载 CSV','export-download','primary'),
+    '<h3>一、导出范围</h3><ul><li>按列表已应用的日期、业务、订单号与状态筛选。订单汇总包含无调用订单。调用明细只导出存在的实际请求。</li><li>订单号可关联两份数据，订单总费用仅出现在汇总表。</li></ul>'+
+    '<h3>二、按钮</h3><ul><li>下载 CSV 保存所选文件。关闭返回订单列表。</li></ul>'+exportRiskFields);
+}
+function downloadRiskExport(){
+  const kind=$('detail').querySelector('input[name="exportKind"]:checked').value;
+  const amounts=value=>value===null?'':(value/10000).toFixed(2);
+  const summaries=kind==='summary';
+  const headers=summaries?
+    ['订单号','命中日期','适用业务','订单状态','命中规则','调用产品','调用次数','计费次数','失败或超时次数','重试或疑似重复次数','规则预估（元）','调用费用（元）','差额（元）','异常调用费用（元）','待核价次数']:
+    ['订单号','适用业务','命中规则','请求编号','调用时间','厂商','产品','接口','调用结果','请求类型','计费状态','单价（元/次）','调用费用（元）','价格生效日'];
+  const rows=shopMatches().flatMap(order=>{
+    const {requests,total,estimate,fee,delta}=orderCost(order);
+    const rule=ruleRows[order.ruleId][0];
+    if(summaries)return [[order.id,order.date,order.biz,order.status,rule,
+      [...new Set(requests.map(call=>productLabel(call.p)))].join('、'),total.total,total.billed,total.failed,total.repeated,
+      amounts(estimate),amounts(fee),amounts(delta),amounts(total.unpriced?null:total.abnormalCost),total.unpriced]];
+    return requests.map(call=>[order.id,order.biz,rule,call.id,call.time,call.p.vendor,call.p.name,call.api,
+      call.status,call.kind,call.bill?'计费':'不计费',amounts(call.price),amounts(call.fee),
+      versions(call.p).find(([date])=>date<=call.date)?.[0]||'']);
+  });
+  if(!rows.length){$('exportStatus').textContent='当前范围没有产品调用记录，可切换为订单风控汇总。';return}
+  downloadCsv(summaries?'订单风控汇总':'产品调用明细',headers,rows);
+  $('exportStatus').textContent='已生成 '+num(rows.length)+' 行数据。';
+}
+function downloadCsv(filename,headers,rows){
+  const csv=[headers,...rows].map(columns=>columns.map(value=>'"'+String(value).replaceAll('"','""')+'"').join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'}));
+  const link=document.createElement('a');
+  link.href=url;
+  link.download=filename+'.csv';
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function base(){
+  const form='<form id="ruleFilters" class="filters rule-filters">'+
+    '<div class="rule-inputs"><label>规则名称<input name="name" placeholder="请输入规则名称"></label>'+
+    field('biz','适用业务',bizs,'请选择适用业务')+field('state','规则状态',['启用','停用'],'请选择规则状态')+'</div>'+
+    '<div class="rule-actions"><button type="submit" class="primary">查询</button>'+button('重置','rule-reset')+
+    button('新建风控规则','original','primary')+button('操作日志','original')+
+    '<button type="button" class="added" data-view="prices">产品单价配置</button>'+
+    '<button type="button" class="added" data-view="overview">每日调用费用对比</button></div></form>';
+  const rows=ruleRows.map((rule,id)=>[...rule.slice(0,8),rule[8],id]).filter(([name,biz,,,,enabled])=>
+    name.includes(ruleFilters.name)&&(!ruleFilters.biz||bizs[biz]===ruleFilters.biz)&&(!ruleFilters.state||(enabled?'启用':'停用')===ruleFilters.state)
+  ).map(([name,biz,products,priority,cost,enabled,time,conditions,report=[0,0,0,0,0,0],id])=>{
+    const hit='<div class="rule-conditions">'+conditions.map(([label,...tags])=>'<div><b>'+label+'</b>'+tags.map(t=>'<span class="rule-tag">'+t.replaceAll('>','&gt;')+'</span>').join('')+'</div>').join('')+'</div>';
+    const reports=['运营','商家','CRM'].map((role,i)=>'<div>'+role+' <small>'+report[2*i]+'个组合·包含'+report[2*i+1]+'项内容</small></div>').join('');
+    return row([name,bizs[biz],hit,button(products+' 项产品','original','link'),priority,button('¥'+cost,'rule-history:'+id,'link')+'<br>'+button('历史估算','rule-history:'+id,'link'),
+      '<span class="rule-status '+(enabled?'on':'')+'" role="img" aria-label="'+(enabled?'启用':'停用')+'"></span>',
+      time,reports+button('预览报告','original','link'),button('编辑','original','link')+button('删除','original','link danger')]);
+  });
+  return form+'<p id="ruleNotice" role="status" class="muted" hidden></p><div class="rule-table">'+table(
+    ['规则名称','适用业务','命中规则','调用产品','优先级','预估单次成本','状态','更新时间','风控报告展示','操作'],
+    rows.join(''))+'</div><div class="pager">共 '+rows.length+' 条 · 10条/页</div>';
+}
+
+function ruleEstimate(id,date){
+  const prices=ruleProducts[id].map(p=>priceAt(p,date)?.unit??null);
+  return prices.includes(null)?null:prices.reduce((sum,price)=>sum+price,0);
+}
+function showRuleHistory(id){
+  const start=dates[0];
+  const changes=new Set([start]);
+  for(const p of ruleProducts[id])for(const [date] of versions(p))if(date>=start)changes.add(date);
+  const sorted=[...changes].sort();
+  const rows=sorted.map((date,i)=>row([date,sorted[i+1]||'—',ruleProducts[id].length,money(ruleEstimate(id,date))])).reverse().join('');
+  infoDialog('规则历史估算','<p>'+ruleRows[id][0]+' · 示例规则配置</p>'+
+    '<p class="muted">配置产品：'+ruleProducts[id].map(productLabel).join('、')+'</p>'+
+    table(['生效日起（含）','下一生效日（不含）','配置产品数','预估单次成本'],rows),
+    '<h3>一、估算规则</h3><ul><li>从示例规则生效日开始，每个配置产品按计费一次估算。任一产品缺少价格时显示待核价。</li><li>价格变更产生新的估算区间。正式接入时需要按历史规则版本与对应产品价格版本一起计算。</li><li>列表原有金额用于还原页面，此处按模拟产品组合重新估算。</li></ul><h3>二、操作</h3><p>点击关闭返回规则列表。</p>'+section('三、列表字段',['<b>生效日起（含）</b>　当前估算区间的起始日。','<b>下一生效日（不含）</b>　下一个价格区间的起点，末区间显示「—」。','<b>配置产品数</b>　规则配置中的产品数量。','<b>预估单次成本</b>　按各配置产品在该区间内计费一次相加，缺少任一产品价格则待核价。']));
+}
+function costSummary(list){
+  const total=stats(list);
+  const orders=matchedOrders.filter(order=>within(order)&&(comparisonMode!=='rule'||!filters.rule||filters.rule===ruleRows[order.ruleId][0])).length;
+  const metrics=[
+    ['调用次数',num(total.total),'计费 '+num(total.billed)+' 次'],
+    ['调用费用',money(total.cost),'按生效单价估算'],
+    ['单均费用',orders?money(total.cost/orders):'—','摊至 '+num(orders)+' 笔命中订单'],
+    ['异常调用',num(total.abnormal),'失败／超时 '+total.failed+' 次，重试／疑似重复 '+total.repeated+' 次'],
+    ['异常调用费用',money(total.abnormalCost),'按请求去重']
+  ];
+  return '<div class="metrics">'+metrics.map(([name,value,tip])=>'<div class="metric"><small>'+name+'</small><b>'+value+'</b><small>'+tip+'</small></div>').join('')+'</div>';
+}
+function calendarMonth(month){
+  const [year,number]=month.split('-').map(Number);
+  return {from:month+'-01',to:new Date(Date.UTC(year,number,0)).toISOString().slice(0,10)};
+}
+function monthPeriods(){
+  const periods=comparisonMonths.map(calendarMonth);
+  if(comparisonMonths.includes(defaultMonth)){
+    const day=Number(demoEnd.slice(-2));
+    for(const period of periods){
+      const cutoff=Math.min(day,Number(period.to.slice(-2)));
+      period.to=period.from.slice(0,8)+String(cutoff).padStart(2,'0');
+    }
+  }
+  return periods;
+}
+function activeDayRange(){
+  if(timeMode==='day')return {from:filters.from,to:filters.to};
+  const period=calendarMonth(reportMonth);
+  if(reportMonth===defaultMonth)period.to=demoEnd;
+  return period;
+}
+function groupRows(){
+  if(comparisonMode==='rule'){
+    const rules=ruleRows.map((rule,id)=>({label:rule[0],ruleId:id,biz:bizs[rule[1]]}))
+      .filter(item=>(!filters.rule||item.label===filters.rule)&&(!filters.biz||item.biz===filters.biz));
+    return filters.rule?rules:[{label:'全部规则合计'},...rules];
+  }
+  const selected=products.filter(p=>!filters.product||p.name===filters.product).map(p=>({label:productLabel(p),product:p}));
+  return filters.product?selected:[{label:'全部产品合计'},...selected];
+}
+function periodStats(period,group){
+  const available=period.from>=demoStart&&period.to<=demoEnd;
+  if(!available)return null;
+  const included=item=>item.date>=period.from&&item.date<=period.to&&
+    (!filters.biz||item.biz===filters.biz)&&(group.ruleId===undefined||item.ruleId===group.ruleId);
+  const orders=matchedOrders.filter(included).length;
+  const totals=stats(calls.filter(call=>included(call)&&(!group.product||call.p===group.product)));
+  return {...totals,orders,fee:totals.unpriced?null:totals.cost,
+    average:orders&&!totals.unpriced?totals.cost/orders:null};
+}
+function monthlyRows(periods){
+  return groupRows().map(group=>({label:group.label,months:periods.map(period=>periodStats(period,group))}));
+}
+function monthDelta(current,previous){
+  if(current?.fee==null||previous?.fee==null)return {amount:null,rate:null};
+  const amount=current.fee-previous.fee;
+  return {amount,rate:previous.fee===0?null:amount/previous.fee};
+}
+const monthRate=rate=>rate===null?'—':(rate>0?'+':'')+(rate*100).toFixed(2)+'%';
+const amountText=value=>value==null?'—':money(value);
+function monthlyComparison(){
+  const periods=monthPeriods();
+  const header=(period,index)=>'<span>'+period.from.slice(0,7)+(index===0?' · 基准月':'')+'</span><br><small>'+period.from+' 至 '+period.to+'</small>';
+  const cell=(data,baseline,index)=>{
+    if(!data)return '无数据';
+    const delta=monthDelta(data,baseline);
+    const difference=delta.amount===null?'—':(delta.amount>0?'+':'')+money(delta.amount);
+    return '<strong>'+amountText(data.fee)+'</strong><br><small>调用 '+num(data.total)+' 次 · 异常 '+num(data.abnormal)+' 次</small>'+
+      '<br><small>单均 '+amountText(data.average)+'</small>'+
+      (index===0?'':'<br><small class="comparison-delta">较基准 '+difference+'（'+monthRate(delta.rate)+'）</small>');
+  };
+  const rows=monthlyRows(periods).map(item=>row([item.label,...item.months.map((data,index)=>cell(data,item.months[0],index))])).join('');
+  const partial=comparisonMonths.includes(defaultMonth);
+  return '<p class="muted">'+(partial?'含未结束月份，所选月份均统计至第 '+Number(demoEnd.slice(-2))+' 日。':'按所选完整自然月统计。')+
+    ' 各对比月的费用变化均以 '+comparisonMonths[0]+' 为基准。</p>'+
+    '<div class="comparison-table">'+table([comparisonMode==='rule'?'风控规则':'产品｜厂商',...periods.map(header)],rows)+'</div>';
+}
+function singleMonthView(){
+  const period=activeDayRange();
+  const group=groupRows()[0];
+  const summary=group&&periodStats(period,group);
+  if(!summary)return '<p class="empty">所选月份或筛选条件暂无示例数据。</p>';
+  const rows=dateRange(period.from,period.to).map(date=>{
+    const day=periodStats({from:date,to:date},group);
+    let fee=amountText(day.fee);
+    if(group.ruleId!==undefined&&day.orders)fee=button(fee,'rule-day:'+group.ruleId+':'+date,'link');
+    if(comparisonMode==='product'&&day.total)fee=button(fee,'compare:'+date,'link');
+    return row([date,num(day.total),num(day.billed),num(day.abnormal),fee,amountText(day.average)]);
+  }).join('');
+  const total=row(['<strong>整段合计</strong>',num(summary.total),num(summary.billed),num(summary.abnormal),amountText(summary.fee),amountText(summary.average)]);
+  return '<p class="muted"><b>'+group.label+'</b> · '+period.from+' 至 '+period.to+
+    (reportMonth===defaultMonth?'（截至数据日）':'')+'</p>'+table(['日期','调用次数','计费次数','异常次数','调用费用','单均费用'],total+rows);
+}
+let trendMetric='fee';
+function costReportPeriods(){
+  return timeMode==='month'?monthPeriods():[activeDayRange()];
+}
+function costReportCalls(period){
+  return calls.filter(call=>call.date>=period.from&&call.date<=period.to&&
+    (!filters.biz||call.biz===filters.biz)&&
+    (comparisonMode==='rule'?(!filters.rule||filters.rule===ruleRows[call.ruleId][0]):(!filters.product||call.p.name===filters.product)));
+}
+function trendChart(){
+  const periods=costReportPeriods();
+  const monthly=timeMode==='month';
+  const palette=['#2a7fa3','#cc8432','#538b45','#7865ac','#b95770','#368e82','#66574b','#3c60a5'];
+  const series=periods.map((period,index)=>{
+    const byDay=new Map();
+    for(const call of costReportCalls(period)){
+      if(!byDay.has(call.date))byDay.set(call.date,[]);
+      byDay.get(call.date).push(call);
+    }
+    const days=dates.filter(date=>date>=period.from&&date<=period.to);
+    return {label:monthly?period.from.slice(0,7)+(index===0?'（基准月）':''):groupRows()[0]?.label||'当前筛选',
+      color:palette[index%palette.length],points:days.map(date=>{
+        const total=stats(byDay.get(date)||[]);
+        return {date,value:trendMetric==='count'?total.total:total.unpriced?null:total.cost/10000};
+      })};
+  });
+  const controls='<div class="segments" aria-label="趋势指标">'+[['fee','调用费用'],['count','调用次数']].map(([key,label])=>
+    '<button type="button" data-action="trend:'+key+'" aria-pressed="'+(key===trendMetric)+'">'+label+'</button>').join('')+'</div>';
+  const legend=series.map(line=>'<span><i style="background:'+line.color+'"></i>'+line.label+(line.points.length?'':' · 无数据')+'</span>').join('');
+  const heading='<section class="trend-card"><header><h2>每日趋势</h2>'+controls+'</header><div class="trend-legend">'+legend+'</div>';
+  const points=series.flatMap(line=>line.points);
+  const values=points.filter(point=>point.value!==null).map(point=>point.value);
+  if(!values.length)return heading+'<p class="empty">当前范围暂无可绘制的趋势数据。</p></section>';
+  const xMin=monthly?1:0;
+  const xMax=monthly?Math.max(...points.map(point=>Number(point.date.slice(-2)))):series[0].points.length-1;
+  const x=value=>58+(xMax===xMin?350:(value-xMin)/(xMax-xMin)*698);
+  const max=Math.max(1,...values);
+  const y=value=>165-value/max*135;
+  const unit=trendMetric==='count'?'次':'元';
+  const fmt=value=>trendMetric==='count'?num(Math.round(value)):value.toFixed(2);
+  const grid=[0,1,2,3].map(i=>{
+    const value=max*i/3;
+    return '<line x1="58" x2="756" y1="'+y(value)+'" y2="'+y(value)+'" stroke="#e3ebe7"/><text x="50" y="'+(y(value)+4)+'" text-anchor="end">'+fmt(value)+'</text>';
+  }).join('');
+  const tickCount=Math.min(7,xMax-xMin+1);
+  const labels=Array.from({length:tickCount},(_,i)=>{
+    const index=tickCount===1?xMin:Math.round(xMin+i*(xMax-xMin)/(tickCount-1));
+    return '<text x="'+x(index)+'" y="189" text-anchor="middle">'+(monthly?index+'日':series[0].points[index].date.slice(5))+'</text>';
+  }).join('');
+  const lines=series.map(line=>{
+    let path='', penDown=false;
+    const dots=line.points.map((point,index)=>{
+      if(point.value===null){penDown=false;return ''}
+      const px=x(monthly?Number(point.date.slice(-2)):index),py=y(point.value);
+      path+=(penDown?'L':'M')+px+' '+py+' ';
+      penDown=true;
+      return '<circle cx="'+px+'" cy="'+py+'" r="2.8" fill="'+line.color+'"><title>'+line.label+' '+point.date+' · '+fmt(point.value)+' '+unit+'</title></circle>';
+    }).join('');
+    return '<path d="'+path+'" fill="none" stroke="'+line.color+'" stroke-width="2"/>'+dots;
+  }).join('');
+  return heading+'<p class="muted">单位 '+unit+(monthly?' · 按月内日序对齐':'')+' · 悬停数据点查看日期与数值</p>'+
+    '<svg class="trend-chart" viewBox="0 0 780 200" role="img" aria-label="每日'+(trendMetric==='count'?'调用次数':'调用费用')+'折线图">'+grid+labels+lines+'</svg></section>';
+}
+function exportCosts(){
+  const headers=['日期','产品名称','服务商名称','单价（元/次）','调用次数','调用费用（元）','计费次数','异常次数'];
+  const byRule=comparisonMode==='rule';
+  if(byRule)headers.push('风控规则');
+  const rows=costReportPeriods().flatMap(period=>{
+    const grouped=new Map();
+    for(const call of costReportCalls(period)){
+      const rule=byRule?ruleRows[call.ruleId][0]:'';
+      const key=[call.date,call.p.id,call.price,rule].join('|');
+      if(!grouped.has(key))grouped.set(key,{date:call.date,product:call.p,price:call.price,rule,requests:[]});
+      grouped.get(key).requests.push(call);
+    }
+    return [...grouped.values()].sort((a,b)=>a.date.localeCompare(b.date)||a.product.id-b.product.id||a.rule.localeCompare(b.rule)).map(item=>{
+      const total=stats(item.requests);
+      const row=[item.date,item.product.name,item.product.vendor,item.price===null?'':(item.price/10000).toFixed(2),
+        total.total,total.unpriced?'':(total.cost/10000).toFixed(2),total.billed,total.abnormal];
+      if(byRule)row.push(item.rule);
+      return row;
+    });
+  });
+  const status=$('costExportStatus');
+  if(!rows.length){status.textContent='当前筛选没有可导出的调用记录。';return}
+  downloadCsv('产品调用费用明细',headers,rows);
+  status.textContent='已生成 '+num(rows.length)+' 行数据。';
+}
+function overview(){
+  const modes='<div class="segments" aria-label="费用维度">'+['product','rule'].map(mode=>
+    '<button type="button" data-action="mode:'+mode+'" aria-pressed="'+(comparisonMode===mode)+'">'+(mode==='product'?'按产品':'按风控规则')+'</button>').join('')+'</div>';
+  const periods='<div class="segments" aria-label="统计方式">'+Object.entries({single:'单月查看',month:'多月对比',day:'自定义日期'}).map(([mode,label])=>
+    '<button type="button" data-action="time:'+mode+'" aria-pressed="'+(timeMode===mode)+'">'+label+'</button>').join('')+'</div>';
+  const actions='<div>'+button('导出费用数据','cost-export')+button('返回风控基座','base')+'</div>';
+  if(timeMode==='single')return title('调用费用分析','选择具体月份，按日期查看费用',actions)+periods+modes+filterForm()+
+    '<p id="costExportStatus" class="muted" role="status"></p>'+trendChart()+singleMonthView();
+  if(timeMode==='month')return title('调用费用分析','添加任意月份，对比调用费用',actions)+periods+modes+filterForm()+'<p id="costExportStatus" class="muted" role="status"></p>'+trendChart()+monthlyComparison();
+  const list=comparisonMode==='rule'?calls.filter(call=>within(call)&&(!filters.rule||filters.rule===ruleRows[call.ruleId][0])):scoped();
+  const unpriced=stats(list).unpriced;
+  const hint=unpriced?'<p class="error">有 '+num(unpriced)+' 次计费请求待核价，金额仅包含已知费用。</p>':'';
+  return title('每日调用费用对比','示例数据覆盖 2026-09-01 至 '+demoEnd,actions)+
+    periods+modes+filterForm()+'<p id="costExportStatus" class="muted" role="status"></p>'+costSummary(list)+hint+trendChart()+(comparisonMode==='rule'?ruleComparison():dailyComparison(list));
+}
+function records(){
+  const list=scoped().filter(r=>(!filters.status||r.status===filters.status)&&(!filters.kind||r.kind===filters.kind)&&(!filters.order||r.order===filters.order)&&(!filters.orderContext||r.order===filters.orderContext))
+    .sort((a,b)=>b.time.localeCompare(a.time)||b.id.localeCompare(a.id));
+  const count=Math.max(1,Math.ceil(list.length/10));
+  page=Math.min(page,count);
+  shown=list.slice((page-1)*10,page*10);
+  const rows=shown.map(r=>row([r.time,r.order,r.biz,r.p.vendor,r.p.name,r.api,'<span class="pill '+(r.status==='成功'?'':'warn')+'">'+r.status+'</span>',r.kind,r.bill?'计费':'不计费',money(r.fee),button('详情','record:'+r.id,'link')])).join('');
+  return title('调用明细','逐笔核对请求结果、重试和费用',button(filters.orderContext?'返回命中订单':'返回费用对比',filters.orderContext?'back-orders':'return'))+filterForm()+
+    table(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用','操作'],rows)+
+    '<div class="pager"><span>共 '+num(list.length)+' 条 · 第 '+page+' / '+count+' 页</span><button data-action="prev" '+(page===1?'disabled':'')+'>上一页</button><button data-action="next" '+(page===count?'disabled':'')+'>下一页</button></div>';
+}
+const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'open':'')+'><summary>'+name+'</summary><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></details>';
+const reviewNotes=section('原型操作', ['左侧切换页面，同步更新中央标题、面包屑和右侧说明。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
+const fieldGlossary={
+  '序号':'产品目录中的展示顺序。',
+  '产品名称':'三方产品目录中的名称。',
+  '产品':'该请求实际调用的目录产品。',
+  '厂商':'提供该产品的三方机构。',
+  '产品｜厂商':'目录产品名称与提供方。全部产品合计汇总筛选范围内的请求。',
+  '风控规则':'订单命中的规则名称。全部规则合计为符合筛选条件的规则汇总。',
+  '日期':'北京时间自然日，按请求发起时间归属。区间首尾均包含。',
+  '日列':'表头为调用发起日。单元格显示当日调用费用、调用次数和异常次数，规则行另显示命中订单数，规则行及产品汇总行显示单均费用。点击可下钻的金额查看对应记录。',
+  '区间合计':'该行在查询日期范围内的费用总和，单位为元。',
+  '月份列':'表头显示月份、实际统计开始及结束日期，首个所选月份标为基准月。单元格显示调用费用、调用次数、异常次数、单均费用。',
+  '较基准':'对比月费用减基准月费用。变化率为差额除以基准费用，基准为零或任一费用未知时不计算变化率。',
+  '命中订单数':'按统计范围内的订单去重，含未发请求的命中订单。按单产品筛选时，分母仍使用同业务和日期范围内的命中订单数。',
+  '调用次数':'实际外发的请求数，重试单独计一次。无调用显示 0。',
+  '计费次数':'厂商计费规则判定应计费的请求数，包含待核价的计费请求。',
+  '失败或超时次数':'调用结果为失败或超时的请求数。',
+  '重试或疑似重复次数':'请求标记为重试或疑似重复的数量。',
+  '异常次数':'失败、超时、重试或疑似重复请求的并集，单个请求只计一次。',
+  '异常费用（元）':'异常请求去重后的计费金额之和。导出中有待核价时留空。',
+  '调用费用':'各计费请求按调用日生效单价计算的费用之和，单位为元。已知无调用为 ¥0.00，金额未知时按页面标识展示。',
+  '单均费用':'调用费用除以命中订单数。无命中订单或费用未知显示「—」。',
+  '待核价次数':'应计费但缺少生效单价的请求数。',
+  '订单号':'关联订单的唯一标识，导出两份文件使用同一订单号。有调用的命中订单可点订单号查看请求。',
+  '命中日期':'订单风控执行记录中的命中日，按北京时间统计。',
+  '命中规则':'订单风控执行记录关联的规则名称。',
+  '规则预估':'按命中日价格，假设命中规则配置的每个产品各计费一次。缺少价格时显示待核价。',
+  '差额':'订单调用费用减规则预估，任一金额未知时展示「—」。',
+  '适用业务':'关联订单的业务归属，费用导出记录当前业务筛选，未选具体业务时为全部。',
+  '订单状态':'导出时订单在列表中的状态。',
+  '调用产品':'订单实际调用过的产品与厂商，去重后列出，无调用时留空。',
+  '调用时间':'实际请求发起的北京时间。列表按时间倒序，同时间按请求编号倒序。',
+  '请求编号':'一次实际外发请求的唯一标识，重试有独立编号。',
+  '接口':'请求实际外发的三方接口。',
+  '结果':'请求终态，取成功、失败或超时。请求成功仅表示正常返回。',
+  '请求类型':'调用链标记，取首次、超时重试或疑似重复。正式重复判定口径待确认。',
+  '计费判定':'按当时接口计费规则和请求结果确定计费或不计费。',
+  '预估费用':'计费请求的生效单价，免计费为 ¥0.00。缺少单价显示待核价。',
+  '请求单价':'调用发生日适用的产品单价，单位为元/次。',
+  '生效日期':'该价格版本从北京时间当日零点起适用，直至下一有效版本开始。',
+  '单价（元/次）':'产品按次计费的金额。价格配置列表显示截至示例周期末日的有效单价。0 表示免费，最多两位小数。',
+  '价格历史':'点击「查看历史」查看该产品各版本和同日改价记录。',
+  '操作':'在对应行打开配置或详情。'
+};
+const fieldAliases={'调用结果':'结果','计费状态':'计费判定','调用费用（元）':'调用费用',
+  '规则预估（元）':'规则预估','差额（元）':'差额','异常调用费用（元）':'异常费用（元）','单均费用（元）':'单均费用',
+  '价格生效日':'生效日期','调用费用（预估）':'调用费用','单价':'请求单价','费用':'预估费用'};
+const fieldItems=names=>names.map(item=>{const [name,key]=Array.isArray(item)?item:[item,fieldAliases[item]||item];return '<b>'+name+'</b>　'+fieldGlossary[key]});
+const exportRiskFields=section('四、订单风控汇总 CSV 字段',fieldItems([
+  '订单号','命中日期','适用业务','订单状态','命中规则','调用产品','调用次数','计费次数','失败或超时次数','重试或疑似重复次数','规则预估（元）','调用费用（元）','差额（元）','异常调用费用（元）','待核价次数'
+]),false)+section('五、产品调用明细 CSV 字段',fieldItems([
+  '订单号','适用业务','命中规则','请求编号','调用时间','厂商','产品','接口','调用结果','请求类型','计费状态',['单价（元/次）','请求单价'],['调用费用（元）','预估费用'],'价格生效日'
+]),false);
+const exportCostFields=section('六、费用 CSV 字段',[
+  ...fieldItems(['日期','产品名称']),
+  '<b>服务商名称</b>　提供该产品的三方机构名称。',
+  '<b>单价（元/次）</b>　调用当日生效的产品单价。未配置时留空。',
+  ...fieldItems(['调用次数','调用费用（元）','计费次数','异常次数']),
+  '<b>风控规则</b>　仅按规则查看时导出，为该批调用对应的命中规则。'
+],false);
+const prds={
+  report:section('一、报告入口与布局',[
+    '订单列表点击「风控报告」在新标签页打开对应订单。页面沿用原报告的视角页签、免责声明、风险等级、基础信息和产品风控结论。',
+    '报告时间、历史风控管理、产品结论分组及详情沿用已生成报告的展示结构。基础资料、结论和部分详情采用示例内容。'
+  ])+section('二、新增三方调用费用',[
+    '运营后台视角在报告标题右侧的操作区展示「查看调用费用」。点击打开独立弹窗，关闭后回到报告原位置。入口仅对运营后台视角展示。',
+    '调用费用为该订单已计费请求按生效单价估算的金额。规则预估为配置产品各计费一次，差额为调用费用减规则预估。展开产品查看逐次调用、结果、计费状态、单价和费用。',
+    '订单号关联报告与导出。通过浏览器切回订单列表可保留该标签页中的筛选和分页。'
+  ]),
+
+  commerce:section('一、需求背景',[
+    '三方按次计费，单笔订单可触发多产品、多接口及重试。订单侧需直接看到调用成本、产品报告和异常请求，方便在月度账单到达前定位费用变化，并给采购提供用量与费用依据。'
+  ])+section('二、订单列表与风控报告',[
+    '订单编号、平台类型、创建日期和状态用于筛选示例订单。示例创建日与命中日相同，其余既有筛选和订单操作按可见布局展示。查询应用筛选并返回第一页，重置恢复默认范围，状态按钮切换状态，分页只影响展示。',
+    '从订单卡片原有「风控报告」入口在新标签页打开对应订单报告。在运营后台视角点击「查看调用费用」，弹窗展示订单累计调用费用、规则预估、差额、调用及计费次数、异常次数和产品报告。逐笔费用按调用发生日生效单价估算，失败或超时按厂商规则判定是否计费。'
+  ])+section('三、导出风控数据',[
+    '沿用订单列表的「导出风控数据」按钮，按当前已查询范围与状态导出全部匹配订单，跨分页。订单汇总一单一行，产品调用明细一次外发一行。两份数据按订单号关联。无调用订单保留在订单汇总。',
+    '产品调用明细增加厂商、产品、接口、调用时间、请求编号、结果、请求类型、计费状态、调用单价和费用等字段。订单汇总增加命中规则、产品、各类次数、规则预估、调用费用与差额。',
+    '原型演示 UTF-8 CSV，正式导出的既有字段、权限、历史费用快照和厂商账单对账口径待确认。'
+  ])+exportRiskFields,
+
+  orders:section('一、订单费用口径',[
+    '订单号与命中日期来自示例风控执行记录，每笔订单演示归属一个规则。调用次数含重试，订单无请求时显示 0 次。',
+    '规则预估按命中日、规则配置产品各计费一次计算。调用费用按该订单实际计费请求汇总的估算金额，差额为调用费用减规则预估。待核价时差额显示「—」。',
+    '正式落地按订单记录的实际执行规则版本和请求归属追溯。生产历史账单及已确认成本快照口径待确认。'
+  ])+section('二、列表字段',fieldItems(['订单号','命中日期','命中规则','调用次数','规则预估','调用费用','差额']))+section('三、操作',['点击有调用的订单号查看该单请求。返回费用对比恢复筛选条件。']),
+
+  base:section('一、需求背景',[
+    '风控产品按次计费。业务需要按产品维护单价，并按天比较调用费用，用于发现费用波动及辅助对账。'
+  ])+section('二、新增入口',[
+    '在「全局内容 / 平台风控设置 / 风控基座」的规则筛选操作区新增「产品单价配置」和「每日调用费用对比」。',
+    '点击「产品单价配置」，在当前风控基座内打开 30 个产品的单价配置。点击「每日调用费用对比」，在当前风控基座内查看单品或全部产品的每日费用。',
+    '在新增功能内点击「返回风控基座」，回到原规则列表并恢复规则筛选条件。原列表的「预估单次成本」保留示例值，点击「历史估算」按规则的模拟产品组合和各期单价查看历史估算。',
+    '规则列表按后台结构展示模拟配置。规则名称按文本查询，适用业务和规则状态按选项筛选，重置清除查询条件。原规则维护类操作仅保留位置，用于对照。'
+  ]),
+  overview:section('一、需求背景与范围',[
+    '三方产品按调用计费，过去主要等月度账单核对。新增按产品配置单价、按日对比费用，方便提前发现费用变化，并为对账、续费和产品取舍提供依据。',
+    '从风控基座规则列表工具栏打开「每日调用费用对比」。点击「返回风控基座」，回到同页内的规则列表。'
+  ])+section('二、查询与费用对比',[
+    '日期按北京时间的调用发起日，包含开始和结束日。开始日期不得晚于结束日期。适用业务按订单归属，产品按调用记录筛选。接口是请求走的技术入口，只在明细用于排查。',
+    '点击「查询」更新对比表。选全部产品时，首行显示每日总费用，下方显示 30 个产品各自的费用。选单个产品时，只显示该产品跨日费用。点击「重置」恢复全部产品和示例周期。',
+    '每列为一个自然日，区间合计为所查日期的费用之和。每天预估费用等于当日各计费请求对应产品单价之和。每日格同时显示调用次数与异常次数，产品合计行和规则行展示单均费用。单均费用按命中订单数摊销，包含未发请求的命中订单。筛选单产品时表示该产品对单均费用的贡献。异常请求按失败、超时、重试或疑似重复的并集去重。失败或重试是否计费按厂商规则判定，无调用显示 ¥0.00。',
+    '按产品时点击每日金额查看对应产品的调用明细。按风控规则时按命中规则与日期统计，显示命中订单数和调用费用，点击金额查看订单预估、调用费用和差额。切换维度时清空产品或规则选择，保留日期和适用业务。返回后恢复原查询条件。点击「产品单价配置」可维护用于费用估算的单价。'
+  ])+section('三、按月查看与导出',[
+    '「单月查看」选择具体月份，按日期纵向列出调用费用和次数，首行是所选范围合计。「自定义日期」用开始和结束日期查看逐日矩阵。示例截至 2026-11-07。',
+    '「多月对比」可添加或移除月份，至少选择两个且不可重复。基准月固定在首列，可直接修改月份。点击对比月份旁的左移、右移按钮可调整顺序，点击查询后，表头和 CSV 按新顺序输出。表头标明各月的实际统计日期。若包含未结束月份，所有月份均按截至日对齐。各月使用同一套业务及产品或规则筛选。',
+    '费用差额为该对比月减基准月，变化率为差额除以基准月费用。基准费用为零时，变化率显示「—」。缺少整期示例数据时标为无数据。',
+    '「导出费用数据」按当前已查询的区间和筛选导出产品调用明细 CSV。每天按产品与适用单价汇总，按规则查看时再按规则拆分。调用费用按计费次数乘以单价计算，应计费但缺少单价时留空。多月按所选月份顺序导出，月内日期升序。'
+  ])+section('每日趋势',['折线图可切换调用费用和调用次数。按单月或自定义日期查看时，显示当前筛选的每日汇总。多月对比时每月一条线，按月内日序对齐。无数据的月份只显示图例，待核价的日期在费用折线中断开。'])+section('四、单月与自定义日期表字段',fieldItems(['日期','产品｜厂商','风控规则','日列','区间合计','命中订单数','调用次数','计费次数','异常次数','调用费用','单均费用']))+
+  section('五、多月对比表字段',fieldItems(['产品｜厂商','风控规则','月份列','调用费用','调用次数','异常次数','单均费用','较基准']))+
+  exportCostFields+section('七、待确认',[
+    '当前目录为 30 个示例产品。示例单价、接口与请求用于演示。正式合同价、厂商计费规则、历史回填范围和对账字段待确认。'
+  ],false),
+  prices:section('一、业务需求与字段',[
+    '支持业务人员按产品自定义按次单价，覆盖 30 个示例产品。序号为目录顺序，产品名称、厂商按清单展示。',
+    '单价单位为元/次，支持 0 至 99999.99，最多 2 位小数，0 表示免费。生效日期为北京时间自然日，从当日零点起适用。列表按示例周期末日展示生效版本。',
+    '点击「价格历史」查看每次保存的单价、生效日期、记录时间和状态。初始演示值在历史中标注「示例」，主表统一显示当前单价。'
+  ])+section('二、产品列表字段',fieldItems(['序号','产品名称','厂商','单价（元/次）','生效日期','价格历史','操作']))+section('三、配置与费用计算',[
+    '点击「配置单价」打开该产品弹窗。保存后更新版本和估算费用，同一生效日以最后一次保存为准，前值保留在历史中。选择其他日期可新增版本。',
+    '每笔计费请求按调用日匹配最近的已生效价格，直到下一版本生效。回填历史日期时重算其覆盖区间，覆盖区间之外的版本继续生效。',
+    '示例单价用于演示。在示例首日或更早保存自定义版本时，该版本接管示例价；较晚生效时，之前的示例区间继续用于演示。',
+    '自定义价格保存在当前浏览器。「返回风控基座」回到规则列表，「查看费用对比」恢复原费用查询条件。正式合同价、修改权限及审计要求待确认。'
+  ]),
+  records:section('一、需求与查询',[
+    '从每日费用对比下钻后，逐笔查看所选日期与产品的请求、计费判定和估算费用。',
+    '开始和结束日期按北京时间请求发起日筛选，首尾日期包含，开始不得晚于结束。适用业务取订单归属，三方产品取实际调用的产品。',
+    '调用结果可选成功、失败、超时。请求类型可选首次、超时重试、疑似重复。订单号按完整订单号匹配。查询组合条件并回第一页，重置清空筛选并恢复示例周期。',
+  ])+section('二、列表字段',fieldItems(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用','操作']))+section('三、查看与返回',[
+    '「详情」打开调用记录及其配套弹窗说明。上一页和下一页每次翻动 10 条，边界禁用，无数据时显示空态。',
+    '从产品下钻时点击「返回费用对比」恢复筛选条件，从命中订单下钻时点击「返回命中订单」回到同一规则和日期。'
+  ])
+};
+let savedOverview={...initial};
+function ruleComparison(){
+  const days=dates.filter(date=>date>=filters.from&&date<=filters.to);
+  if(!days.length)return '<p class="empty">所选区间暂无示例数据</p>';
+  const rules=ruleRows.map((rule,id)=>({rule,id})).filter(({rule})=>(!filters.rule||filters.rule===rule[0])&&(!filters.biz||filters.biz===bizs[rule[1]]));
+  const rows=rules.map(({rule,id})=>row([rule[0],...days.map(date=>{
+    const orders=matchedOrders.filter(order=>order.date===date&&order.ruleId===id);
+    const total=stats(calls.filter(call=>call.date===date&&call.ruleId===id));
+    const fee=total.unpriced?null:total.cost;
+    return orders.length?button(money(fee),'rule-day:'+id+':'+date,'link')+
+      '<br><small>'+orders.length+' 单 · '+total.total+' 次 · 异常 '+total.abnormal+'</small>'+
+      '<br><small>单均 '+money(fee===null?null:fee/orders.length)+'</small>':'¥0.00<br><small>0 单</small>';
+  })])).join('');
+  return '<p class="muted">金额为实际发生的计费调用按配置单价估算的费用。点击金额查看命中订单及其费用差额。</p>'+table(['风控规则',...days],rows);
+}
+function orders(){
+  const {id,date}=selectedRuleDay;
+  const rows=matchedOrders.filter(order=>order.ruleId===id&&order.date===date).map(order=>{
+    const {requests,estimate,fee,delta}=orderCost(order);
+    return row([requests.length?button(order.id,'order:'+order.id,'link'):order.id,date,ruleRows[id][0],requests.length,
+      money(estimate),money(fee),delta===null?'—':money(delta)]);
+  }).join('');
+  return title('规则命中订单费用',date+' · '+ruleRows[id][0]+' · 示例订单',button('返回费用对比','return'))+
+    table(['订单号','命中日期','命中规则','调用次数','规则预估','调用费用','差额'],rows);
+}
+function dailyComparison(list){
+  const selected=products.filter(p=>!filters.product||p.name===filters.product);
+  const days=dates.filter(d=>d>=filters.from&&d<=filters.to);
+  if(!days.length)return '<p class="empty">所选区间暂无示例数据</p>';
+  const cell=(items,date,id)=>{
+    const total=stats(items);
+    const fee=total.unpriced?null:total.cost;
+    const amount=total.total?button(money(fee),'compare:'+date+(id?':'+id:''),'link'):'¥0.00';
+    const orders=id?0:matchedOrders.filter(order=>order.date===date&&within(order)).length;
+    return amount+'<br><small>'+total.total+' 次 · 异常 '+total.abnormal+'</small>'+
+      (orders?'<br><small>单均 '+money(fee===null?null:fee/orders)+'</small>':'');
+  };
+  const totals=row(['<strong>'+ (filters.product?productLabel(selected[0]):'全部产品合计')+'</strong>',...days.map(d=>cell(list.filter(r=>r.date===d),d)),money(stats(list).cost)]);
+  const rows=filters.product?totals:totals+selected.map(p=>{
+    const items=list.filter(r=>r.p===p);
+    return row([productLabel(p),...days.map(d=>cell(items.filter(r=>r.date===d),d,p.id)),money(stats(items).cost)]);
+  }).join('');
+  return '<p class="muted">横向比较各自然日费用。点击有调用的金额，查看当日对应调用明细。</p>'+table(['产品｜厂商',...days,'区间合计'],rows);
+}
+function prices(){
+  const rows=products.map(p=>{
+    const history=versions(p);
+    const active=history.find(([date])=>date<=dates.at(-1));
+    return row([String(p.id).padStart(2,'0'),p.name,p.vendor,unitMoney(active?.[1].unit??null),active?.[0]||'—',
+      button('查看历史','price-history:'+p.id,'link'),button('配置单价','price:'+p.id,'link')]);
+  }).join('');
+  return title('产品单价配置','30 个产品 · 列表展示截至 2026-11-07 生效的单价','<div>'+button('返回风控基座','base')+button('查看费用对比','return')+'</div>')+
+    '<p class="muted">初始单价为演示值。自定义单价按生效日期用于预估费用，并保存在当前浏览器。</p>'+
+    table(['序号','产品名称','厂商','单价（元/次）','生效日期','价格历史','操作'],rows);
+}
+let editingProduct;
+function showPrice(id){
+  editingProduct=products[id-1];
+  $('priceProduct').textContent=productLabel(editingProduct);
+  $('priceForm').elements.date.value=novemberDates[0];
+  $('priceError').hidden=true;
+  syncPriceForm();
+  $('priceDialog').showModal();
+}
+function syncPriceForm(){
+  const {date,unit}=$('priceForm').elements;
+  const existing=versions(editingProduct).find(([start])=>start===date.value);
+  unit.value=existing?String(existing[1].unit/10000):'';
+  $('priceError').hidden=true;
+  $('priceHint').textContent=existing?'保存将更新该生效日的'+(existing[1].demo?'示例':'自定义')+'单价。旧值保留在历史中，并重新计算该版本覆盖期间的费用。':'保存后从所选日期开始生效，直到下一个价格版本生效。';
+}
+$('priceForm').elements.date.addEventListener('change',syncPriceForm);
+$('priceForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const {date,unit}=e.target.elements;
+  const value=unit.value.trim();
+  const error=$('priceError');
+  if(!/^\d{1,5}(\.\d{1,2})?$/.test(value)){
+    error.textContent='请输入 0 至 99999.99 的单价，最多 2 位小数。';
+    error.hidden=false;
+    unit.focus();
+    return;
+  }
+  const previous=customPrices[editingProduct.id]?.[date.value];
+  const log=priceLogs[editingProduct.id]||[];
+  if(previous&&!log.some(item=>item.date===date.value))log.push({date:date.value,unit:previous.unit,at:previous.at||''});
+  const savedVersion={unit:Math.round(Number(value)*100)*100,demo:false,at:new Date().toISOString()};
+  log.push({date:date.value,...savedVersion});
+  priceLogs[editingProduct.id]=log;
+  customPrices={...customPrices,[editingProduct.id]:{...customPrices[editingProduct.id],[date.value]:savedVersion}};
+  let saved=true;
+  try{localStorage.setItem(priceKey,JSON.stringify(customPrices));localStorage.setItem(priceLogKey,JSON.stringify(priceLogs))}catch{saved=false}
+  $('priceDialog').close();
+  render();
+  const status=document.createElement('p');
+  status.setAttribute('role','status');
+  status.textContent=saved?'单价已保存，费用按生效日期重新计算。':'单价已用于本次预览，当前浏览器无法保存，重新打开会恢复。';
+  $('content').querySelector('.heading').after(status);
+  $('content').querySelector('[data-action="price:'+editingProduct.id+'"]').focus({preventScroll:true});
+});
+function render(){
+  document.title='风控基座 · '+({report:'风控报告',commerce:'商城订单列表',orders:'规则命中订单费用',base:'规则列表',overview:'每日调用费用对比',records:'调用明细',prices:'产品单价配置'}[view]);
+  const inShop=view==='commerce'||view==='report';
+  $('opsNav').hidden=inShop;
+  $('shopNav').hidden=!inShop;
+  $('opsModule').classList.toggle('active',!inShop);
+  $('shopModule').classList.toggle('active',inShop);
+  $('riskTabs').hidden=inShop;
+  $('crumbRoot').textContent=inShop?(view==='report'?'订单管理 / 风控报告':'订单管理 / 订单列表'):'全局内容 / 平台风控设置';
+  $('crumb').textContent=(view==='base'||inShop)?'':' / 风控基座 / '+({orders:'每日调用费用对比 / 规则命中订单费用',overview:'每日调用费用对比',prices:'产品单价配置',records:'每日调用费用对比 / 调用明细'}[view]);
+  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view||b.classList.contains('risk-tab'))));
+  $('content').innerHTML=({base,overview,records,prices,orders,commerce,report}[view])();
+  if($('shopFilters')){
+    for(const input of $('shopFilters').elements)if(input.name)input.value=shopFilters[input.name];
+  }
+  if($('ruleFilters')){
+    for(const input of $('ruleFilters').elements)if(input.name)input.value=ruleFilters[input.name];
+  }
+  updateMonthOrderButtons();
+  if($('filters')){
+    for(const input of $('filters').elements)if(input.name&&input.name!=='comparisonMonth')input.value=input.name==='month'?reportMonth:filters[input.name];
+  }
+}
+function switchView(next,overrides){
+  if(next!==view){
+    if(view==='overview')savedOverview={...filters};
+    if(next==='overview')filters={...savedOverview};
+    if(next==='records')filters={...savedOverview,...overrides};
+    view=next;
+    $('prd').innerHTML=prds[view]+reviewNotes;
+    $('prd').parentElement.scrollTop=0;
+  }
+  page=1;
+  render();
+}
+function infoDialog(name,body,notes){
+  $('modalTitle').textContent=name;
+  $('modalBody').innerHTML=body;
+  $('modalPrd').innerHTML='<h2>'+name+' · 弹窗说明</h2>'+notes;
+  $('detail').showModal();
+}
+function showPriceHistory(id){
+  const p=products[id-1];
+  const applied=versions(p);
+  const entries=['2026-09-01','2026-11-01'].map(date=>({date,unit:p.interfaces[0][1],demo:true})).concat([...(priceLogs[id]||[])]);
+  for(const [date,v] of Object.entries(customPrices[id]||{})){
+    if(!entries.some(e=>!e.demo&&e.date===date))entries.push({date,...v});
+  }
+  const rows=entries.map((e,i)=>({...e,i})).sort((a,b)=>b.date.localeCompare(a.date)||b.i-a.i).map(e=>{
+    const current=applied.find(([date])=>date===e.date)?.[1];
+    const applies=current&&Boolean(current.demo)===Boolean(e.demo)&&(current.at||'')===(e.at||'')&&!entries.slice(e.i+1).some(later=>!later.demo&&later.date===e.date);
+    const at=e.at?new Date(e.at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'—';
+    return row([e.date,money(Math.round(e.unit/100)*100),at,(e.demo?'示例 · ':'')+(applies?(e.date>dates.at(-1)?'待生效':'有效版本'):'已替代')]);
+  }).join('');
+  infoDialog('产品单价历史','<p>'+productLabel(p)+'</p>'+table(['生效日期','单价（元/次）','记录时间','状态'],rows),
+    '<h3>一、版本记录</h3><ul><li>按生效日期倒序，同日按保存顺序倒序。示例价标在状态中，历史记录的时间为空时显示「—」。</li><li>状态区分有效版本、待生效和已替代。同一日期的旧记录标为已替代。</li></ul><h3>二、操作</h3><p>点击关闭返回产品列表。</p>'+section('三、列表字段',[...fieldItems(['生效日期','请求单价']),'<b>记录时间</b>　保存版本的北京时间。初始示例或无记录时间显示「—」。','<b>状态</b>　区分有效版本、待生效和已替代，初始版本附示例标识。']));
+}
+function showDetail(id){
+  $('modalTitle').textContent='调用记录详情';
+  const r=shown.find(item=>item.id===id);
+  if(!r)return;
+  const pair=[['请求编号',r.id],['调用时间',r.time],['订单号',r.order],['适用业务',r.biz],['厂商',r.p.vendor],['产品',r.p.name],['接口',r.api],['结果',r.status],['请求类型',r.kind],['计费判定',r.bill?'计费':'不计费'],['请求单价',unitMoney(r.price)],['预估费用',money(r.fee)]];
+  $('modalBody').innerHTML='<dl class="pairs">'+pair.map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl><p class="muted">'+(r.bill?(r.status==='成功'?'成功请求按调用日生效的产品单价估算。':'此接口的演示规则对失败和超时也计费。'):'此接口的演示规则仅对成功请求计费。')+'</p>';
+  $('modalPrd').innerHTML='<h2>调用记录详情 · 弹窗说明</h2><h3>一、记录字段</h3><ul><li>请求编号是单次外发标识，调用时间为北京时间发起时间，订单号用于关联订单，适用业务取订单归属。</li><li>厂商为服务提供方，产品为采购的数据产品，接口为实际外发目标。</li><li>结果为成功、失败或超时，请求类型为首次、超时重试或疑似重复。</li><li>计费判定取当时接口规则，请求单价取调用日生效的产品单价。预估费用为计费金额，免计费显示 ¥0.00。</li></ul><h3>二、按钮事件</h3><ul><li>点击「关闭」、右上角 × 或按 Esc 返回原列表，保留条件与页码。</li></ul>';
+  $('detail').showModal();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');
+  if(!b)return;
+  if(b.hasAttribute('data-close')){b.closest('dialog').close();return}
+  if(b.dataset.view){if(view==='report')history.replaceState(null,'',location.pathname+location.search);switchView(b.dataset.view);return}
+  if(!b.dataset.action)return;
+  const [action,key,idx]=b.dataset.action.split(':');
+  if(action==='report-cost'&&reportAudience==='运营后台'&&reportOrder){showReportCost(reportOrder);return}
+  if(action==='report-audience'){reportAudience=key;render();return}
+  if(action==='shop-more'){
+    showShopFilters=!showShopFilters;
+    const extra=$('shopFilters').querySelectorAll('.rule-inputs')[1];
+    extra.hidden=!showShopFilters;
+    b.textContent=showShopFilters?'收起筛选':'更多筛选';
+    return;
+  }
+  if(action==='shop-status'){shopFilters={...shopFilters,status:key};shopPage=1;render();return}
+  if(action==='shop-reset'){shopFilters={...shopDefaults};shopPage=1;render();return}
+  if(action==='shop-page'){shopPage+=Number(key);render();return}
+  if(action==='shop-export'){showRiskExport();return}
+  if(action==='export-download'){downloadRiskExport();return}
+  if(action==='base'){switchView('base');return}
+  if(action==='rule-reset'){ruleFilters={name:'',biz:'',state:''};render();return}
+  if(action==='original'){
+    const notice=$('ruleNotice');
+    notice.hidden=false;
+    notice.textContent='「'+b.textContent.trim()+'」是现有规则维护功能，本次原型演示产品单价配置与每日调用费用对比。';
+    return;
+  }
+  if(action==='move-month'){
+    const month=b.closest('.comparison-month');
+    const neighbor=key==='left'?month.previousElementSibling:month.nextElementSibling;
+    if(!neighbor||neighbor===month.parentElement.firstElementChild)return;
+    if(key==='left')neighbor.before(month);
+    else neighbor.after(month);
+    updateMonthOrderButtons();
+    const focusTarget=b.disabled?month.querySelector('[data-action^="move-month"]:not(:disabled)'):b;
+    (focusTarget||month.querySelector('input')).focus();
+    return;
+  }
+  if(action==='add-month'){
+    const fields=$('comparisonMonthFields');
+    fields.insertAdjacentHTML('beforeend',comparisonMonthField());
+    updateMonthOrderButtons();
+    fields.lastElementChild.querySelector('input').focus();
+    return;
+  }
+  if(action==='remove-month'){
+    b.closest('.comparison-month').remove();
+    updateMonthOrderButtons();
+    $('filters').querySelector('[data-action="add-month"]').focus();
+    return;
+  }
+  if(action==='trend'){
+    trendMetric=key;
+    const chart=b.closest('.trend-card');
+    chart.outerHTML=trendChart();
+    $('content').querySelector('[data-action="trend:'+key+'"]').focus();
+    return;
+  }
+  if(action==='cost-export'){exportCosts();return}
+  if(action==='time'){timeMode=key;render();return}
+  if(action==='mode'){
+    comparisonMode=key;
+    filters={...filters,product:'',rule:''};
+    render();
+    return;
+  }
+  if(action==='price-history'){showPriceHistory(Number(key));return}
+  if(action==='rule-history'){showRuleHistory(Number(key));return}
+  if(action==='rule-day'){selectedRuleDay={id:Number(key),date:idx};switchView('orders');return}
+  if(action==='back-orders'){switchView('orders');return}
+  if(action==='order'){
+    switchView('records',{from:selectedRuleDay.date,to:selectedRuleDay.date,order:key,orderContext:key});
+    return;
+  }
+  if(action==='return'){switchView('overview');return}
+  if(action==='record'){showDetail(key);return}
+  if(action==='price'){showPrice(Number(key));return}
+  if(action==='compare'){switchView('records',{from:key,to:key,product:idx?products[Number(idx)-1].name:filters.product});return}
+  if(action==='reset'){
+    if(view==='overview'){reportMonth=defaultMonth;comparisonMonths=[...defaultComparisonMonths]}
+    const context=filters.orderContext;
+    filters=context?{...initial,from:selectedRuleDay.date,to:selectedRuleDay.date,order:context,orderContext:context}:{...initial};
+    page=1;
+  }
+  if(action==='prev')page--;
+  if(action==='next')page++;
+  render();
+  const replacement=[...document.querySelectorAll('[data-action]')].find(el=>el.dataset.action===b.dataset.action);
+  if(replacement&&!replacement.disabled)replacement.focus({preventScroll:true});
+});
+$('content').addEventListener('submit',e=>{
+  if(e.target.id==='shopFilters'){
+    e.preventDefault();
+    const data=Object.fromEntries(new FormData(e.target));
+    if(data.from>data.to){
+      $('shopError').textContent='开始日期不得晚于结束日期';
+      $('shopError').hidden=false;
+      return;
+    }
+    shopFilters={...shopFilters,...data,order:data.order.trim()};
+    shopPage=1;
+    render();
+    return;
+  }
+  if(e.target.id==='ruleFilters'){
+    e.preventDefault();
+    ruleFilters=Object.fromEntries(new FormData(e.target));
+    ruleFilters.name=ruleFilters.name.trim();
+    render();
+    return;
+  }
+  if(e.target.id!=='filters')return;
+  e.preventDefault();
+  const formData=new FormData(e.target);
+  const data=Object.fromEntries(formData);
+  const error=$('error');
+  if(view==='overview'&&timeMode==='month'){
+    const months=formData.getAll('comparisonMonth');
+    if(months.length<2||new Set(months).size!==months.length){
+      error.textContent='请选择至少两个不同的月份，月份不能重复。';
+      error.hidden=false;
+      return;
+    }
+    comparisonMonths=months;
+    delete data.comparisonMonth;
+  }
+  if(view==='overview'&&timeMode==='single'){
+    reportMonth=data.month;
+    delete data.month;
+  }
+  if(data.from>data.to){error.textContent='开始日期不能晚于结束日期';error.hidden=false;return}
+  filters={...filters,...data,order:(data.order||'').trim()};
+  page=1;
+  render();
+  $('filters').querySelector('[type=submit],.primary').focus({preventScroll:true});
+});
+const layout=$('layout'), divider=$('divider'), defaultRatio=72;
+let ratio=defaultRatio;
+try{ratio=Number(localStorage.getItem('risk-cost-pane-ratio'))||defaultRatio}catch{}
+function setRatio(value){
+  ratio=Math.max(55,Math.min(80,Math.round(value)));
+  layout.style.setProperty('--left',ratio+'fr');
+  layout.style.setProperty('--right',(100-ratio)+'fr');
+  divider.setAttribute('aria-valuenow',ratio);
+  try{localStorage.setItem('risk-cost-pane-ratio',ratio)}catch{}
+}
+setRatio(ratio);
+divider.addEventListener('pointerdown',e=>divider.setPointerCapture(e.pointerId));
+divider.addEventListener('pointermove',e=>{
+  if(!divider.hasPointerCapture(e.pointerId))return;
+  const rect=layout.getBoundingClientRect();
+  setRatio((e.clientX-rect.left)/rect.width*100);
+});
+divider.addEventListener('dblclick',()=>setRatio(defaultRatio));
+divider.addEventListener('keydown',e=>{
+  if(!['ArrowLeft','ArrowRight','Home'].includes(e.key))return;
+  e.preventDefault();
+  setRatio(e.key==='Home'?defaultRatio:ratio+(e.key==='ArrowLeft'?-2:2));
+});
+$('prdToggle').addEventListener('click',e=>{
+  const collapsed=layout.classList.toggle('prd-collapsed');
+  e.target.textContent=collapsed?'展开 PRD':'收起';
+  e.target.setAttribute('aria-expanded',String(!collapsed));
+});
+function syncShopRoute(){
+  const id=location.hash.match(/^#report\/(\d+)$/)?.[1];
+  if(id){
+    reportOrder=shopOrders.find(order=>order.id===id)||null;
+    if(reportOrder){switchView('report');return}
+  }
+  if(location.hash==='#commerce'||view==='report')switchView('commerce');
+}
+window.addEventListener('hashchange',syncShopRoute);
+$('prd').innerHTML=prds.base+reviewNotes;
+render();
+syncShopRoute();
+</script>
+</body>
+</html>
