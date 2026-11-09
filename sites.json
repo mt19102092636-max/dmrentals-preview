@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-09T14:42:24+08:00",
+  "updatedAt": "2026-11-09T14:49:04+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -21,9 +21,9 @@
     {
       "slug": "risk-control-call-costs",
       "name": "风控基座 · 三方调用成本监控",
-      "summary": "按业务清单展示30个三方风控产品与服务商，支持单价配置、每日及多月费用分析、订单调用成本查看和费用导出。",
+      "summary": "按最新业务清单展示33款风控产品及厂商，按单价配置与日期对比每日、多月调用费用，支持订单成本查看和费用导出。",
       "path": "previews/risk-control-call-costs/",
-      "updatedAt": "2026-11-09T14:42:24+08:00",
+      "updatedAt": "2026-11-09T14:49:04+08:00",
       "createdAt": "2026-11-07T17:27:39+08:00"
     }
   ]
