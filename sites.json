@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-09T14:55:44+08:00",
+  "updatedAt": "2026-11-11T15:55:54+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -25,6 +25,14 @@
       "path": "previews/risk-control-call-costs/",
       "updatedAt": "2026-11-09T14:55:44+08:00",
       "createdAt": "2026-11-07T17:27:39+08:00"
+    },
+    {
+      "slug": "crm-pool-claim-rules",
+      "name": "CRM风控基座 · 公海领取规则",
+      "summary": "演示线下销售与电销客服的公海领取额度、超限归属及账号角色判定规则，附 PRD。",
+      "path": "previews/crm-pool-claim-rules/",
+      "updatedAt": "2026-11-11T15:55:54+08:00",
+      "createdAt": "2026-11-11T15:55:54+08:00"
     }
   ]
 }

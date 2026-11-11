@@ -1,0 +1,308 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CRM风控基座 · 公海领取规则</title><style>
+:root{--green:#58c758;--blue:#409eff;--ink:#303133;--muted:#909399;--line:#e4e7ed;--bg:#f2f3f7;--pane:67fr;--prd:33fr}*{box-sizing:border-box}body{margin:0;background:#f2f4f6;color:var(--ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,select{font:inherit}button{cursor:pointer}.top{height:64px;background:#1b1b1b;color:#fff;display:flex;align-items:center;padding:0 22px;gap:32px}.brand{font-size:16px;font-weight:700;min-width:210px}.brand i{font-style:normal;color:#53cf61;margin-right:10px}.nav{display:flex;height:100%;align-items:center;gap:34px;color:#ddd}.nav b{background:#444;padding:21px 18px;border-bottom:3px solid var(--blue)}.user{margin-left:auto;color:#ddd}.work{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 64px)}.rail{background:white;border-right:1px solid var(--line);padding:22px 10px}.rail label{font-size:12px;color:#9aa0a8;padding:0 12px}.choice{width:100%;text-align:left;padding:13px 12px;margin-top:8px;border:0;background:white;color:#50545a;border-radius:3px}.choice.on{background:#ecf5ff;color:var(--blue);border-right:3px solid var(--blue)}.main{min-width:0}.crumb{height:46px;background:white;padding:13px 22px;color:#657080;border-bottom:1px solid var(--line)}.stage{padding:18px;min-width:0}.heading{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px}.heading h1{font-size:19px;margin:0}.tag{font-size:12px;color:#8d959f}.split{display:grid;grid-template-columns:minmax(0,var(--pane)) 14px minmax(300px,var(--prd));gap:8px;align-items:start}.board,.prd{background:#fff;border:1px solid #dfe4eb;border-radius:5px;min-width:0;box-shadow:0 2px 10px #1c243008}.resizer{grid-column:2;cursor:col-resize;display:flex;align-items:center;justify-content:center;min-height:100%;touch-action:none}.resizer:after{content:"";height:55px;width:4px;background:#cbd5df;border-radius:5px}.resizer:focus{outline:2px solid #9bd7c5}.prd{grid-column:3;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;padding:15px}.prdhead{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #edf0f3;padding-bottom:12px}.prd h2{font-size:16px;margin:0}.prd h3{font-size:13px;color:#15936c;margin:16px 0 5px}.prd p,.prd li{font-size:12px;color:#637080;line-height:1.8;margin:4px 0}.prd ul{padding-left:18px}.toggle,.minor{border:1px solid #dcdfe6;background:#fff;border-radius:3px;padding:5px 10px;color:#606266}.foot{border-top:1px solid #eee;padding-top:8px;margin-top:12px}.split.collapsed{grid-template-columns:minmax(0,1fr) 0 52px}.collapsed .resizer{display:none}.collapsed .prd{padding:8px}.collapsed .prd h2,.collapsed .prd article,.collapsed .foot{display:none}.collapsed .prdhead{border:0;justify-content:center}.collapsed .toggle{writing-mode:vertical-rl;min-height:100px}.apphead{background:#1b1b1b;color:white;display:flex;align-items:center;padding:0 20px;height:58px;gap:35px}.apphead strong{font-size:15px}.apphead span{color:#ddd}.apphead .active{height:100%;padding:19px 18px;background:#454545;border-bottom:3px solid var(--blue)}.apphead small{margin-left:auto;color:#eee}.sidenav{display:grid;grid-template-columns:160px 1fr;min-height:760px}.menu{border-right:1px solid var(--line);padding:15px 0;color:#4f5660}.menu div{padding:12px 20px}.menu .sel{background:#ecf5ff;color:#409eff}.content{min-width:0;background:#fff}.innercrumb{padding:13px 20px;border-bottom:1px solid var(--line);font-size:13px}.page{padding:18px 20px}.box{background:#f4f6fb;border:1px solid #e4e9f1;border-radius:4px;padding:18px;margin-bottom:18px}.box h2{font-size:17px;margin:0 0 14px;color:#252a31}.muted{color:#8b929d;font-size:12px}.radio{display:flex;gap:24px;margin:10px 0 17px;color:#515963}.radio label{display:flex;align-items:center;gap:7px}.radio input{accent-color:#58c758}.formrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}.formrow>label{font-size:13px}.formrow input,.formrow select{height:36px;border:1px solid #dcdfe6;background:white;border-radius:3px;padding:0 10px;color:#606266;min-width:145px}.formrow select{min-width:190px}.btn{border:1px solid #dcdfe6;background:white;color:#606266;padding:8px 15px;border-radius:3px}.btn.green{background:#58c758;border-color:#58c758;color:#fff}.btn.blue{background:#409eff;border-color:#409eff;color:#fff}.team{background:white;border:1px solid #e1e5eb;border-radius:4px;padding:14px;margin-top:12px}.teamtop{display:flex;align-items:center;gap:10px}.teamtop strong{font-size:15px}.pill{font-size:11px;border-radius:12px;background:#ecf5ff;color:#409eff;padding:3px 9px}.pill.green{background:#f0f9eb;color:#58a83b}.inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.line{height:1px;background:#e8ebef;margin:12px 0}.alert{background:#f0f9eb;color:#559343;padding:10px 12px;border-radius:3px;font-size:12px;margin:10px 0}.tabs{display:flex;gap:25px;border-bottom:1px solid #e4e7ed;padding:0 0 12px;margin-bottom:14px}.tabs button{border:0;background:none;color:#606266;padding:0}.tabs .on{color:#409eff;border-bottom:2px solid #409eff;padding-bottom:11px;margin-bottom:-13px}.summary{display:flex;gap:26px;margin:13px 0;font-weight:600}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:690px;font-size:12px}th,td{text-align:left;border:1px solid #e4e7ed;padding:11px 10px;white-space:nowrap}th{background:#fafafa;font-weight:600}td small{display:block;color:#999;margin-top:3px}.status{color:#58a83b}.toast{position:fixed;top:78px;right:28px;background:#eff9eb;border:1px solid #cce8bf;color:#4f8f3b;padding:11px 18px;border-radius:4px;box-shadow:0 3px 12px #0001;display:none;z-index:5}.toast.show{display:block}.pair{position:fixed;inset:0;z-index:10;background:#1118;backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:24px}.pair.open{display:flex}.pairgrid{width:min(1120px,96vw);max-height:calc(100vh - 48px);display:grid;grid-template-columns:minmax(430px,1fr) 320px;gap:14px;align-items:stretch}.modal,.modalprd{background:#fff;border-radius:5px;box-shadow:0 15px 50px #0003;overflow:auto}.modal{padding:20px 24px;display:flex;flex-direction:column}.modalhead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:13px}.modalhead h2{font-size:17px;margin:0}.x{border:0;background:none;font-size:22px;color:#999}.modalbody{overflow:auto;padding:8px 2px;flex:1}.modalprd{padding:20px 19px}.modalprd h2{font-size:16px;margin:0 0 12px}.modalprd h3{font-size:13px;color:#13906e;margin:15px 0 5px}.modalprd p,.modalprd li{font-size:12px;line-height:1.75;color:#66717d}.modalfoot{border-top:1px solid #eee;padding-top:13px;text-align:right}.field-label{min-width:100px;color:#626a74}.pending{color:#b18435;background:#fbf6e8;border:1px solid #f1e4bd;padding:8px;border-radius:3px;font-size:12px}@media(max-width:1120px){.split,.split.collapsed{grid-template-columns:1fr;gap:12px}.board,.prd{grid-column:1}.resizer{display:none}.prd{position:static;max-height:none}.pairgrid{grid-template-columns:1fr;overflow:auto}.modal{max-height:68vh}.modalprd{max-height:36vh}}@media(max-width:680px){.work{display:block}.rail{display:flex;gap:5px;padding:8px}.rail label{display:none}.choice{margin:0;padding:8px;font-size:12px}.stage{padding:10px}.sidenav{grid-template-columns:1fr}.menu{display:none}.apphead{gap:12px;padding:0 9px}.apphead strong{font-size:12px}.apphead span{display:none}.summary{flex-wrap:wrap}.pair{padding:10px}.pairgrid{width:100%;max-height:calc(100vh - 20px)}.modal{max-height:60vh;padding:15px}.modalprd{max-height:35vh}}
+
+.demo-role{margin:18px 10px}.demo-role label{padding:0;display:block;margin-bottom:6px}.demo-role select,.pool-filters input,.pool-filters select{width:100%;min-width:0;border:1px solid #dcdfe6;background:#fff;border-radius:3px;height:32px;padding:0 7px;color:#606266}
+.pool-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px 14px}.pool-filters label{display:grid;grid-template-columns:76px minmax(0,1fr);align-items:center;gap:6px;font-size:12px}.pool-filters .range{grid-column:span 2}.range span{display:flex;align-items:center;gap:4px}.pool-actions{grid-column:1/-1;text-align:right}.outline{background:#f0f9eb;color:#559343;border-color:#c2e7b0}.pool-table{min-width:780px;table-layout:fixed}.pool-table th:first-child{width:36px}.pool-table th:nth-child(2){width:24%}.pool-table th:nth-child(3){width:13%}.pool-table th:nth-child(4){width:30%}.pool-table th:last-child{width:74px}.pool-table td{white-space:normal;line-height:1.65;color:#606266;overflow-wrap:anywhere}.pool-table td b{color:#303133}.link{display:block;padding:0;border:0;background:transparent;color:#409eff;font-size:12px}.empty{text-align:center}.btn:disabled{cursor:not-allowed;opacity:.55}.menu .sub{padding-left:26px;font-size:12px}.menu .sel{border-right:2px solid #409eff}.summary{font-size:13px;flex-wrap:wrap;gap:8px 20px}#dialog{border:0;background:none;padding:0;max-width:96vw;max-height:90vh}#dialog::backdrop{background:#1118;backdrop-filter:blur(2px)}#dialog .pairgrid{width:min(880px,95vw);max-height:88vh;align-items:start;grid-template-columns:minmax(0,1fr) minmax(280px,34%)}#dialog .modal,#dialog .modalprd{max-height:88vh}.modalfoot{flex-shrink:0}.toast{z-index:20}
+@media(max-width:1120px){.split.collapsed .prdhead{justify-content:space-between}.collapsed .prd h2{display:block}.collapsed .toggle{writing-mode:initial;min-height:0}}
+@media(max-width:680px){.rail{flex-wrap:wrap}.rail .choice{width:auto}.demo-role{margin:4px 8px}.demo-role label{display:block}.pool-filters .range{grid-column:1/-1}#dialog .pairgrid{grid-template-columns:1fr}#dialog .modal,#dialog .modalprd{max-height:none}.top{height:auto;min-height:55px;padding:10px}.top .nav,.top .user{display:none}.apphead small{display:none}}
+
+.change-label{display:inline-block;white-space:nowrap;background:#b93816;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:700;line-height:1.6;vertical-align:middle}
+.change-heading,.changed-quota{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+#policyForm{border:1px solid #e8a28c;border-left:4px solid #b93816}
+.changed-quota{background:#fff2eb;border:1px solid #f0b29d;border-radius:4px;padding:4px 8px}
+.summary{align-items:center}
+#dialog .pairgrid.single{grid-template-columns:minmax(0,1fr);width:min(480px,95vw)}
+</style></head><body>
+<header class="top"><div class="brand"><i>♞</i>雕马CRM管理系统</div><div class="nav"><b>CRM</b><span>商学院管理</span><span>商学院</span><span>工单</span></div><div class="user">AI　体验馆二维码　演示账号　⌄</div></header>
+<div class="work"><aside class="rail"><label>CRM 风控基座 / 页面切换</label><button class="choice on" data-page="setting">⚙　业务设置</button><button class="choice" data-page="pool">▤　公海客户列表</button><div class="demo-role" id="demoRole" hidden><label for="actor">演示领取身份</label><select id="actor"><option value="sales">线下销售</option><option value="phone">电销客服</option></select></div></aside><main class="main"><div class="crumb"><span class="parentCrumb">系统管理</span>　/　<span id="crumb">业务设置</span></div><div class="stage"><div class="heading"><h1 id="pagetitle">CRM后台 · 业务设置</h1><span class="tag">静态原型 · 示例数据</span></div><div class="split" id="split"><section class="board"><div class="apphead"><strong>雕马CRM管理系统</strong><span>CRM</span><span>商学院管理</span><span>商学院</span><span>工单</span><small>体验馆二维码　演示账号⌄</small></div><div class="sidenav"><aside class="menu" id="menu"><div>员工管理</div><div>职务管理</div><div>组织架构</div><div>企业管理</div><div>系统管理</div><div class="sel">业务设置</div><div>基础配置</div></aside><div class="content"><div class="innercrumb">☰　<span class="parentCrumb">系统管理</span>　/　<span id="innercrumb">业务设置</span></div><section class="page" id="settingPage"><div class="box"><h2>客户绑定渠道归属人设置</h2><div class="radio"><label><input type="radio" name="bind" checked> 启用</label><label><input type="radio" name="bind"> 不启用</label></div><div class="formrow"><label>绑定渠道名称：</label><input value="系统自然渠道" disabled><label>指定流入：</label><select><option>固定归属人</option><option>绑定归属人</option></select><label>归属人员：</label><input value="示例客服"></div><div class="formrow"><label>绑定渠道名称：</label><input value="CRM扫码渠道" disabled><label>指定流入：</label><select><option>绑定归属人</option><option>固定归属人</option></select></div><button class="btn green" onclick="toast('渠道归属设置已保存')">保存</button></div>
+<form class="box" id="policyForm">
+  <h2 class="change-heading">客户公海领取规则设置 <span class="change-label">本次改动</span></h2>
+  <p>领取时先校验当前登录账号的领取权限，再按账号的 CRM 业务角色匹配下方规则。</p>
+  <div class="team">
+    <div class="teamtop"><strong>线下销售</strong></div>
+    <div class="formrow">个人领取上限：<b>100</b></div>
+    <div class="formrow"><label for="overflow">超限归属：</label>
+      <select id="overflow"><option value="assign">指定归属人员</option><option value="self">仍归属领取人</option></select>
+      <label for="owner" id="ownerLabel">归属人员：</label>
+      <input id="owner" value="示例销售主管" maxlength="30" required>
+    </div>
+  </div>
+  <div class="team"><div class="teamtop"><strong>电销客服</strong></div>
+    <div class="formrow">个人领取上限：<b>不限</b></div>
+    <p class="muted">通过现有领取校验后，客户直接归属领取人。</p>
+  </div>
+  <button class="btn green" style="margin-top:14px" type="submit">保存</button>
+</form>
+</section>
+<section class="page" id="poolPage" hidden>
+  <form class="box pool-filters" id="filters"></form>
+  <button class="btn outline" id="batch">批量领取</button>
+  <div class="summary"><span>当日可领取客户数：<b id="daily"></b></span><span class="changed-quota"><span>剩余可领取用户总数：<b id="remaining"></b></span><span class="change-label">本次改动</span></span></div>
+  <div class="tablewrap" tabindex="0" aria-label="公海客户列表"><table class="pool-table">
+    <thead><tr><th><input type="checkbox" id="all" aria-label="全选当前列表"></th><th>状态信息</th><th>企业信息</th><th>客户信息</th><th>交易信息</th><th>操作</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+</section></div></section><div class="resizer" id="resizer" tabindex="0" role="separator" aria-label="拖动或按左右键调整中间原型与右侧PRD宽度，双击恢复默认" title="拖动调整，双击恢复默认"></div><aside class="prd" id="prd"><div class="prdhead"><div><div class="muted" id="prdContext">当前页面 PRD</div><h2 id="prdTitle">业务设置 · 公海领取规则</h2></div><button class="toggle" id="toggle">收起</button></div><article id="prdtext"></article><div class="foot"><button class="minor" id="resetRatio">↔ 恢复默认比例 67:33</button></div></aside></div></div></main></div></div>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="dialog" aria-labelledby="dialogTitle"><div class="pairgrid">
+  <section class="modal"><div class="modalhead"><h2 id="dialogTitle"></h2><button class="x" id="closeDialog" aria-label="关闭">×</button></div>
+  <div class="modalbody" id="dialogBody"></div>
+  <form method="dialog" class="modalfoot"><button class="btn" value="cancel" id="cancelDialog">取消</button> <button class="btn green" value="confirm" id="confirmDialog">确定</button></form></section>
+  <aside class="modalprd" id="dialogPrd"></aside>
+</div></dialog>
+<script>
+const el = id => document.getElementById(id);
+const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
+  '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+}[char]));
+const roles = {
+  sales: {name:'线下销售', held:99, today:0, limit:100},
+  phone: {name:'电销客服', held:126, today:0, limit:Infinity}
+};
+const dailyLimit = 2;
+let policy = {overflow:'assign', owner:'示例销售主管'};
+let applied = {};
+const selected = new Set();
+const records = [
+  {id:1,name:'客户甲',phone:'1XX****0001',company:'示例企业甲',type:'企业客户',source:'自开发-独立开发',channel:'CRM扫码渠道',previous:'示例销售',follow:'未跟进',followTime:'2026-09-20 15:33:47',created:'2023-12-19 20:19:35',orders:6},
+  {id:2,name:'客户乙',phone:'1XX****0002',company:'示例企业乙',type:'企业客户',source:'自开发-独立开发',channel:'CRM扫码渠道',previous:'示例销售',follow:'未跟进',followTime:'2026-09-20 15:34:13',created:'2023-12-19 20:19:40',orders:5},
+  {id:3,name:'客户丙',phone:'1XX****0003',company:'—',type:'个人客户',source:'电销留资',channel:'系统自然渠道',previous:'—',follow:'跟进中',followTime:'2026-09-20 16:10:00',created:'2026-09-18 09:20:00',orders:0}
+];
+const filterFields = [
+  ['name','客户名称','输入客户名称'],['company','企业名称','输入企业名称'],['phone','客户手机号码','输入客户手机号码'],
+  ['type','客户类型',['个人客户','企业客户']],['source','来源渠道',['自开发-独立开发','电销留资']],
+  ['channel','绑定渠道',['CRM扫码渠道','系统自然渠道']],['previous','前归属人','请输入前归属人'],
+  ['follow','跟进状态',['未跟进','跟进中','已跟进']]
+];
+el('filters').innerHTML = filterFields.map(([key,label,control]) => `<label>${label}${Array.isArray(control)
+  ? `<select name="${key}"><option value="">全部</option>${control.map(value=>`<option>${value}</option>`).join('')}</select>`
+  : `<input name="${key}" placeholder="${control}">`}</label>`).join('') +
+  [['followTime','跟进时间'],['created','创建时间']].map(([key,label])=>`<label class="range">${label}<span>
+    <input type="date" name="${key}From" aria-label="${label}开始日期">至<input type="date" name="${key}To" aria-label="${label}结束日期">
+  </span></label>`).join('') + '<div class="pool-actions"><button class="btn green">查询</button> <button type="reset" class="btn">重置</button></div>';
+
+const pagePrd = {
+  setting:`<h3>按账号的 CRM 业务角色匹配规则</h3>
+  <p>过去电销客服需要人工调高上限，漏调时客户会被转给线下销售的指定归属人员。提交领取时，后端先校验当前登录账号的公海领取权限。有领取权限时，读取该账号的 CRM 业务角色，匹配线下销售或电销客服规则。新员工配置电销客服角色后自动适用对应规则。</p>
+  <ul><li>线下销售：个人领取上限为 100，达到上限后按配置决定下一位客户的归属。</li><li>电销客服：个人领取总量不限，通过领取校验后归属领取人。</li></ul>
+  <h3>合并超限归属设置</h3>
+  <p>在线下销售规则下选择「指定归属人员」或「仍归属领取人」。选择指定时归属人员必填，当前值为示例销售主管。点击同区「保存」后，对后续领取生效。原型用姓名输入演示人员选择。</p>
+  <h3>待确认</h3><p>现有 CRM 是否已配置这两个业务角色，以及账号同时拥有两个角色或未匹配角色时如何处理。</p>`,
+  pool:`<h3>剩余可领取用户总数</h3>
+  <ul><li>线下销售：显示个人剩余量 / 100，例如 1/100。</li><li>电销客服：显示「不限」，当日领取额度仍独立校验。</li></ul>
+  <h3>单条与批量领取归属</h3>
+  <p>提交时由后端校验当前登录账号的领取权限，再按账号的 CRM 业务角色应用规则。原型左侧的身份切换用于模拟不同账号角色。线下销售领取第 100 位客户时归属本人，下一位按超限配置处理。电销客服通过领取校验后归属本人。批量领取逐条应用同一规则。</p>`
+};
+
+function switchPage(page) {
+  const pool = page === 'pool';
+  const parent = pool ? '客户管理' : '系统管理';
+  const title = pool ? '公海客户列表' : '业务设置';
+  el('settingPage').hidden = pool;
+  el('poolPage').hidden = !pool;
+  el('demoRole').hidden = !pool;
+  el('pagetitle').textContent = 'CRM后台 · ' + title;
+  el('prdTitle').textContent = pool ? title + ' · 领取规则' : title + ' · 公海领取规则';
+  el('prdtext').innerHTML = pagePrd[page];
+  for (const id of ['crumb','innercrumb']) el(id).textContent = title;
+  document.querySelectorAll('.parentCrumb').forEach(node => node.textContent = parent);
+  document.querySelectorAll('.choice').forEach(button => {
+    button.classList.toggle('on', button.dataset.page === page);
+    button.setAttribute('aria-pressed', String(button.dataset.page === page));
+  });
+  const items = pool
+    ? ['客户管理','销售线索','自媒体线索配置管理','客户总管理列表','客户列表','公海客户列表','客户查重','自动客户分配列表','客资转化看板','订单管理']
+    : ['员工管理','职务管理','组织架构','企业管理','系统管理','权限管理','业务设置','内容列表','基础配置'];
+  el('menu').innerHTML = items.map(item=>`<div class="sub ${item===title?'sel':''}">${item}</div>`).join('');
+  if (pool) renderPool();
+}
+
+let toastTimer;
+function toast(message) {
+  clearTimeout(toastTimer);
+  el('toast').textContent = message;
+  el('toast').classList.add('show');
+  toastTimer = setTimeout(() => el('toast').classList.remove('show'), 3600);
+}
+function syncOwnerField() {
+  const show = el('overflow').value === 'assign';
+  el('ownerLabel').hidden = !show;
+  el('owner').hidden = !show;
+  el('owner').required = show;
+  el('owner').disabled = !show;
+}
+el('overflow').onchange = syncOwnerField;
+el('owner').oninput = () => el('owner').setCustomValidity('');
+el('policyForm').onsubmit = event => {
+  event.preventDefault();
+  const overflow = el('overflow').value;
+  const owner = el('owner').value.trim();
+  if (overflow === 'assign' && !owner) {
+    el('owner').setCustomValidity('请输入归属人员');
+    el('owner').reportValidity();
+    return;
+  }
+  policy = {overflow,owner};
+  toast('公海领取规则已保存');
+};
+
+function visibleRecords() {
+  return records.filter(record => !record.owner && Object.entries(applied).every(([key,value]) => {
+    if (!value) return true;
+    if (key.endsWith('From')) return record[key.slice(0,-4)].slice(0,10) >= value;
+    if (key.endsWith('To')) return record[key.slice(0,-2)].slice(0,10) <= value;
+    return record[key].includes(value);
+  }));
+}
+function updateSelection() {
+  const count = visibleRecords().length;
+  el('all').disabled = count === 0;
+  el('all').checked = count > 0 && selected.size === count;
+  el('all').indeterminate = selected.size > 0 && selected.size < count;
+  el('batch').disabled = selected.size === 0;
+}
+function renderPool() {
+  const actor = roles[el('actor').value];
+  el('daily').textContent = (dailyLimit - actor.today) + '/' + dailyLimit;
+  el('remaining').textContent = actor.limit === Infinity ? '不限' : Math.max(0,actor.limit-actor.held) + '/' + actor.limit;
+  el('rows').innerHTML = visibleRecords().map(record=>`<tr>
+    <td><input type="checkbox" data-check="${record.id}" aria-label="选择 ${record.name}" ${selected.has(record.id)?'checked':''}></td>
+    <td>创建时间：${record.created}<br>是否成交：否<br>跟进状态：${record.follow}<br>跟进时间：${record.followTime}<br>进入公海天数：0</td>
+    <td>名称：${record.company}<br>行业：—<br>角色：其他</td>
+    <td><b>客户名称：${record.name}</b><br><b>客户手机：${record.phone}</b><br>客户价值：未知<br>来源渠道：${record.source}<br>绑定渠道：${record.channel}<br>已绑定下单人：${record.orders?1:0}<br>前归属人：${record.previous}</td>
+    <td>需求品类：—<br>租赁用途：—<br>订单数：${record.orders}<br>风险等级：无风险<br>备注：${escapeHtml(record.note||'—')}</td>
+    <td>${['备注','操作记录','跟进情况','领取客户'].map(action=>`<button class="link" data-action="${action}" data-id="${record.id}">${action}</button>`).join('')}</td>
+  </tr>`).join('') || '<tr><td colspan="6" class="empty">暂无公海客户</td></tr>';
+  updateSelection();
+}
+el('filters').onsubmit = event => {
+  event.preventDefault();
+  const filters = Object.fromEntries([...new FormData(event.currentTarget)].map(([key,value])=>[key,value.trim()]));
+  for (const key of ['followTime','created']) {
+    if (filters[key+'From'] && filters[key+'To'] && filters[key+'From'] > filters[key+'To']) {
+      toast('开始日期不能晚于结束日期');
+      return;
+    }
+  }
+  applied = filters;
+  selected.clear();
+  renderPool();
+};
+el('filters').onreset = () => {
+  applied = {};
+  selected.clear();
+  renderPool();
+};
+el('actor').onchange = () => {
+  selected.clear();
+  renderPool();
+};
+el('all').onchange = event => {
+  selected.clear();
+  if (event.target.checked) visibleRecords().forEach(record=>selected.add(record.id));
+  renderPool();
+};
+el('rows').onchange = event => {
+  if (!event.target.dataset.check) return;
+  const id = Number(event.target.dataset.check);
+  if (event.target.checked) selected.add(id);
+  else selected.delete(id);
+  updateSelection();
+};
+
+function openDialog(title, body, notes, confirm) {
+  const dialog = el('dialog');
+  dialog.returnValue = '';
+  el('dialogTitle').textContent = title;
+  el('dialogBody').innerHTML = body;
+  el('dialogPrd').hidden = !notes;
+  dialog.querySelector('.pairgrid').classList.toggle('single', !notes);
+  el('dialogPrd').innerHTML = notes ? `<h2>${title} · 弹窗说明</h2>${notes}` : '';
+  el('confirmDialog').hidden = !confirm;
+  el('cancelDialog').textContent = confirm ? '取消' : '关闭';
+  dialog.onclose = () => {
+    if (dialog.returnValue === 'confirm') confirm?.();
+  };
+  dialog.showModal();
+}
+el('closeDialog').onclick = () => el('dialog').close('cancel');
+
+function claim(ids) {
+  const key = el('actor').value;
+  const actor = roles[key];
+  const targets = records.filter(record=>ids.includes(record.id) && !record.owner);
+  if (!targets.length) return;
+  const title = ids.length === 1 ? '领取客户确认' : '批量领取确认';
+  openDialog(title, `<p class="change-heading">当前账号角色：${actor.name} <span class="change-label">本次改动</span></p><p>领取 ${targets.length} 位客户：${targets.map(record=>record.name).join('、')}</p>`,
+    '<h3>一、本次改动</h3><p>提交时先校验当前登录账号的领取权限，再读取账号的 CRM 业务角色，逐条决定归属。线下销售达到个人上限后按超限配置处理，电销客服通过领取校验后归属本人。</p>',
+    () => {
+      if (targets.some(record=>record.owner)) return toast('客户状态已变化，请重新选择');
+      if (actor.today + targets.length > dailyLimit) return toast('当日剩余领取额度不足');
+      let assigned = 0;
+      for (const record of targets) {
+        const redirect = actor.held >= actor.limit && policy.overflow === 'assign';
+        record.owner = redirect ? policy.owner : actor.name;
+        if (redirect) assigned++;
+        else actor.held++;
+        actor.today++;
+      }
+      selected.clear();
+      renderPool();
+      const own = targets.length - assigned;
+      toast([own ? own + ' 位归属领取人' : '', assigned ? assigned + ' 位超限归属 ' + policy.owner : ''].filter(Boolean).join('，'));
+    });
+}
+el('batch').onclick = () => claim([...selected]);
+el('rows').onclick = event => {
+  const {action,id} = event.target.dataset;
+  if (!action) return;
+  const record = records.find(entry=>entry.id===Number(id));
+  if (action === '领取客户') return claim([record.id]);
+  if (action === '备注') {
+    return openDialog(action,`<label for="note">客户备注</label><textarea id="note" maxlength="200" rows="4" style="display:block;width:100%;margin-top:8px">${escapeHtml(record.note||'')}</textarea>`,
+      '',
+      () => { record.note = el('note').value.trim(); renderPool(); toast('备注已保存'); });
+  }
+  const follow = action === '跟进情况';
+  openDialog(action, follow ? `<p>跟进状态：${record.follow}</p><p>最近跟进时间：${record.followTime}</p>` : `<p>前归属人：${record.previous}</p><p>客户当前在公海。</p>`,
+    '');
+};
+
+const split = el('split');
+const resizer = el('resizer');
+const ratioKey = 'crmPrdRatio';
+let ratio = 67;
+function setRatio(value) {
+  ratio = Math.round(Math.max(45,Math.min(78,value)));
+  split.style.setProperty('--pane', ratio+'fr');
+  split.style.setProperty('--prd',(100-ratio)+'fr');
+  resizer.setAttribute('aria-valuenow', String(ratio));
+  try { localStorage.setItem(ratioKey, String(ratio)); } catch {}
+}
+try { setRatio(Number(localStorage.getItem(ratioKey)) || 67); } catch { setRatio(67); }
+resizer.setAttribute('aria-valuemin','45');
+resizer.setAttribute('aria-valuemax','78');
+resizer.setAttribute('aria-orientation','vertical');
+resizer.onkeydown = event => {
+  if (!['ArrowLeft','ArrowRight'].includes(event.key)) return;
+  event.preventDefault();
+  setRatio(ratio + (event.key === 'ArrowLeft' ? -2 : 2));
+};
+resizer.ondblclick = el('resetRatio').onclick = () => setRatio(67);
+resizer.onpointerdown = event => {
+  const start = event.clientX;
+  const original = ratio;
+  resizer.setPointerCapture(event.pointerId);
+  resizer.onpointermove = move => setRatio(original+(move.clientX-start)/split.clientWidth*100);
+};
+resizer.onlostpointercapture = () => resizer.onpointermove = null;
+el('toggle').setAttribute('aria-expanded','true');
+el('toggle').onclick = event => {
+  const collapsed = split.classList.toggle('collapsed');
+  event.currentTarget.textContent = collapsed ? '展开' : '收起';
+  event.currentTarget.setAttribute('aria-expanded', String(!collapsed));
+};
+document.querySelectorAll('.choice').forEach(button=>button.onclick=()=>switchPage(button.dataset.page));
+switchPage('setting');
+</script>
+</body></html>
