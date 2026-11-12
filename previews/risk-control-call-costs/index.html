@@ -1500,7 +1500,7 @@ const operationChapters=[
   ]},
   {title:'订单调用成本追溯',summary:'从订单列表进入风控报告，查看单笔订单产品调用费用。',steps:[
     {selector:'button[data-view="commerce"]',action:'click',text:'点击左侧「商城订单列表」。',result:'展示订单列表与风控报告入口。'},
-    {selector:'.shop-order a[href^="#report/"]',action:'click',text:'点击一笔订单的「风控报告」。',result:'打开该订单对应的风控报告。'},
+    {selector:'.shop-order',action:'report',text:'通过订单卡片中的「风控报告」入口打开报告。',result:'在当前演示窗口打开该订单对应的风控报告。'},
     {selector:'.report-cost-trigger',action:'click',text:'点击报告右上角「查看调用费用」。',result:'打开该订单的调用费用弹窗。'},
     {selector:'#detail #modalBody',text:'查看订单调用费用汇总和产品逐次调用明细。',result:'可核对调用费用、规则预估、差额、计费次数与异常费用。'}
   ]}
@@ -1538,6 +1538,7 @@ function runDemoAction(step){
   const target=document.querySelector(step.selector);
   if(!target)return;
   if(step.action==='click')target.click();
+  if(step.action==='report'){const reportLink=target.querySelector('a[href]');if(reportLink){location.hash=reportLink.getAttribute('href');syncShopRoute()}}
   if(step.action==='type'){
     target.focus();target.value=step.value||'';
     target.dispatchEvent(new Event('input',{bubbles:true}));
