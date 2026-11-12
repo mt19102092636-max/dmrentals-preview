@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>风控基座 · 三方调用成本监控</title>
   <style>
-*{box-sizing:border-box}body{margin:0;background:#eef2f1;color:#243532;font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,select{font:inherit}button,a{cursor:pointer}button:focus-visible,a:focus-visible,[role=separator]:focus-visible{outline:2px solid #247b66;outline-offset:3px}[hidden]{display:none!important}button,.button{border:1px solid #d8dedc;border-radius:4px;background:#fff;padding:7px 13px;color:#34413f;text-decoration:none;white-space:nowrap}button:hover,.button:hover{border-color:#7fba76;color:#398443}button:disabled{opacity:.42;cursor:default}.primary{background:#65a957;border-color:#65a957;color:white}.primary:hover{background:#508c43;color:white}.link{background:none;border:0;padding:2px 0;color:#246ab1}.prototype-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:#fff;border-bottom:1px solid #dce6e2}.prototype-brand{display:flex;align-items:center;gap:12px;font-weight:750;font-size:17px}.prototype-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#136651;color:#fff}.prototype-status,.muted,small{color:#62716d;font-size:12px}.prototype-workspace{display:grid;grid-template-columns:154px minmax(0,1fr);gap:12px;padding:14px;align-items:start}.prototype-rail{padding:14px 10px;background:#fff;border:1px solid #dde6e2;border-radius:8px}.eyebrow{font-size:11px;letter-spacing:.12em;color:#42786a;font-weight:750}.prototype-rail strong{display:block;margin:5px 0 14px}.prototype-rail button,.prototype-rail a{display:block;text-align:left;width:100%;margin:5px 0;white-space:normal}.prototype-rail button[aria-current=true]{background:#e7f3ed;border-color:#c6e0d3;color:#136651;font-weight:700}.prototype-layout{display:grid;grid-template-columns:minmax(0,var(--left,72fr)) 10px minmax(280px,var(--right,28fr));gap:6px;min-width:0;align-items:start}.prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr) 54px}.prd-collapsed .prototype-resizer,.prd-collapsed .prd-panel-content,.prd-collapsed .prd-panel-head h2{display:none}.prd-collapsed .prd-toggle{writing-mode:vertical-rl}.prototype-resizer{height:100%;min-height:50px;cursor:col-resize;touch-action:none;display:grid;place-items:center}.prototype-resizer:after{content:"";width:4px;height:46px;border-radius:4px;background:#afc6be}.prototype-board,.prototype-prd{min-width:0;background:#fff;border:1px solid #dce6e2;border-radius:8px;overflow:hidden}.prototype-prd{max-height:calc(100vh - 94px);overflow:auto;position:sticky;top:12px}.prd-panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;background:#f7fbf9;border-bottom:1px solid #e2ebe6;position:sticky;top:0;z-index:1}.prd-panel-head h2{font-size:15px;margin:0}.prd-panel-content{padding:4px 14px 14px}.prd-section{border-bottom:1px solid #e7eeeb;padding:10px 0}.prd-section:last-child{border:0}.prd-section summary{cursor:pointer;color:#176754;font-weight:700}.prd-section p,.prd-section li,.modal-context-prd li{font-size:13px;line-height:1.65}.prd-section ul,.modal-context-prd ul{padding-left:19px;margin:8px 0}.prd-section li+li,.modal-context-prd li+li{margin-top:5px}
+*{box-sizing:border-box}body{margin:0;background:#eef2f1;color:#243532;font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,select{font:inherit}button,a{cursor:pointer}button:focus-visible,a:focus-visible,[role=separator]:focus-visible{outline:2px solid #247b66;outline-offset:3px}[hidden]{display:none!important}button,.button{border:1px solid #d8dedc;border-radius:4px;background:#fff;padding:7px 13px;color:#34413f;text-decoration:none;white-space:nowrap}button:hover,.button:hover{border-color:#7fba76;color:#398443}button:disabled{opacity:.42;cursor:default}.primary{background:#65a957;border-color:#65a957;color:white}.primary:hover{background:#508c43;color:white}.link{background:none;border:0;padding:2px 0;color:#246ab1}.prototype-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;background:#fff;border-bottom:1px solid #dce6e2}.prototype-top-actions{display:flex;align-items:center;gap:12px}.operation-demo{position:fixed;z-index:2000;left:50%;bottom:14px;transform:translateX(-50%);width:min(760px,calc(100vw - 24px));padding:9px 11px;background:#fff;border:1px solid #c9d9d3;border-radius:8px;box-shadow:0 8px 30px #13282030}.operation-demo-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.operation-demo-controls strong{margin-right:auto;color:#176754}.operation-demo-controls button{font-size:12px;padding:5px 9px}.operation-demo-result{margin:6px 0 0;color:#176754;font-size:12px}.operation-demo-directory{max-height:min(52vh,420px);overflow:auto;border-top:1px solid #e6eeea;margin-top:8px;padding-top:6px}.demo-chapter{padding:7px 0;border-bottom:1px solid #e9efec}.demo-chapter header{display:flex;align-items:center;gap:8px}.demo-chapter header strong{flex:1}.demo-chapter p,.demo-chapter li{font-size:12px;color:#63736d;margin:4px 0}.demo-chapter ol{padding-left:22px}.demo-chapter button{font-size:12px;padding:4px 8px}.operation-callout{position:fixed;z-index:2100;width:min(340px,calc(100vw - 20px));padding:11px 13px;background:#253934;color:#fff;border:1px solid #94c5ac;border-radius:8px;box-shadow:0 6px 24px #1115;font-size:13px;line-height:1.55}.operation-callout strong{display:block;color:#aee3c6;margin-bottom:3px}.operation-callout:after{content:"";position:absolute;left:24px;bottom:-8px;width:14px;height:14px;transform:rotate(45deg);background:#253934;border-right:1px solid #94c5ac;border-bottom:1px solid #94c5ac}.operation-callout.below:after{top:-8px;bottom:auto;transform:rotate(225deg)}.operation-target-highlight{outline:3px solid #ffbb55!important;outline-offset:3px!important;position:relative;z-index:1500!important;box-shadow:0 0 0 5px #ffbb5540!important}@media(max-width:690px){.prototype-top-actions{gap:5px}.prototype-top-actions .prototype-status{display:none}.operation-demo{bottom:8px}.operation-demo-controls strong{flex-basis:100%}.operation-demo-controls button{flex:1}}.prototype-brand{display:flex;align-items:center;gap:12px;font-weight:750;font-size:17px}.prototype-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#136651;color:#fff}.prototype-status,.muted,small{color:#62716d;font-size:12px}.prototype-workspace{display:grid;grid-template-columns:154px minmax(0,1fr);gap:12px;padding:14px;align-items:start}.prototype-rail{padding:14px 10px;background:#fff;border:1px solid #dde6e2;border-radius:8px}.eyebrow{font-size:11px;letter-spacing:.12em;color:#42786a;font-weight:750}.prototype-rail strong{display:block;margin:5px 0 14px}.prototype-rail button,.prototype-rail a{display:block;text-align:left;width:100%;margin:5px 0;white-space:normal}.prototype-rail button[aria-current=true]{background:#e7f3ed;border-color:#c6e0d3;color:#136651;font-weight:700}.prototype-layout{display:grid;grid-template-columns:minmax(0,var(--left,72fr)) 10px minmax(280px,var(--right,28fr));gap:6px;min-width:0;align-items:start}.prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr) 54px}.prd-collapsed .prototype-resizer,.prd-collapsed .prd-panel-content,.prd-collapsed .prd-panel-head h2{display:none}.prd-collapsed .prd-toggle{writing-mode:vertical-rl}.prototype-resizer{height:100%;min-height:50px;cursor:col-resize;touch-action:none;display:grid;place-items:center}.prototype-resizer:after{content:"";width:4px;height:46px;border-radius:4px;background:#afc6be}.prototype-board,.prototype-prd{min-width:0;background:#fff;border:1px solid #dce6e2;border-radius:8px;overflow:hidden}.prototype-prd{max-height:calc(100vh - 94px);overflow:auto;position:sticky;top:12px}.prd-panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;background:#f7fbf9;border-bottom:1px solid #e2ebe6;position:sticky;top:0;z-index:1}.prd-panel-head h2{font-size:15px;margin:0}.prd-panel-content{padding:4px 14px 14px}.prd-section{border-bottom:1px solid #e7eeeb;padding:10px 0}.prd-section:last-child{border:0}.prd-section summary{cursor:pointer;color:#176754;font-weight:700}.prd-section p,.prd-section li,.modal-context-prd li{font-size:13px;line-height:1.65}.prd-section ul,.modal-context-prd ul{padding-left:19px;margin:8px 0}.prd-section li+li,.modal-context-prd li+li{margin-top:5px}
 .appbar{background:#1d1d1d;color:#eee;display:flex;align-items:center;gap:12px;padding:10px 15px;min-height:49px}.appbar .appmark{color:#89cb77;font-size:19px}.appbar .account{margin-left:auto}.appbody{display:grid;grid-template-columns:minmax(0,1fr);min-height:620px}.appnav{border-right:1px solid #e6e9ec;padding:12px 0;color:#52605f;font-size:12px}.appnav div{padding:9px 11px}.appnav .selected{background:#ecf3fd;border-right:2px solid #70a3ef;color:#2868af}.appnav .group{font-weight:700;margin-top:12px}.breadcrumb{padding:10px 13px;border-bottom:1px solid #e6e9ec;color:#586866;font-size:12px}.tabs{padding:0 13px;display:flex;gap:16px;overflow:auto;border-bottom:1px solid #e6e9ec;white-space:nowrap;font-size:12px}.tabs>*{padding:11px 0}.tabs button{background:transparent;border:0;border-radius:0}.tabs button[aria-current=true]{color:#508c43;border-bottom:2px solid #7abd6d;font-weight:700}.content{padding:16px 13px 20px;min-width:0}h1{font-size:22px;margin:2px 0 3px}.heading{display:flex;align-items:start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:13px}.heading p{margin:0}.heading>div+div{display:flex;gap:6px;flex-wrap:wrap}.filters select{max-width:min(215px,65vw)}.price-filters{align-items:center}.price-filters .price-search{position:relative;flex:1 1 360px}.price-search span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9aa5ad;display:flex}.price-filters .price-search input{width:100%;height:38px;padding:6px 10px 6px 38px}.price-filters .price-vendor{flex:0 1 240px}.price-filters .price-vendor select{width:100%;max-width:none;height:38px;border-color:#65a957}.filters{padding:11px;background:#f5f6fa;border:1px solid #e8ebf0;border-radius:4px;display:flex;align-items:end;flex-wrap:wrap;gap:8px;margin-bottom:13px}.filters label{display:grid;gap:4px;font-size:12px;color:#475652}.filters input,.filters select{min-width:0;border:1px solid #d8dedc;border-radius:4px;height:33px;padding:3px 6px;background:#fff;color:#243532}.filters button{height:33px;padding:4px 11px}.error{color:#a3312a;margin:0 0 8px;font-size:13px}.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:8px}.metric{border:1px solid #e1e8e4;border-radius:5px;padding:9px;background:#fff;min-width:0}.metric small{display:block}.metric b{display:block;font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap}.metric:first-child{background:#f0f8ef;border-color:#d4e7d0}.anomaly{margin:12px 0;padding:8px 10px;background:#fff8e9;border:1px solid #f4e2b7;border-radius:4px;color:#805219;display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;font-size:12px}.anomaly .link{color:#795018;text-decoration:underline}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:14px 0 8px;flex-wrap:wrap}.section-head h2{font-size:15px;margin:0}.segments{display:flex;gap:4px;flex-wrap:wrap}.segments button{padding:4px 8px;font-size:12px}.segments button[aria-pressed=true]{background:#edf6ea;border-color:#b6d7ae;color:#367037}.scroll{overflow:auto;border:1px solid #e3e8e6;border-radius:4px;max-width:100%}table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid #e6ebea}th{background:#f4f6fa;color:#4a5956}tr:last-child td{border-bottom:0}tr:nth-child(even){background:#fafbfc}.subrow td:first-child{padding-left:20px;color:#65746f}.num{font-variant-numeric:tabular-nums}.pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:9px;font-size:12px}.pager button{padding:3px 8px}.pill{display:inline-block;border-radius:4px;padding:1px 5px;background:#eef4ef;color:#336a39}.warn{background:#fff0db;color:#8c4d08}.empty{padding:22px;text-align:center;color:#667570}
 dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24px));max-width:none;max-height:calc(100% - 24px);color:inherit}dialog::backdrop{background:#17262170;backdrop-filter:blur(3px)}.modal-context-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;align-items:start;gap:12px}.modal,.modal-context-prd{background:#fff;border-radius:7px;padding:15px;min-width:0}.modal h2,.modal-context-prd h2{font-size:17px;margin:0 0 10px}.modal-context-prd h3{font-size:14px;color:#176754;margin:10px 0 4px}.modal-head{display:flex;justify-content:space-between;align-items:start}.modal-foot{display:flex;justify-content:flex-end;margin-top:12px}.pairs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}.pairs div{background:#f5f7f7;padding:7px 9px}.pairs dt{color:#5c6d67;font-size:12px}.pairs dd{margin:2px 0 0;overflow-wrap:anywhere}
 @media(max-width:1120px){.prototype-layout,.prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr)}.prototype-resizer{display:none}.prototype-prd{position:static;max-height:none}.prd-collapsed .prd-toggle{writing-mode:initial}}
@@ -95,7 +95,13 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 </style>
 </head>
 <body>
-<header class="prototype-topbar"><div class="prototype-brand"><span class="prototype-mark">雕</span> 风控基座 · 三方调用成本监控</div><span class="prototype-status">需求评审原型 · 模拟数据</span></header>
+<header class="prototype-topbar"><div class="prototype-brand"><span class="prototype-mark">雕</span> 风控基座 · 三方调用成本监控</div><div class="prototype-top-actions"><button id="playOperationDemo" type="button">播放操作演示</button><span class="prototype-status">需求评审原型 · 模拟数据</span></div></header>
+<section id="operationDemo" class="operation-demo" aria-live="polite" hidden>
+  <div class="operation-demo-controls"><strong id="demoProgress">操作演示</strong><button id="demoDirectoryToggle" type="button">演示目录</button><button id="demoPause" type="button">暂停</button><button id="demoReplay" type="button">重新播放</button><button id="demoEnd" type="button">结束演示</button></div>
+  <div id="demoDirectory" class="operation-demo-directory" hidden></div>
+  <p id="demoResult" class="operation-demo-result" hidden></p>
+</section>
+<div id="operationCallout" class="operation-callout" role="status" hidden></div>
 <div class="prototype-workspace">
 <aside class="prototype-rail"><span class="eyebrow">评审导航</span><strong>运营后台</strong><nav class="prototype-role-nav" aria-label="原型页面"><button data-view="base" aria-current="true">风控基座</button><button data-view="prices">产品单价配置</button><button data-view="overview">每日调用费用对比</button><button data-view="commerce">商城订单列表</button></nav></aside>
 <div class="prototype-layout" id="layout">
@@ -983,7 +989,7 @@ function records(){
     '<div class="pager"><span>共 '+num(list.length)+' 条 · 第 '+page+' / '+count+' 页</span><button data-action="prev" '+(page===1?'disabled':'')+'>上一页</button><button data-action="next" '+(page===count?'disabled':'')+'>下一页</button></div>';
 }
 const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'open':'')+'><summary>'+name+'</summary><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></details>';
-const reviewNotes=section('原型操作', ['左侧切换页面，同步更新中央标题、面包屑和右侧说明。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
+const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品搜索与价格配置、费用对比及订单成本追溯。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','左侧切换页面，同步更新中央标题、面包屑和右侧说明。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
 const fieldGlossary={
   '序号':'产品目录中的展示顺序。',
   '产品名称':'三方产品目录中的名称。',
@@ -1476,6 +1482,144 @@ window.addEventListener('hashchange',syncShopRoute);
 $('prd').innerHTML=prds.base+reviewNotes;
 render();
 syncShopRoute();
+
+const operationChapters=[
+  {title:'产品价格配置',summary:'筛选一个产品，查看按生效日期维护单价的入口。',steps:[
+    {selector:'button[data-view="prices"]',action:'click',text:'点击左侧「产品单价配置」，进入产品价格目录。',result:'打开 33 款产品的单价列表。'},
+    {selector:'#productNameFilter',action:'type',value:'手机在网状态',text:'在「搜索产品名称」输入框输入产品名称。',result:'产品列表即时筛选出匹配产品。'},
+    {selector:'#priceRows [data-action="price:1"]',action:'click',text:'点击该行「配置单价」。',result:'打开单价配置弹窗，显示产品、厂商、生效日期和单价。'},
+    {selector:'#priceForm input[name="unit"]',text:'查看单价与生效日期字段。',result:'演示只查看配置入口，不保存或改动示例价格。'},
+    {selector:'#priceDialog [data-close]',action:'click',text:'关闭配置弹窗。',result:'返回筛选后的产品目录。'}
+  ]},
+  {title:'调用费用对比与导出',summary:'查看多月费用趋势，并导出当前费用明细。',steps:[
+    {selector:'button[data-view="overview"]',action:'click',text:'点击左侧「每日调用费用对比」。',result:'打开费用分析页面。'},
+    {selector:'button[data-action="time:month"]',action:'click',text:'选择「多月对比」。',result:'按自定义月份查看基准月与对比月费用。'},
+    {selector:'#comparisonMonthFields input[name="comparisonMonth"]',text:'检查月份选择器。',result:'可添加任意月份并调整对比顺序。'},
+    {selector:'#filters button.primary',action:'click',text:'点击「查询」。',result:'刷新月度费用、调用次数、异常次数及趋势。'},
+    {selector:'[data-action="cost-export"]',action:'click',text:'点击「导出费用数据」。',result:'下载当前筛选条件下的产品调用费用 CSV。'}
+  ]},
+  {title:'订单调用成本追溯',summary:'从订单列表进入风控报告，查看单笔订单产品调用费用。',steps:[
+    {selector:'button[data-view="commerce"]',action:'click',text:'点击左侧「商城订单列表」。',result:'展示订单列表与风控报告入口。'},
+    {selector:'.shop-order a[href^="#report/"]',action:'click',text:'点击一笔订单的「风控报告」。',result:'打开该订单对应的风控报告。'},
+    {selector:'.report-cost-trigger',action:'click',text:'点击报告右上角「查看调用费用」。',result:'打开该订单的调用费用弹窗。'},
+    {selector:'#detail #modalBody',text:'查看订单调用费用汇总和产品逐次调用明细。',result:'可核对调用费用、规则预估、差额、计费次数与异常费用。'}
+  ]}
+];
+let operationState={active:false,paused:false,finished:false,chapter:0,step:0,playAll:true,timer:null,actionTimer:null,remaining:0,actionRemaining:0,actionDone:false,lastTick:0,misses:0,target:null};
+function clearOperationTimers(){clearTimeout(operationState.timer);clearTimeout(operationState.actionTimer);operationState.timer=null;operationState.actionTimer=null}
+function operationStep(){return operationChapters[operationState.chapter]?.steps[operationState.step]}
+function renderDemoDirectory(){
+  $('demoDirectory').innerHTML=operationChapters.map((chapter,index)=>'<article class="demo-chapter"><header><strong>'+String(index+1).padStart(2,'0')+' · '+chapter.title+'</strong><button type="button" data-demo-play="'+index+'">播放本段</button></header><p>'+chapter.summary+'</p><details><summary>查看完整步骤</summary><ol>'+chapter.steps.map(step=>'<li>'+step.text+' '+step.result+'</li>').join('')+'</ol></details></article>').join('');
+}
+function setDemoStatus(message){
+  const chapter=operationChapters[operationState.chapter],step=operationStep();
+  $('demoProgress').textContent=message||(!operationState.finished&&chapter&&step?'第 '+(operationState.chapter+1)+' / '+operationChapters.length+' 段 · 第 '+(operationState.step+1)+' / '+chapter.steps.length+' 步':'操作演示');
+  $('demoPause').textContent=operationState.paused?'继续播放':'暂停';
+  $('demoPause').hidden=operationState.finished;
+  $('demoReplay').textContent=operationState.finished?'重播演示':'重新播放';
+}
+function positionOperationCallout(){
+  const tip=$('operationCallout'),target=operationState.target;
+  if(!target||tip.hidden)return;
+  const r=target.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;
+  let left=Math.max(10,Math.min(r.left,innerWidth-w-10));
+  let top=r.top-h-13,below=false;
+  if(top<10||top+h>innerHeight-82){top=r.bottom+13;below=true}
+  if(top+h>innerHeight-10)top=Math.max(10,innerHeight-h-10);
+  tip.style.left=left+'px';tip.style.top=top+'px';tip.classList.toggle('below',below);
+}
+function showOperationCallout(step,index,total){
+  const tip=$('operationCallout');
+  tip.innerHTML='<strong>第 '+(index+1)+' / '+total+' 步 · '+operationChapters[operationState.chapter].title+'</strong><span>'+step.text+'</span><br><span>结果：'+step.result+'</span>';
+  tip.hidden=false;positionOperationCallout();
+}
+function runDemoAction(step){
+  if(!step.action)return;
+  const target=document.querySelector(step.selector);
+  if(!target)return;
+  if(step.action==='click')target.click();
+  if(step.action==='type'){
+    target.focus();target.value=step.value||'';
+    target.dispatchEvent(new Event('input',{bubbles:true}));
+    target.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+}
+function scheduleOperationTimers(){
+  const step=operationStep();operationState.lastTick=Date.now();
+  if(!operationState.actionDone&&step?.action){
+    operationState.actionTimer=setTimeout(()=>{runDemoAction(step);operationState.actionDone=true;operationState.actionTimer=null},operationState.actionRemaining);
+  }
+  operationState.timer=setTimeout(()=>{
+    if(!operationState.actionDone&&step?.action){runDemoAction(step);operationState.actionDone=true}
+    operationState.step++;operationState.misses=0;playOperationStep();
+  },operationState.remaining);
+}
+function playOperationStep(){
+  if(!operationState.active||operationState.paused)return;
+  clearOperationTimers();
+  if(operationState.step>=operationChapters[operationState.chapter].steps.length){
+    if(operationState.playAll&&operationState.chapter<operationChapters.length-1){operationState.chapter++;operationState.step=0;setDemoStatus('进入下一段：'+operationChapters[operationState.chapter].title);operationState.timer=setTimeout(playOperationStep,1200);return}
+    finishOperationDemo();return;
+  }
+  const step=operationStep(),target=document.querySelector(step.selector);
+  if(!target){
+    operationState.misses++;
+    $('demoProgress').textContent='正在定位步骤控件…';
+    if(operationState.misses>20){$('demoProgress').textContent='未找到当前控件，请点击「重播演示」重试。';return}
+    operationState.timer=setTimeout(playOperationStep,400);return;
+  }
+  if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
+  operationState.target=target;target.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'});target.classList.add('operation-target-highlight');
+  setDemoStatus();showOperationCallout(step,operationState.step,operationChapters[operationState.chapter].steps.length);
+  operationState.actionDone=!step.action;operationState.remaining=step.duration||3900;operationState.actionRemaining=step.action?1550:0;
+  setTimeout(positionOperationCallout,280);scheduleOperationTimers();
+}
+function finishOperationDemo(){
+  clearOperationTimers();operationState.active=false;operationState.paused=false;operationState.finished=true;
+  if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
+  operationState.target=null;$('operationCallout').hidden=true;
+  $('demoResult').hidden=false;$('demoResult').textContent=operationState.playAll?'演示完成：订单调用费用与逐次产品明细已打开，可继续查看或重播。':'「'+operationChapters[operationState.chapter].title+'」演示完成，当前页面已保留，可继续查看或重播。';
+  setDemoStatus('操作演示已完成');
+}
+function startOperationDemo(chapter=0,playAll=false){
+  clearOperationTimers();if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
+  document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());
+  operationState={active:true,paused:false,finished:false,chapter,step:0,playAll,timer:null,actionTimer:null,remaining:0,actionRemaining:0,actionDone:false,lastTick:0,misses:0,target:null};
+  $('operationDemo').hidden=false;$('demoDirectory').hidden=true;$('demoDirectoryToggle').textContent='演示目录';$('demoResult').hidden=true;
+  renderDemoDirectory();setDemoStatus();playOperationStep();
+}
+function pauseOperationDemo(){
+  if(!operationState.active)return;
+  if(!operationState.paused){
+    const elapsed=Date.now()-operationState.lastTick;
+    operationState.remaining=Math.max(0,operationState.remaining-elapsed);
+    if(!operationState.actionDone)operationState.actionRemaining=Math.max(0,operationState.actionRemaining-elapsed);
+    clearOperationTimers();operationState.paused=true;setDemoStatus('演示已暂停');
+  }else{operationState.paused=false;scheduleOperationTimers();setDemoStatus()}
+}
+function endOperationDemo(){
+  clearOperationTimers();operationState.active=false;operationState.paused=false;
+  if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
+  operationState.target=null;$('operationCallout').hidden=true;$('operationDemo').hidden=true;$('demoDirectory').hidden=true;
+  $('demoResult').hidden=true;
+}
+$('playOperationDemo').addEventListener('click',()=>startOperationDemo(0,true));
+$('demoPause').addEventListener('click',pauseOperationDemo);
+$('demoReplay').addEventListener('click',()=>startOperationDemo(operationState.playAll?0:operationState.chapter,operationState.playAll));
+$('demoEnd').addEventListener('click',endOperationDemo);
+$('demoDirectoryToggle').addEventListener('click',()=>{
+  const dir=$('demoDirectory');dir.hidden=!dir.hidden;
+  $('demoDirectoryToggle').textContent=dir.hidden?'演示目录':'收起目录';
+  if(!dir.hidden&&operationState.active&&!operationState.paused)pauseOperationDemo();
+  if(dir.hidden&&operationState.active&&operationState.paused)pauseOperationDemo();
+});
+$('demoDirectory').addEventListener('click',e=>{
+  const b=e.target.closest('[data-demo-play]');if(!b)return;
+  startOperationDemo(Number(b.dataset.demoPlay),false);
+});
+window.addEventListener('resize',positionOperationCallout);
+window.addEventListener('scroll',positionOperationCallout,true);
+
 </script>
 </body>
 </html>
