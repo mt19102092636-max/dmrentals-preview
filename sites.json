@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-12T18:10:34+08:00",
+  "updatedAt": "2026-11-12T19:54:24+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -33,6 +33,14 @@
       "path": "previews/crm-pool-claim-rules/",
       "updatedAt": "2026-11-11T15:55:54+08:00",
       "createdAt": "2026-11-11T15:55:54+08:00"
+    },
+    {
+      "slug": "fdd-notarization",
+      "name": "法大大 · 赋强公证对接",
+      "summary": "演示商家存证与模拟扣款、快租小程序签署、证书申请和订单筛选，附分段自动播放与 PRD。",
+      "path": "previews/fdd-notarization/",
+      "updatedAt": "2026-11-12T19:54:24+08:00",
+      "createdAt": "2026-11-12T19:54:24+08:00"
     }
   ]
 }
