@@ -103,7 +103,7 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 </section>
 <div id="operationCallout" class="operation-callout" role="status" hidden></div>
 <div class="prototype-workspace">
-<aside class="prototype-rail"><span class="eyebrow">评审导航</span><strong>运营后台</strong><nav class="prototype-role-nav" aria-label="原型页面"><button data-view="base" aria-current="true">风控基座</button><button data-view="prices">产品单价配置</button><button data-view="overview">每日调用费用对比</button><button data-view="commerce">商城订单列表</button></nav></aside>
+<aside class="prototype-rail"><span class="eyebrow">评审导航</span><strong>运营后台</strong><nav class="prototype-role-nav" aria-label="原型页面"><button data-view="base" aria-current="true">风控基座</button><button data-view="commerce">商城订单列表</button></nav></aside>
 <div class="prototype-layout" id="layout">
 <main class="prototype-board">
 <header class="appbar"><span class="appmark" aria-hidden="true">♧</span><b>运营后台管理系统</b><div class="appmodules" aria-label="后台模块"><span id="opsModule" class="active">运营</span><span id="shopModule">商城</span><span>资产</span><span>CRM</span><span>分销</span><span>商学院</span><span>工单</span></div><span class="account">admin ⌄</span></header>
@@ -989,7 +989,7 @@ function records(){
     '<div class="pager"><span>共 '+num(list.length)+' 条 · 第 '+page+' / '+count+' 页</span><button data-action="prev" '+(page===1?'disabled':'')+'>上一页</button><button data-action="next" '+(page===count?'disabled':'')+'>下一页</button></div>';
 }
 const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'open':'')+'><summary>'+name+'</summary><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></details>';
-const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品搜索与价格配置、费用对比及订单成本追溯。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','左侧切换页面，同步更新中央标题、面包屑和右侧说明。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
+const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品价格配置、费用对比与订单成本追溯。新增的「产品单价配置」「每日调用费用对比」必须从风控基座规则列表工具栏进入，后台实际侧边栏不增加这两个菜单。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','外层「评审导航」仅用于切换原型中的风控基座和订单联动示意，不代表生产后台菜单。产品单价配置与费用对比的真实业务入口均在风控基座工具栏。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
 const fieldGlossary={
   '序号':'产品目录中的展示顺序。',
   '产品名称':'三方产品目录中的名称。',
@@ -1076,18 +1076,28 @@ const prds={
     '正式落地按订单记录的实际执行规则版本和请求归属追溯。生产历史账单及已确认成本快照口径待确认。'
   ])+section('二、列表字段',fieldItems(['订单号','命中日期','命中规则','调用次数','规则预估','调用费用','差额']))+section('三、操作',['点击有调用的订单号查看该单请求。返回费用对比恢复筛选条件。']),
 
-  base:section('一、需求背景',[
-    '风控产品按次计费。业务需要按产品维护单价，并按天比较调用费用，用于发现费用波动及辅助对账。'
-  ])+section('二、新增入口',[
-    '在「全局内容 / 平台风控设置 / 风控基座」的规则筛选操作区新增「产品单价配置」和「每日调用费用对比」。',
-    '点击「产品单价配置」，在当前风控基座内打开 33 个产品的单价配置。点击「每日调用费用对比」，在当前风控基座内查看单品或全部产品的每日费用。',
-    '在新增功能内点击「返回风控基座」，回到原规则列表并恢复规则筛选条件。原列表的「预估单次成本」保留示例值，点击「历史估算」按规则的模拟产品组合和各期单价查看历史估算。',
-    '规则列表按后台结构展示模拟配置。规则名称按文本查询，适用业务和规则状态按选项筛选，重置清除查询条件。原规则维护类操作仅保留位置，用于对照。'
+  base:section('一、本次新增需求变更',[
+    '目标：把三方风控产品按次成本从月末账单核对前移到日常监控。新增能力覆盖产品单价维护、按产品或规则统计每日费用、多月比较与导出，并在订单风控报告中查看单笔订单的调用成本。',
+    '本次改动范围：新增产品单价配置与每日调用费用对比两个页面入口；订单列表增加调用费用追溯和风控数据导出字段。原风控规则列表及原风控报告主体结构保留。',
+    '价格、调用记录及统计结果均为原型模拟数据；前端维护的价格只保存在当前浏览器，不代表已接入生产计费或厂商账单。'
+  ])+section('二、新增页面入口与返回',[
+    '新增入口位于「全局内容 / 平台风控设置 / 风控基座」原规则筛选与操作工具栏内，与「查询」「新建风控规则」同区。正式后台不新增左侧菜单。',
+    '点击「产品单价配置」进入 33 个风控产品的价格目录；点击「每日调用费用对比」进入调用费用分析。两个入口都从风控基座打开。',
+    '产品单价配置页的「返回风控基座」返回规则列表；「查看费用对比」跳转到费用分析。费用分析页的「返回风控基座」返回规则列表。返回后保留此前的规则筛选条件。',
+    '规则列表中的「预估单次成本」保留为规则配置参考值；「历史估算」按该规则关联产品及各生效价格查看估算记录。规则维护类原有按钮仅用于界面结构对照。'
+  ])+section('三、新增能力说明',[
+    '产品单价配置：可按产品名称搜索、按厂商筛选；在行内配置单价和生效日期；查看同一产品所有价格版本。字段含厂商、产品名称、单价（元/次）、生效日期、价格历史及操作。保存后用于后续费用估算。',
+    '每日调用费用对比：可按单月、任意多个自选月份或自定义日期查询；可按产品或风控规则统计，可筛业务和产品；查看每日调用费用折线、调用次数切换、异常调用指标及逐日费用表。月份可添加、删除和排序，支持导出费用 CSV。',
+    '订单追溯与导出：订单列表沿用原「风控报告」入口，在运营视角报告中增加「查看调用费用」按钮，弹窗展示订单调用费用、规则预估、差额和逐产品请求明细；「导出风控数据」提供订单汇总和产品调用明细两份 CSV。'
+  ])+section('四、原风控基座字段与行为',[
+    '规则名称按文本查询，适用业务和规则状态按选项筛选；「查询」应用条件，「重置」清空条件。规则列表字段和原有风控报告展示沿用现有后台布局。'
   ]),
   overview:section('一、需求背景与范围',[
     '三方产品按调用计费，过去主要等月度账单核对。新增按产品配置单价、按日对比费用，方便提前发现费用变化，并为对账、续费和产品取舍提供依据。',
     '从风控基座规则列表工具栏打开「每日调用费用对比」。点击「返回风控基座」，回到同页内的规则列表。'
-  ])+section('二、查询与费用对比',[
+  ])+section('二、新增页面入口',[
+    '从风控基座规则列表工具栏点击「每日调用费用对比」进入本页，不新增后台左侧菜单入口。「返回风控基座」返回原规则列表并保留此前的规则筛选条件；从本页可通过「产品单价配置」入口维护估算单价。'
+  ])+section('三、查询与费用对比',[
     '日期按北京时间的调用发起日，包含开始和结束日。开始日期不得晚于结束日期。适用业务按订单归属，产品按调用记录筛选。接口是请求走的技术入口，只在明细用于排查。',
     '点击「查询」更新对比表。选全部产品时，首行显示每日总费用，下方显示 33 个产品各自的费用。选单个产品时，只显示该产品跨日费用。点击「重置」恢复全部产品和示例周期。',
     '每列为一个自然日，区间合计为所查日期的费用之和。每天预估费用等于当日各计费请求对应产品单价之和。每日格同时显示调用次数与异常次数，产品合计行和规则行展示单均费用。单均费用按命中订单数摊销，包含未发请求的命中订单。筛选单产品时表示该产品对单均费用的贡献。异常请求按失败、超时、重试或疑似重复的并集去重。失败或重试是否计费按厂商规则判定，无调用显示 ¥0.00。',
@@ -1107,7 +1117,11 @@ const prds={
     '增加「搜索产品名称」关键词输入框和「全部厂商」下拉框；输入名称或选择厂商后即时筛选，可组合使用，清空关键词并选择全部厂商可恢复完整目录。',
     '单价单位为元/次，支持 0 至 99999.99，最多 2 位小数，0 表示免费。生效日期为北京时间自然日，从当日零点起适用。列表按示例周期末日展示生效版本。',
     '点击「价格历史」查看每次保存的单价、生效日期、记录时间和状态。初始演示值在历史中标注「示例」，主表统一显示当前单价。'
-  ])+section('二、产品列表字段',fieldItems(['厂商','产品名称','单价（元/次）','生效日期','价格历史','操作']))+section('三、配置与费用计算',[
+  ])+section('二、新增页面入口与产品列表',[
+    '从风控基座规则列表的工具栏点击「产品单价配置」进入本页；该入口属于风控基座，不是后台左侧菜单。点击「返回风控基座」回到原规则列表；点击「查看费用对比」进入每日调用费用分析。',
+    '「搜索产品名称」输入关键字后即时过滤产品名称；「全部厂商」下拉框按厂商过滤，两项可叠加。无匹配结果显示空态，清空关键字并选择全部厂商恢复完整目录。',
+    ...fieldItems(['厂商','产品名称','单价（元/次）','生效日期','价格历史','操作'])
+  ])+section('三、配置单价、版本与费用计算',[
     '点击「配置单价」打开该产品弹窗。保存后更新版本和估算费用，同一生效日以最后一次保存为准，前值保留在历史中。选择其他日期可新增版本。',
     '每笔计费请求按调用日匹配最近的已生效价格，直到下一版本生效。回填历史日期时重算其覆盖区间，覆盖区间之外的版本继续生效。',
     '示例单价用于演示。在示例首日或更早保存自定义版本时，该版本接管示例价；较晚生效时，之前的示例区间继续用于演示。',
@@ -1242,7 +1256,9 @@ function render(){
   $('riskTabs').hidden=inShop;
   $('crumbRoot').textContent=inShop?(view==='report'?'订单管理 / 风控报告':'订单管理 / 订单列表'):'全局内容 / 平台风控设置';
   $('crumb').textContent=(view==='base'||inShop)?'':' / 风控基座 / '+({orders:'每日调用费用对比 / 规则命中订单费用',overview:'每日调用费用对比',prices:'产品单价配置',records:'每日调用费用对比 / 调用明细'}[view]);
-  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view||b.classList.contains('risk-tab'))));
+  const reviewView=(view==='prices'||view==='overview'||view==='records'||view==='orders')?'base':(view==='report'?'commerce':view);
+  document.querySelectorAll('.prototype-role-nav [data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===reviewView)));
+  document.querySelectorAll('.risk-tab[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view)));
   $('content').innerHTML=({base,overview,records,prices,orders,commerce,report}[view])();
   if(view==='prices'){
     const nameInput=$('productNameFilter'), vendorInput=$('productVendorFilter');
@@ -1485,14 +1501,14 @@ syncShopRoute();
 
 const operationChapters=[
   {title:'产品价格配置',summary:'筛选一个产品，查看按生效日期维护单价的入口。',steps:[
-    {selector:'button[data-view="prices"]',action:'click',text:'点击左侧「产品单价配置」，进入产品价格目录。',result:'打开 33 款产品的单价列表。'},
+    {selector:'#ruleFilters button[data-view="prices"]',action:'click',text:'点击风控基座规则列表工具栏中的「产品单价配置」。',result:'从风控基座进入 33 款产品单价目录。'},
     {selector:'#productNameFilter',action:'type',value:'手机在网状态',text:'在「搜索产品名称」输入框输入产品名称。',result:'产品列表即时筛选出匹配产品。'},
     {selector:'#priceRows [data-action="price:1"]',action:'click',text:'点击该行「配置单价」。',result:'打开单价配置弹窗，显示产品、厂商、生效日期和单价。'},
     {selector:'#priceForm input[name="unit"]',text:'查看单价与生效日期字段。',result:'演示只查看配置入口，不保存或改动示例价格。'},
     {selector:'#priceDialog [data-close]',action:'click',anchorAfter:'#productNameFilter',text:'关闭配置弹窗。',result:'返回筛选后的产品目录。'}
   ]},
   {title:'调用费用对比与导出',summary:'查看多月费用趋势，并导出当前费用明细。',steps:[
-    {selector:'button[data-view="overview"]',action:'click',text:'点击左侧「每日调用费用对比」。',result:'打开费用分析页面。'},
+    {selector:'#ruleFilters button[data-view="overview"]',action:'click',text:'点击风控基座规则列表工具栏中的「每日调用费用对比」。',result:'从风控基座进入调用费用分析页面。'},
     {selector:'button[data-action="time:month"]',action:'click',text:'选择「多月对比」。',result:'按自定义月份查看基准月与对比月费用。'},
     {selector:'#comparisonMonthFields input[name="comparisonMonth"]',text:'检查月份选择器。',result:'可添加任意月份并调整对比顺序。'},
     {selector:'#filters button.primary',action:'click',text:'点击「查询」。',result:'刷新月度费用、调用次数、异常次数及趋势。'},
@@ -1579,7 +1595,7 @@ function playOperationStep(){
   if(!operationState.active||operationState.paused)return;
   clearOperationTimers();
   if(operationState.step>=operationChapters[operationState.chapter].steps.length){
-    if(operationState.playAll&&operationState.chapter<operationChapters.length-1){operationState.chapter++;operationState.step=0;setDemoStatus('进入下一段：'+operationChapters[operationState.chapter].title);operationState.timer=setTimeout(playOperationStep,1200);return}
+    if(operationState.playAll&&operationState.chapter<operationChapters.length-1){operationState.chapter++;operationState.step=0;const requiredView=operationState.chapter===2?'commerce':'base';if(view!==requiredView)switchView(requiredView);setDemoStatus('进入下一段：'+operationChapters[operationState.chapter].title);operationState.timer=setTimeout(playOperationStep,1200);return}
     finishOperationDemo();return;
   }
   const step=operationStep(),target=document.querySelector(step.selector);
@@ -1604,6 +1620,7 @@ function finishOperationDemo(){
 }
 function startOperationDemo(chapter=0,playAll=false){
   clearOperationTimers();if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
+  const requiredView=chapter===2?'commerce':'base';if(view!==requiredView)switchView(requiredView);
   document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());
   operationState={active:true,paused:false,finished:false,chapter,step:0,playAll,timer:null,actionTimer:null,remaining:0,actionRemaining:0,actionDone:false,lastTick:0,misses:0,target:null};
   $('operationDemo').hidden=false;$('demoDirectory').hidden=true;$('demoDirectoryToggle').textContent='演示目录';$('demoResult').hidden=true;
