@@ -22,6 +22,18 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 .appnav div{padding:12px 9px}
 .appnav .appsub{padding-left:23px}
 .appnav .selected{color:#409eff;background:#ecf5ff;border-right:2px solid #409eff}
+.risk-nav>summary{display:flex;align-items:center;gap:8px;padding:12px 9px;cursor:pointer;list-style:none}
+.risk-nav>summary::-webkit-details-marker{display:none}
+.risk-nav>summary:after{content:"›";margin-left:auto;color:#667580}
+.risk-nav[open]>summary:after{transform:rotate(90deg)}
+.risk-nav button.appsub{display:block;width:100%;padding:12px 5px 12px 17px;border:0;border-radius:0;text-align:left;color:inherit;background:transparent}
+.risk-nav button.appsub:hover{color:#2879c6;background:#f3f8ff}
+.risk-nav button.appsub[aria-current="page"]{color:#2879c6;background:#ecf5ff;border-right:2px solid #409eff;font-weight:700}
+.risk-nav button:focus-visible{outline-offset:-3px}
+@media(max-width:690px){
+  #opsNav{display:block}
+  #opsNav>div{display:none}
+}
 .appmain{min-width:0}
 .breadcrumb{background:#fff;padding:13px;color:#606266}
 .appsurface{margin:8px;background:white}
@@ -84,7 +96,7 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 .report-card .report-products{padding:4px 10px 10px}.report-section-title{color:#66aa56;border-bottom:1px solid #dcdfe6;font-size:14px;padding:0 0 8px}
 .report-empty{padding:28px 10px;text-align:center;color:#9a9da6}.report-empty strong{display:block;color:#737781}
 .report-back{display:inline-block;margin:12px 0;color:#409eff}
-.report-actions h1 small{display:inline-block;margin-left:8px;font-weight:400}.report-actions .report-cost-trigger{background:#f0f8ed}
+.report-actions h1 small{display:inline-block;margin-left:8px;font-weight:400}
 .report-result-title{display:flex;gap:8px;align-items:center;margin:9px 0;font-size:14px}.report-result-title small{padding:0 6px;border-radius:8px;background:#edf4e9;color:#588748}
 .report-result-table th{width:37%;font-weight:500;background:#f7f8fa}.report-result-table td{white-space:normal}.report-result-table .scroll{border-color:#eef0f2}
 .report-original-details{margin:10px 0}.report-original-details>summary{width:fit-content;cursor:pointer;color:#409eff;background:#ecf5ff;border:1px solid #badcff;padding:3px 10px;border-radius:4px}
@@ -108,16 +120,24 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 <main class="prototype-board">
 <header class="appbar"><span class="appmark" aria-hidden="true">♧</span><b>运营后台管理系统</b><div class="appmodules" aria-label="后台模块"><span id="opsModule" class="active">运营</span><span id="shopModule">商城</span><span>资产</span><span>CRM</span><span>分销</span><span>商学院</span><span>工单</span></div><span class="account">admin ⌄</span></header>
 <div class="appbody">
-<aside class="appnav" id="opsNav" aria-label="后台菜单位置"><div>◷　数据</div><div>▣　营销中心</div><div>♧　活动管理</div><div>◎　首页与页面配置</div><div>▤　分类管理</div><div>⊙　全局内容　⌃</div><div class="appsub">帮助中心</div><div class="appsub">页面banner设置</div><div class="appsub">注解设置</div><div class="appsub">商家流量分配</div><div class="appsub selected">平台风控设置</div><div class="appsub">派单规则设置</div><div>☏　消息中心</div><div>♙　权限管理</div><div>⚙　系统管理</div><div>✧　AI管理</div></aside>
+<aside class="appnav" id="opsNav" aria-label="后台菜单位置"><div>◷　数据</div><div>▣　营销中心</div><div>♧　活动管理</div><div>◎　首页与页面配置</div><div>▤　分类管理</div><div>⊙　全局内容　⌃</div><div class="appsub">帮助中心</div><div class="appsub">页面banner设置</div><div class="appsub">注解设置</div><div class="appsub">商家流量分配</div><div class="appsub">派单规则设置</div>
+<details class="risk-nav" open>
+  <summary><span aria-hidden="true">◇</span>风控设置</summary>
+  <button class="appsub" type="button" data-view="quick-risk">雕马快租平台风控</button>
+  <button class="appsub" type="button" data-view="flash-risk">雕马闪租平台风控</button>
+  <button class="appsub" type="button" data-view="quick-material">雕马快租补充资料</button>
+  <button class="appsub" type="button" data-view="base" aria-current="page">风控基座</button>
+</details>
+<div>☏　消息中心</div><div>♙　权限管理</div><div>⚙　系统管理</div><div>✧　AI管理</div></aside>
 <aside class="appnav" id="shopNav" aria-label="商城菜单位置" hidden><div>▣　订单管理　⌃</div><div class="appsub selected">订单列表</div><div class="appsub">逾期订单列表</div><div class="appsub">预授权到期列表</div><div class="appsub">小红书订单列表</div><div class="appsub">购买申请列表</div><div class="appsub">转单池</div><div class="appsub">用户开票列表</div><div class="appsub">争议订单</div><div class="appsub">订单分组管理</div><div class="appsub">提前完结订单列表</div><div>售后管理</div><div>催收管理</div><div>同城管理</div><div>商品管理</div><div>字典</div><div>核销管理</div></aside>
-<div class="appmain"><div class="breadcrumb">☰　 <span id="crumbRoot">全局内容 / 平台风控设置</span><span id="crumb"></span></div><div class="appsurface"><div class="tabs" id="riskTabs" aria-label="平台风控设置页签"><span>雕马快租平台风控</span><span>雕马闪租平台风控</span><span>雕马快租补充资料</span><button type="button" class="risk-tab" data-view="base">风控基座</button></div>
+<div class="appmain"><div class="breadcrumb">☰　 <span id="crumbRoot">风控设置 / 风控基座</span><span id="crumb"></span></div><div class="appsurface">
 <div class="content" id="content"></div></div></div>
 </div>
 </main>
 <div class="prototype-resizer" id="divider" role="separator" aria-label="调整原型与需求说明宽度，双击或按 Home 恢复默认" aria-orientation="vertical" aria-valuemin="55" aria-valuemax="80" tabindex="0" title="拖动调整 · 双击恢复默认"></div>
 <aside class="prototype-prd"><div class="prd-panel-head"><h2>需求说明 · PRD</h2><button class="prd-toggle" id="prdToggle" aria-controls="prd" aria-expanded="true">收起</button></div><div class="prd-panel-content" id="prd"></div></aside>
 </div></div>
-<dialog id="detail" aria-labelledby="modalTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="modalTitle">调用记录详情</h2><button aria-label="关闭详情" data-close>×</button></div><div id="modalBody"></div><div class="modal-foot"><button data-close>关闭</button></div></section><aside class="modal-context-prd" id="modalPrd"></aside></div></dialog>
+<dialog id="detail" aria-labelledby="modalTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="modalTitle"></h2><button aria-label="关闭详情" data-close>×</button></div><div id="modalBody"></div><div class="modal-foot"><button data-close>关闭</button></div></section><aside class="modal-context-prd" id="modalPrd"></aside></div></dialog>
 <dialog id="priceDialog" aria-labelledby="priceTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="priceTitle">配置产品单价</h2><button aria-label="关闭单价配置" data-close>×</button></div><p id="priceProduct"></p><form id="priceForm"><div class="filters"><label>生效日期<input type="date" name="date" required></label><label>单价（元/次）<input name="unit" inputmode="decimal" placeholder="例如 0.35" required></label></div><p id="priceHint" class="muted"></p><p id="priceError" class="error" role="alert" hidden></p><div class="modal-foot"><button type="button" data-close>取消</button><button class="primary" type="submit">保存单价</button></div></form></section><aside class="modal-context-prd"><h2>配置产品单价 · 弹窗说明</h2><h3>一、字段说明</h3><ul><li>产品与厂商由所选行带入。</li><li>生效日期按北京时间自然日，从该日零点开始适用。</li><li>单价单位为元/次，支持 0 至 99999.99，最多 2 位小数。0 表示免费。</li></ul><h3>二、按钮与计费规则</h3><ul><li>保存新增生效版本。同一产品和日期已有单价时，以最后保存的价格计费，旧值保留在历史表，并重算该版本覆盖期间的估算费用。</li><li>取消、× 或 Esc 关闭弹窗，放弃本次编辑。</li></ul></aside></div></dialog>
 <script>
 'use strict';
@@ -182,16 +202,27 @@ function dateRange(from,to){
   }
   return result;
 }
-const demoEnd='2026-11-07';
+const beijingDate = new Intl.DateTimeFormat('sv-SE',{
+  timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'
+});
+const demoEnd=beijingDate.format(new Date());
 const demoStart='2026-09-01';
-const novemberDates=dateRange('2026-11-01',demoEnd);
 const dates=dateRange(demoStart,demoEnd);
 const bizs = ['雕马快租','雕马闪租'];
-const initial={from:novemberDates[0],to:demoEnd,biz:'',product:'',rule:'',status:'',kind:'',order:''};
-const defaultMonth=demoEnd.slice(0,7), defaultBaseline='2026-10';
+const defaultMonth=demoEnd.slice(0,7);
+const currentMonthStart=defaultMonth+'-01';
+const previousMonthEnd=new Date(currentMonthStart+'T00:00:00Z');
+previousMonthEnd.setUTCDate(0);
+const defaultBaseline=previousMonthEnd.toISOString().slice(0,7);
+const initial={from:currentMonthStart,to:demoEnd,biz:'',product:'',rule:'',status:'',kind:'',order:''};
+const otherRiskViews={
+  'quick-risk':'雕马快租平台风控',
+  'flash-risk':'雕马闪租平台风控',
+  'quick-material':'雕马快租补充资料'
+};
 const defaultComparisonMonths=[defaultBaseline,defaultMonth];
 let comparisonMonths=[...defaultComparisonMonths];
-let timeMode='single', reportMonth=defaultMonth, comparisonMode='product', selectedRuleDay=null, view='base', filters={...initial}, page=1, shown=[];
+let timeMode='single', reportMonth=defaultMonth, comparisonMode='product', selectedRuleDay=null, view='base', filters={...initial}, page=1;
 const money = (units,precision=2) => units===null?'待核价':'¥'+(units/10000).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:precision});
 const unitMoney = units=>money(units);
 const productLabel = p=>p.name+'｜'+p.vendor;
@@ -525,7 +556,11 @@ const ruleRows=[
 const ruleProductStarts=[0,3,6,10,12,15,18,21,24,29];
 const ruleProducts=ruleRows.map((rule,index)=>products.slice(ruleProductStarts[index],ruleProductStarts[index]+rule[2]));
 const calls = [], matchedOrders = [];
-[...novemberDates,...dateRange(demoStart,'2026-10-31')].forEach(date=>{
+// Generate the original sample days first so existing sample request IDs stay stable.
+const originalNovember=dates.filter(date=>date>='2026-11-01'&&date<='2026-11-07');
+const originalHistory=dates.filter(date=>date<'2026-11-01');
+const followingDays=dates.filter(date=>date>'2026-11-07');
+[...originalNovember,...originalHistory,...followingDays].forEach(date=>{
   const d=Number(date.slice(-2))-1;
   const volume=date.startsWith('2026-11')?32+d*3:26+d%9+(date.startsWith('2026-10')?3:0);
   for(let i=0;i<volume;i++){
@@ -554,7 +589,7 @@ let ruleFilters={name:'',biz:'',state:''};
 const shopStatuses=['已取消','待付款','平台待审核','商家待审核','待发货','待收货','租用中','归还中','交易完成','商家超时确认','超时发货','逾期归还','逾期付款','待补充资料','完结中'];
 const shopOrders=matchedOrders.map((order,index)=>({...order,status:shopStatuses[index%shopStatuses.length]}))
   .sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
-const shopDefaults={from:novemberDates[0],to:dates.at(-1),biz:'',order:'',status:'平台待审核'};
+const shopDefaults={from:currentMonthStart,to:dates.at(-1),biz:'',order:'',status:'平台待审核'};
 let shopFilters={...shopDefaults}, shopPage=1, showShopFilters=false, reportOrder=null, reportAudience='运营后台';
 function shopMatches(includeStatus=true){
   return shopOrders.filter(order=>order.date>=shopFilters.from&&order.date<=shopFilters.to&&
@@ -615,26 +650,6 @@ function commerce(){
     '<button data-action="shop-page:-1" '+(shopPage===1?'disabled':'')+'>上一页</button>'+
     '<button data-action="shop-page:1" '+(shopPage===pages?'disabled':'')+'>下一页</button></div>';
 }
-function showReportCost(order){
-  const {requests,total,estimate,fee,delta}=orderCost(order);
-  const fields=[['订单号',order.id],['命中规则',ruleRows[order.ruleId][0]],['调用费用（预估）',money(fee)],
-    ['规则预估',money(estimate)],['差额',delta===null?'—':money(delta)],
-    ['调用／计费次数',total.total+' / '+total.billed],['失败或超时／重试或疑似重复',total.failed+' / '+total.repeated],
-    ['异常调用费用',total.unpriced?'待核价':money(total.abnormalCost)]];
-  const sections=[...new Set(requests.map(call=>call.p))].map(p=>{
-    const data=requests.filter(call=>call.p===p);
-    const subtotal=stats(data);
-    const rows=data.map(call=>row([call.id,call.time,call.api,call.status,call.kind,call.bill?'计费':'不计费',money(call.price),money(call.fee)])).join('');
-    return '<details><summary>'+productLabel(p)+' · '+subtotal.total+' 次 · '+money(subtotal.unpriced?null:subtotal.cost)+'</summary>'+
-      table(['请求编号','调用时间','接口','结果','请求类型','计费状态','单价','费用'],rows)+'</details>';
-  }).join('');
-  infoDialog('三方调用费用','<dl class="pairs">'+fields.map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>'+
-    '<h3>按产品查看调用明细</h3><div class="report-products">'+(sections||'<p class="muted">本订单没有三方调用记录。</p>')+'</div>',
-    '<h3>一、费用口径</h3><ul><li>调用费用为本单计费请求按调用日生效单价估算的金额。规则预估为配置产品各计费一次的金额，差额为调用费用减规则预估。</li><li>异常费用按失败、超时、重试或疑似重复请求去重汇总。缺失单价时标为待核价。</li></ul>'+
-    section('二、订单费用字段',fieldItems(['订单号','命中规则','调用费用','规则预估','差额','调用次数','计费次数','失败或超时次数','重试或疑似重复次数','异常费用（元）']))+
-    section('三、产品与请求字段',fieldItems(['产品｜厂商','调用次数','调用费用','请求编号','调用时间','接口','结果','请求类型','计费状态','单价','费用']))+
-    '<h3>四、操作</h3><ul><li>展开产品可查逐次请求。关闭或按 Esc 返回报告原位置。</li></ul>');
-}
 function productRiskResults(){
   const results=[
     ['在网状态','低 · 手机状态正常'],['三要素核验','手机三要素均一致'],['在网时长','低 · 在网时长 2 年以上'],
@@ -663,10 +678,9 @@ function report(){
   const tabs=['运营后台','商家后台','CRM后台'].map(label=>'<button data-action="report-audience:'+label+'" aria-pressed="'+(reportAudience===label)+'">'+label+'</button>').join('');
   const actions=['获取完整风控报告','获取对应策略风控报告','风控列表管理','历史风控管理','AI 风控分析'];
   const fields=[['姓名','示例用户'],['年龄','28 岁'],['手机号','1** **** ****'],['手机归属地','广东广州'],['身份证号','******************'],['运营商','电信'],['户籍','广东广州'],['定位信息','—']];
-  const costButton=reportAudience==='运营后台'&&reportOrder?button('查看调用费用','report-cost','report-cost-trigger'):'';
   return '<div class="report-tabs" aria-label="风控报告视角">'+tabs+'</div>'+
     '<div class="report-notice"><b>ⓘ　免责声明</b><p>本风控报告基于用户提交的信息及平台可获取的数据分析生成，旨在为商家决策提供参考信息。报告内容不代表平台对用户信用、履约能力的保证或承诺。商家应结合自身经营策略、风险偏好及实际情况独立判断并做出最终决策。</p></div>'+
-    '<div class="report-actions"><h1>▤　风控报告'+(reportOrder?'<small>'+reportOrder.date+' 14:30:00</small>':'')+'</h1><div>'+actions.map(label=>'<button type="button" aria-disabled="true">'+label+'</button>').join('')+costButton+'</div></div>'+
+    '<div class="report-actions"><h1>▤　风控报告'+(reportOrder?'<small>'+reportOrder.date+' 14:30:00</small>':'')+'</h1><div>'+actions.map(label=>'<button type="button" aria-disabled="true">'+label+'</button>').join('')+'</div></div>'+
     '<div class="report-privacy">ⓘ　风控报告涉及用户的个人隐私信息，请按平台要求使用。</div>'+
     '<div class="report-risk"><b>！　综合风险等级：中风险</b></div>'+
     '<section class="report-card"><h2>基础信息</h2><dl class="pairs">'+fields.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+value+'</dd></div>').join('')+'</dl></section>'+
@@ -968,13 +982,14 @@ function overview(){
   const periods='<div class="segments" aria-label="统计方式">'+Object.entries({single:'单月查看',month:'多月对比',day:'自定义日期'}).map(([mode,label])=>
     '<button type="button" data-action="time:'+mode+'" aria-pressed="'+(timeMode===mode)+'">'+label+'</button>').join('')+'</div>';
   const actions='<div>'+button('导出费用数据','cost-export')+button('返回风控基座','base')+'</div>';
-  if(timeMode==='single')return title('调用费用分析','选择具体月份，按日期查看费用',actions)+periods+modes+filterForm()+
+  const coverage='模拟数据截至 '+demoEnd+'（北京时间）';
+  if(timeMode==='single')return title('调用费用分析',coverage,actions)+periods+modes+filterForm()+
     '<p id="costExportStatus" class="muted" role="status"></p>'+trendChart()+singleMonthView();
-  if(timeMode==='month')return title('调用费用分析','添加任意月份，对比调用费用',actions)+periods+modes+filterForm()+'<p id="costExportStatus" class="muted" role="status"></p>'+trendChart()+monthlyComparison();
+  if(timeMode==='month')return title('调用费用分析',coverage,actions)+periods+modes+filterForm()+'<p id="costExportStatus" class="muted" role="status"></p>'+trendChart()+monthlyComparison();
   const list=comparisonMode==='rule'?calls.filter(call=>within(call)&&(!filters.rule||filters.rule===ruleRows[call.ruleId][0])):scoped();
   const unpriced=stats(list).unpriced;
   const hint=unpriced?'<p class="error">有 '+num(unpriced)+' 次计费请求待核价，金额仅包含已知费用。</p>':'';
-  return title('每日调用费用对比','示例数据覆盖 2026-09-01 至 '+demoEnd,actions)+
+  return title('每日调用费用对比',coverage,actions)+
     periods+modes+filterForm()+'<p id="costExportStatus" class="muted" role="status"></p>'+costSummary(list)+hint+trendChart()+(comparisonMode==='rule'?ruleComparison():dailyComparison(list));
 }
 function records(){
@@ -982,14 +997,14 @@ function records(){
     .sort((a,b)=>b.time.localeCompare(a.time)||b.id.localeCompare(a.id));
   const count=Math.max(1,Math.ceil(list.length/10));
   page=Math.min(page,count);
-  shown=list.slice((page-1)*10,page*10);
-  const rows=shown.map(r=>row([r.time,r.order,r.biz,r.p.vendor,r.p.name,r.api,'<span class="pill '+(r.status==='成功'?'':'warn')+'">'+r.status+'</span>',r.kind,r.bill?'计费':'不计费',money(r.fee),button('详情','record:'+r.id,'link')])).join('');
+  const visibleRecords=list.slice((page-1)*10,page*10);
+  const rows=visibleRecords.map(r=>row([r.time,r.order,r.biz,r.p.vendor,r.p.name,r.api,'<span class="pill '+(r.status==='成功'?'':'warn')+'">'+r.status+'</span>',r.kind,r.bill?'计费':'不计费',money(r.fee)])).join('');
   return title('调用明细','逐笔核对请求结果、重试和费用',button(filters.orderContext?'返回命中订单':'返回费用对比',filters.orderContext?'back-orders':'return'))+filterForm()+
-    table(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用','操作'],rows)+
+    table(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用'],rows)+
     '<div class="pager"><span>共 '+num(list.length)+' 条 · 第 '+page+' / '+count+' 页</span><button data-action="prev" '+(page===1?'disabled':'')+'>上一页</button><button data-action="next" '+(page===count?'disabled':'')+'>下一页</button></div>';
 }
 const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'open':'')+'><summary>'+name+'</summary><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></details>';
-const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品价格配置、费用对比与订单成本追溯。新增的「产品单价配置」「每日调用费用对比」必须从风控基座规则列表工具栏进入，后台实际侧边栏不增加这两个菜单。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','外层「评审导航」仅用于切换原型中的风控基座和订单联动示意，不代表生产后台菜单。产品单价配置与费用对比的真实业务入口均在风控基座工具栏。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
+const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品价格配置、费用对比与订单风控数据导出。新增的「产品单价配置」「每日调用费用对比」必须从风控基座规则列表工具栏进入，后台实际侧边栏不增加这两个菜单。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','外层「评审导航」仅用于切换原型中的风控基座和订单联动示意，不代表生产后台菜单。产品单价配置与费用对比的真实业务入口均在风控基座工具栏。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
 const fieldGlossary={
   '序号':'产品目录中的展示顺序。',
   '产品名称':'三方产品目录中的名称。',
@@ -1042,7 +1057,7 @@ const exportRiskFields=section('四、订单风控汇总 CSV 字段',fieldItems(
 ]),false)+section('五、产品调用明细 CSV 字段',fieldItems([
   '订单号','适用业务','命中规则','请求编号','调用时间','厂商','产品','接口','调用结果','请求类型','计费状态',['单价（元/次）','请求单价'],['调用费用（元）','预估费用'],'价格生效日'
 ]),false);
-const exportCostFields=section('六、费用 CSV 字段',[
+const exportCostFields=section('七、费用 CSV 字段',[
   ...fieldItems(['日期','产品名称']),
   '<b>服务商名称</b>　提供该产品的三方机构名称。',
   '<b>单价（元/次）</b>　调用当日生效的产品单价。未配置时留空。',
@@ -1053,17 +1068,13 @@ const prds={
   report:section('一、报告入口与布局',[
     '订单列表点击「风控报告」在新标签页打开对应订单。页面沿用原报告的视角页签、免责声明、风险等级、基础信息和产品风控结论。',
     '报告时间、历史风控管理、产品结论分组及详情沿用已生成报告的展示结构。基础资料、结论和部分详情采用示例内容。'
-  ])+section('二、新增三方调用费用',[
-    '运营后台视角在报告标题右侧的操作区展示「查看调用费用」。点击打开独立弹窗，关闭后回到报告原位置。入口仅对运营后台视角展示。',
-    '调用费用为该订单已计费请求按生效单价估算的金额。规则预估为配置产品各计费一次，差额为调用费用减规则预估。展开产品查看逐次调用、结果、计费状态、单价和费用。',
-    '订单号关联报告与导出。通过浏览器切回订单列表可保留该标签页中的筛选和分页。'
   ]),
 
   commerce:section('一、需求背景',[
-    '三方按次计费，单笔订单可触发多产品、多接口及重试。订单侧需直接看到调用成本、产品报告和异常请求，方便在月度账单到达前定位费用变化，并给采购提供用量与费用依据。'
+    '单笔订单可触发多个三方产品调用和重试。通过订单风控汇总及产品调用明细核对订单成本和异常请求。'
   ])+section('二、订单列表与风控报告',[
     '订单编号、平台类型、创建日期和状态用于筛选示例订单。示例创建日与命中日相同，其余既有筛选和订单操作按可见布局展示。查询应用筛选并返回第一页，重置恢复默认范围，状态按钮切换状态，分页只影响展示。',
-    '从订单卡片原有「风控报告」入口在新标签页打开对应订单报告。在运营后台视角点击「查看调用费用」，弹窗展示订单累计调用费用、规则预估、差额、调用及计费次数、异常次数和产品报告。逐笔费用按调用发生日生效单价估算，失败或超时按厂商规则判定是否计费。'
+    '点击订单卡片的「风控报告」，在新标签页打开对应的报告。'
   ])+section('三、导出风控数据',[
     '沿用订单列表的「导出风控数据」按钮，按当前已查询范围与状态导出全部匹配订单，跨分页。订单汇总一单一行，产品调用明细一次外发一行。两份数据按订单号关联。无调用订单保留在订单汇总。',
     '产品调用明细增加厂商、产品、接口、调用时间、请求编号、结果、请求类型、计费状态、调用单价和费用等字段。订单汇总增加命中规则、产品、各类次数、规则预估、调用费用与差额。',
@@ -1077,18 +1088,18 @@ const prds={
   ])+section('二、列表字段',fieldItems(['订单号','命中日期','命中规则','调用次数','规则预估','调用费用','差额']))+section('三、操作',['点击有调用的订单号查看该单请求。返回费用对比恢复筛选条件。']),
 
   base:section('一、本次新增需求变更',[
-    '目标：把三方风控产品按次成本从月末账单核对前移到日常监控。新增能力覆盖产品单价维护、按产品或规则统计每日费用、多月比较与导出，并在订单风控报告中查看单笔订单的调用成本。',
-    '本次改动范围：新增产品单价配置与每日调用费用对比两个页面入口；订单列表增加调用费用追溯和风控数据导出字段。原风控规则列表及原风控报告主体结构保留。',
+    '目标：把三方风控产品按次成本从月末账单核对前移到日常监控。新增能力覆盖产品单价维护、按产品或规则统计每日费用、多月比较与导出，并导出单笔订单的调用成本。',
+    '本次改动范围：新增产品单价配置与每日调用费用对比两个页面入口；订单列表的「导出风控数据」增加调用费用字段。',
     '价格、调用记录及统计结果均为原型模拟数据；前端维护的价格只保存在当前浏览器，不代表已接入生产计费或厂商账单。'
   ])+section('二、新增页面入口与返回',[
-    '新增入口位于「全局内容 / 平台风控设置 / 风控基座」原规则筛选与操作工具栏内，与「查询」「新建风控规则」同区。正式后台不新增左侧菜单。',
-    '点击「产品单价配置」进入 33 个风控产品的价格目录；点击「每日调用费用对比」进入调用费用分析。两个入口都从风控基座打开。',
+    '运营后台将「风控设置」设为独立一级菜单。展开后依次显示「雕马快租平台风控」「雕马闪租平台风控」「雕马快租补充资料」「风控基座」。点击「风控基座」可打开规则列表。',
+    '在「风控设置 / 风控基座」规则列表工具栏点击「产品单价配置」进入 33 个风控产品的价格目录，点击「每日调用费用对比」进入调用费用分析。',
     '产品单价配置页的「返回风控基座」返回规则列表；「查看费用对比」跳转到费用分析。费用分析页的「返回风控基座」返回规则列表。返回后保留此前的规则筛选条件。',
     '规则列表中的「预估单次成本」保留为规则配置参考值；「历史估算」按该规则关联产品及各生效价格查看估算记录。规则维护类原有按钮仅用于界面结构对照。'
   ])+section('三、新增能力说明',[
     '产品单价配置：可按产品名称搜索、按厂商筛选；在行内配置单价和生效日期；查看同一产品所有价格版本。字段含厂商、产品名称、单价（元/次）、生效日期、价格历史及操作。保存后用于后续费用估算。',
     '每日调用费用对比：可按单月、任意多个自选月份或自定义日期查询；可按产品或风控规则统计，可筛业务和产品；查看每日调用费用折线、调用次数切换、异常调用指标及逐日费用表。月份可添加、删除和排序，支持导出费用 CSV。',
-    '订单追溯与导出：订单列表沿用原「风控报告」入口，在运营视角报告中增加「查看调用费用」按钮，弹窗展示订单调用费用、规则预估、差额和逐产品请求明细；「导出风控数据」提供订单汇总和产品调用明细两份 CSV。'
+    '在费用分析中按风控规则查到每日费用后，可打开当天命中订单列表，核对规则预估和订单费用。订单列表的「导出风控数据」提供订单汇总和产品调用明细两种 CSV。'
   ])+section('四、原风控基座字段与行为',[
     '规则名称按文本查询，适用业务和规则状态按选项筛选；「查询」应用条件，「重置」清空条件。规则列表字段和原有风控报告展示沿用现有后台布局。'
   ]),
@@ -1096,20 +1107,21 @@ const prds={
     '三方产品按调用计费，过去主要等月度账单核对。新增按产品配置单价、按日对比费用，方便提前发现费用变化，并为对账、续费和产品取舍提供依据。',
     '从风控基座规则列表工具栏打开「每日调用费用对比」。点击「返回风控基座」，回到同页内的规则列表。'
   ])+section('二、新增页面入口',[
-    '从风控基座规则列表工具栏点击「每日调用费用对比」进入本页，不新增后台左侧菜单入口。「返回风控基座」返回原规则列表并保留此前的规则筛选条件；从本页可通过「产品单价配置」入口维护估算单价。'
+    '在「风控设置 / 风控基座」规则列表工具栏点击「每日调用费用对比」进入本页。「返回风控基座」回到原规则列表并保留此前的筛选条件。'
   ])+section('三、查询与费用对比',[
     '日期按北京时间的调用发起日，包含开始和结束日。开始日期不得晚于结束日期。适用业务按订单归属，产品按调用记录筛选。接口是请求走的技术入口，只在明细用于排查。',
     '点击「查询」更新对比表。选全部产品时，首行显示每日总费用，下方显示 33 个产品各自的费用。选单个产品时，只显示该产品跨日费用。点击「重置」恢复全部产品和示例周期。',
     '每列为一个自然日，区间合计为所查日期的费用之和。每天预估费用等于当日各计费请求对应产品单价之和。每日格同时显示调用次数与异常次数，产品合计行和规则行展示单均费用。单均费用按命中订单数摊销，包含未发请求的命中订单。筛选单产品时表示该产品对单均费用的贡献。异常请求按失败、超时、重试或疑似重复的并集去重。失败或重试是否计费按厂商规则判定，无调用显示 ¥0.00。',
-    '按产品时点击每日金额查看对应产品的调用明细。按风控规则时按命中规则与日期统计，显示命中订单数和调用费用，点击金额查看订单预估、调用费用和差额。切换维度时清空产品或规则选择，保留日期和适用业务。返回后恢复原查询条件。点击「产品单价配置」可维护用于费用估算的单价。'
-  ])+section('三、按月查看与导出',[
-    '「单月查看」选择具体月份，按日期纵向列出调用费用和次数，首行是所选范围合计。「自定义日期」用开始和结束日期查看逐日矩阵。示例截至 2026-11-07。',
+    '按产品时点击每日金额查看对应产品的调用明细。按风控规则时按命中规则与日期统计，显示命中订单数和调用费用，点击金额查看订单预估、调用费用和差额。切换维度时清空产品或规则选择，保留日期和适用业务。返回后恢复原查询条件。'
+  ])+section('四、按月查看与导出',[
+    '「单月查看」默认选中北京时间当前月，首行显示合计，下方逐日列出费用及次数。原型每次打开时生成截至当天的模拟数据。正式页面查询时读取已入库的调用记录，并展示统计截止时间。当日数据随调用记录入库更新，按自然日汇总。',
+    '「自定义日期」用开始和结束日期查看逐日矩阵。',
     '「多月对比」可添加或移除月份，至少选择两个且不可重复。基准月固定在首列，可直接修改月份。点击对比月份旁的左移、右移按钮可调整顺序，点击查询后，表头和 CSV 按新顺序输出。表头标明各月的实际统计日期。若包含未结束月份，所有月份均按截至日对齐。各月使用同一套业务及产品或规则筛选。',
     '费用差额为该对比月减基准月，变化率为差额除以基准月费用。基准费用为零时，变化率显示「—」。缺少整期示例数据时标为无数据。',
     '「导出费用数据」按当前已查询的区间和筛选导出产品调用明细 CSV。每天按产品与适用单价汇总，按规则查看时再按规则拆分。调用费用按计费次数乘以单价计算，应计费但缺少单价时留空。多月按所选月份顺序导出，月内日期升序。'
-  ])+section('每日趋势',['折线图可切换调用费用和调用次数。按单月或自定义日期查看时，显示当前筛选的每日汇总。多月对比时每月一条线，按月内日序对齐。无数据的月份只显示图例，待核价的日期在费用折线中断开。'])+section('四、单月与自定义日期表字段',fieldItems(['日期','产品｜厂商','风控规则','日列','区间合计','命中订单数','调用次数','计费次数','异常次数','调用费用','单均费用']))+
-  section('五、多月对比表字段',fieldItems(['产品｜厂商','风控规则','月份列','调用费用','调用次数','异常次数','单均费用','较基准']))+
-  exportCostFields+section('七、待确认',[
+  ])+section('每日趋势',['折线图可切换调用费用和调用次数。按单月或自定义日期查看时，显示当前筛选的每日汇总。多月对比时每月一条线，按月内日序对齐。无数据的月份只显示图例，待核价的日期在费用折线中断开。'])+section('五、单月与自定义日期表字段',fieldItems(['日期','产品｜厂商','风控规则','日列','区间合计','命中订单数','调用次数','计费次数','异常次数','调用费用','单均费用']))+
+  section('六、多月对比表字段',fieldItems(['产品｜厂商','风控规则','月份列','调用费用','调用次数','异常次数','单均费用','较基准']))+
+  exportCostFields+section('八、待确认',[
     '当前目录为业务提供的 33 个产品，厂商与产品名称按最新清单展示。单价、接口与请求用于演示。正式合同价、厂商计费规则、历史回填范围和对账字段待确认。'
   ],false),
   prices:section('一、业务需求与字段',[
@@ -1131,8 +1143,8 @@ const prds={
     '从每日费用对比下钻后，逐笔查看所选日期与产品的请求、计费判定和估算费用。',
     '开始和结束日期按北京时间请求发起日筛选，首尾日期包含，开始不得晚于结束。适用业务取订单归属，三方产品取实际调用的产品。',
     '调用结果可选成功、失败、超时。请求类型可选首次、超时重试、疑似重复。订单号按完整订单号匹配。查询组合条件并回第一页，重置清空筛选并恢复示例周期。',
-  ])+section('二、列表字段',fieldItems(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用','操作']))+section('三、查看与返回',[
-    '「详情」打开调用记录及其配套弹窗说明。上一页和下一页每次翻动 10 条，边界禁用，无数据时显示空态。',
+  ])+section('二、列表字段',fieldItems(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用']))+section('三、查看与返回',[
+    '逐笔请求的结果、计费判定和费用直接显示在列表中。每页 10 条，首尾页对应翻页按钮禁用，无数据时显示空态。',
     '从产品下钻时点击「返回费用对比」恢复筛选条件，从命中订单下钻时点击「返回命中订单」回到同一规则和日期。'
   ])
 };
@@ -1196,7 +1208,7 @@ function priceRows(){
 function prices(){
   const vendors=[...new Set(products.map(p=>p.vendor))];
   const vendorOptions=['<option value="">全部厂商</option>',...vendors.map(v=>'<option value="'+v+'">'+v+'</option>')].join('');
-  return title('产品单价配置','33 个产品 · 列表展示截至 2026-11-07 生效的单价','<div>'+button('返回风控基座','base')+button('查看费用对比','return')+'</div>')+
+  return title('产品单价配置','33 个产品 · 列表展示截至 '+demoEnd+' 生效的单价','<div>'+button('返回风控基座','base')+button('查看费用对比','return')+'</div>')+
     '<div class="filters price-filters"><label class="price-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span><input id="productNameFilter" type="search" placeholder="搜索产品名称" aria-label="搜索产品名称"></label><label class="price-vendor"><select id="productVendorFilter" aria-label="按厂商筛选">'+vendorOptions+'</select></label></div>'+
     '<p class="muted">初始单价为演示值。自定义单价按生效日期用于预估费用，并保存在当前浏览器。</p>'+
     table(['厂商','产品名称','单价（元/次）','生效日期','价格历史','操作'],priceRows()).replace('<tbody>','<tbody id="priceRows">');
@@ -1205,7 +1217,7 @@ let editingProduct;
 function showPrice(id){
   editingProduct=products[id-1];
   $('priceProduct').textContent=productLabel(editingProduct);
-  $('priceForm').elements.date.value=novemberDates[0];
+  $('priceForm').elements.date.value=currentMonthStart;
   $('priceError').hidden=true;
   syncPriceForm();
   $('priceDialog').showModal();
@@ -1247,19 +1259,28 @@ $('priceForm').addEventListener('submit',e=>{
   $('content').querySelector('[data-action="price:'+editingProduct.id+'"]').focus({preventScroll:true});
 });
 function render(){
-  document.title='风控基座 · '+({report:'风控报告',commerce:'商城订单列表',orders:'规则命中订单费用',base:'规则列表',overview:'每日调用费用对比',records:'调用明细',prices:'产品单价配置'}[view]);
+  document.title='风控基座 · '+({report:'风控报告',commerce:'商城订单列表',orders:'规则命中订单费用',base:'规则列表',overview:'每日调用费用对比',records:'调用明细',prices:'产品单价配置',...otherRiskViews}[view]);
   const inShop=view==='commerce'||view==='report';
   $('opsNav').hidden=inShop;
   $('shopNav').hidden=!inShop;
   $('opsModule').classList.toggle('active',!inShop);
   $('shopModule').classList.toggle('active',inShop);
-  $('riskTabs').hidden=inShop;
-  $('crumbRoot').textContent=inShop?(view==='report'?'订单管理 / 风控报告':'订单管理 / 订单列表'):'全局内容 / 平台风控设置';
-  $('crumb').textContent=(view==='base'||inShop)?'':' / 风控基座 / '+({orders:'每日调用费用对比 / 规则命中订单费用',overview:'每日调用费用对比',prices:'产品单价配置',records:'每日调用费用对比 / 调用明细'}[view]);
-  const reviewView=(view==='prices'||view==='overview'||view==='records'||view==='orders')?'base':(view==='report'?'commerce':view);
-  document.querySelectorAll('.prototype-role-nav [data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===reviewView)));
-  document.querySelectorAll('.risk-tab[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view)));
-  $('content').innerHTML=({base,overview,records,prices,orders,commerce,report}[view])();
+  const riskPage=otherRiskViews[view]||'风控基座';
+  $('crumbRoot').textContent=inShop?(view==='report'?'订单管理 / 风控报告':'订单管理 / 订单列表'):'风控设置 / '+riskPage;
+  const riskSubpages={orders:'每日调用费用对比 / 规则命中订单费用',overview:'每日调用费用对比',prices:'产品单价配置',records:'每日调用费用对比 / 调用明细'};
+  $('crumb').textContent=riskSubpages[view]?' / '+riskSubpages[view]:'';
+  const reviewView=inShop?'commerce':'base';
+  document.querySelectorAll('.prototype-role-nav [data-view]').forEach(button=>{
+    button.setAttribute('aria-current',String(button.dataset.view===reviewView));
+  });
+  const activeRiskView=otherRiskViews[view]?view:'base';
+  document.querySelectorAll('.risk-nav [data-view]').forEach(button=>{
+    if(button.dataset.view===activeRiskView)button.setAttribute('aria-current','page');
+    else button.removeAttribute('aria-current');
+  });
+  $('content').innerHTML=otherRiskViews[view]
+    ? title(riskPage,'')+'<p class="empty">本次评审展示该菜单入口。请进入「风控基座」查看单价配置和费用对比。</p>'
+    : ({base,overview,records,prices,orders,commerce,report}[view])();
   if(view==='prices'){
     const nameInput=$('productNameFilter'), vendorInput=$('productVendorFilter');
     nameInput.value=priceNameFilter; vendorInput.value=priceVendorFilter;
@@ -1283,7 +1304,8 @@ function switchView(next,overrides){
     if(next==='overview')filters={...savedOverview};
     if(next==='records')filters={...savedOverview,...overrides};
     view=next;
-    $('prd').innerHTML=prds[view]+reviewNotes;
+    const notes=prds[view]||section('菜单调整',['「'+otherRiskViews[view]+'」归入一级菜单「风控设置」。本次业务功能演示在「风控基座」。']);
+    $('prd').innerHTML=notes+reviewNotes;
     $('prd').parentElement.scrollTop=0;
   }
   page=1;
@@ -1311,23 +1333,18 @@ function showPriceHistory(id){
   infoDialog('产品单价历史','<p>'+productLabel(p)+'</p>'+table(['生效日期','单价（元/次）','记录时间','状态'],rows),
     '<h3>一、版本记录</h3><ul><li>按生效日期倒序，同日按保存顺序倒序。示例价标在状态中，历史记录的时间为空时显示「—」。</li><li>状态区分有效版本、待生效和已替代。同一日期的旧记录标为已替代。</li></ul><h3>二、操作</h3><p>点击关闭返回产品列表。</p>'+section('三、列表字段',[...fieldItems(['生效日期','请求单价']),'<b>记录时间</b>　保存版本的北京时间。初始示例或无记录时间显示「—」。','<b>状态</b>　区分有效版本、待生效和已替代，初始版本附示例标识。']));
 }
-function showDetail(id){
-  $('modalTitle').textContent='调用记录详情';
-  const r=shown.find(item=>item.id===id);
-  if(!r)return;
-  const pair=[['请求编号',r.id],['调用时间',r.time],['订单号',r.order],['适用业务',r.biz],['厂商',r.p.vendor],['产品',r.p.name],['接口',r.api],['结果',r.status],['请求类型',r.kind],['计费判定',r.bill?'计费':'不计费'],['请求单价',unitMoney(r.price)],['预估费用',money(r.fee)]];
-  $('modalBody').innerHTML='<dl class="pairs">'+pair.map(([k,v])=>'<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl><p class="muted">'+(r.bill?(r.status==='成功'?'成功请求按调用日生效的产品单价估算。':'此接口的演示规则对失败和超时也计费。'):'此接口的演示规则仅对成功请求计费。')+'</p>';
-  $('modalPrd').innerHTML='<h2>调用记录详情 · 弹窗说明</h2><h3>一、记录字段</h3><ul><li>请求编号是单次外发标识，调用时间为北京时间发起时间，订单号用于关联订单，适用业务取订单归属。</li><li>厂商为服务提供方，产品为采购的数据产品，接口为实际外发目标。</li><li>结果为成功、失败或超时，请求类型为首次、超时重试或疑似重复。</li><li>计费判定取当时接口规则，请求单价取调用日生效的产品单价。预估费用为计费金额，免计费显示 ¥0.00。</li></ul><h3>二、按钮事件</h3><ul><li>点击「关闭」、右上角 × 或按 Esc 返回原列表，保留条件与页码。</li></ul>';
-  $('detail').showModal();
-}
 document.addEventListener('click',e=>{
   const b=e.target.closest('button');
   if(!b)return;
   if(b.hasAttribute('data-close')){b.closest('dialog').close();return}
-  if(b.dataset.view){if(view==='report')history.replaceState(null,'',location.pathname+location.search);switchView(b.dataset.view);return}
+  if(b.dataset.view){
+    if(view==='report')history.replaceState(null,'',location.pathname+location.search);
+    if(b.dataset.view==='base')document.querySelector('.risk-nav').open=true;
+    switchView(b.dataset.view);
+    return;
+  }
   if(!b.dataset.action)return;
   const [action,key,idx]=b.dataset.action.split(':');
-  if(action==='report-cost'&&reportAudience==='运营后台'&&reportOrder){showReportCost(reportOrder);return}
   if(action==='report-audience'){reportAudience=key;render();return}
   if(action==='shop-more'){
     showShopFilters=!showShopFilters;
@@ -1397,7 +1414,6 @@ document.addEventListener('click',e=>{
     return;
   }
   if(action==='return'){switchView('overview');return}
-  if(action==='record'){showDetail(key);return}
   if(action==='price'){showPrice(Number(key));return}
   if(action==='compare'){switchView('records',{from:key,to:key,product:idx?products[Number(idx)-1].name:filters.product});return}
   if(action==='reset'){
@@ -1514,11 +1530,10 @@ const operationChapters=[
     {selector:'#filters button.primary',action:'click',text:'点击「查询」。',result:'刷新月度费用、调用次数、异常次数及趋势。'},
     {selector:'[data-action="cost-export"]',action:'click',text:'点击「导出费用数据」。',result:'下载当前筛选条件下的产品调用费用 CSV。'}
   ]},
-  {title:'订单调用成本追溯',summary:'从订单列表进入风控报告，查看单笔订单产品调用费用。',steps:[
-    {selector:'button[data-view="commerce"]',action:'click',text:'点击左侧「商城订单列表」。',result:'展示订单列表与风控报告入口。'},
-    {selector:'.shop-order',action:'report',text:'通过订单卡片中的「风控报告」入口打开报告。',result:'在当前演示窗口打开该订单对应的风控报告。'},
-    {selector:'.report-cost-trigger',action:'click',text:'点击报告右上角「查看调用费用」。',result:'打开该订单的调用费用弹窗。'},
-    {selector:'#detail #modalBody',text:'查看订单调用费用汇总和产品逐次调用明细。',result:'可核对调用费用、规则预估、差额、计费次数与异常费用。'}
+  {title:'订单风控数据导出',summary:'从订单列表查看订单汇总与逐次产品调用的导出选项。',steps:[
+    {selector:'.prototype-role-nav [data-view="commerce"]',action:'click',anchorAfter:'[data-action="shop-export"]',text:'进入「商城订单列表」。',result:'按订单查询条件确定导出范围。'},
+    {selector:'[data-action="shop-export"]',action:'click',text:'点击「导出风控数据」。',result:'打开订单导出选项。'},
+    {selector:'#detail .export-options',text:'选择订单风控汇总或产品调用明细。',result:'可按订单汇总费用，也可逐次核对请求。'}
   ]}
 ];
 let operationState={active:false,paused:false,finished:false,chapter:0,step:0,playAll:true,timer:null,actionTimer:null,remaining:0,actionRemaining:0,actionDone:false,lastTick:0,misses:0,target:null};
@@ -1566,7 +1581,6 @@ function runDemoAction(step){
   const target=document.querySelector(step.selector);
   if(!target)return;
   if(step.action==='click')target.click();
-  if(step.action==='report'){const reportLink=target.querySelector('a[href]');if(reportLink){location.hash=reportLink.getAttribute('href');syncShopRoute()}}
   if(step.action==='type'){
     target.focus();target.value=step.value||'';
     target.dispatchEvent(new Event('input',{bubbles:true}));
@@ -1595,11 +1609,12 @@ function playOperationStep(){
   if(!operationState.active||operationState.paused)return;
   clearOperationTimers();
   if(operationState.step>=operationChapters[operationState.chapter].steps.length){
-    if(operationState.playAll&&operationState.chapter<operationChapters.length-1){operationState.chapter++;operationState.step=0;const requiredView=operationState.chapter===2?'commerce':'base';if(view!==requiredView)switchView(requiredView);setDemoStatus('进入下一段：'+operationChapters[operationState.chapter].title);operationState.timer=setTimeout(playOperationStep,1200);return}
+    if(operationState.playAll&&operationState.chapter<operationChapters.length-1){operationState.chapter++;operationState.step=0;prepareDemoChapter(operationState.chapter);setDemoStatus('进入下一段：'+operationChapters[operationState.chapter].title);operationState.timer=setTimeout(playOperationStep,1200);return}
     finishOperationDemo();return;
   }
   const step=operationStep(),target=document.querySelector(step.selector);
-  if(!target){
+  if(!target||target.disabled){
+    $('operationCallout').hidden=true;
     operationState.misses++;
     $('demoProgress').textContent='正在定位步骤控件…';
     if(operationState.misses>20){$('demoProgress').textContent='未找到当前控件，请点击「重播演示」重试。';return}
@@ -1615,12 +1630,24 @@ function finishOperationDemo(){
   clearOperationTimers();operationState.active=false;operationState.paused=false;operationState.finished=true;
   if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
   operationState.target=null;$('operationCallout').hidden=true;
-  $('demoResult').hidden=false;$('demoResult').textContent=operationState.playAll?'演示完成：订单调用费用与逐次产品明细已打开，可继续查看或重播。':'「'+operationChapters[operationState.chapter].title+'」演示完成，当前页面已保留，可继续查看或重播。';
+  $('demoResult').hidden=false;$('demoResult').textContent=operationState.playAll?'演示完成，可选择订单风控数据的导出类型。':'「'+operationChapters[operationState.chapter].title+'」演示完成，当前页面已保留，可继续查看或重播。';
   setDemoStatus('操作演示已完成');
+}
+function prepareDemoChapter(chapter){
+  if(view==='report')history.replaceState(null,'',location.pathname+location.search);
+  if(chapter===2){
+    shopFilters={...shopDefaults};
+    shopPage=1;
+    switchView('commerce');
+  }else{
+    if(chapter===0){priceNameFilter='';priceVendorFilter=''}
+    document.querySelector('.risk-nav').open=true;
+    switchView('base');
+  }
 }
 function startOperationDemo(chapter=0,playAll=false){
   clearOperationTimers();if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
-  const requiredView=chapter===2?'commerce':'base';if(view!==requiredView)switchView(requiredView);
+  prepareDemoChapter(chapter);
   document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());
   operationState={active:true,paused:false,finished:false,chapter,step:0,playAll,timer:null,actionTimer:null,remaining:0,actionRemaining:0,actionDone:false,lastTick:0,misses:0,target:null};
   $('operationDemo').hidden=false;$('demoDirectory').hidden=true;$('demoDirectoryToggle').textContent='演示目录';$('demoResult').hidden=true;
