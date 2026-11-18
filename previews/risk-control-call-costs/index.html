@@ -106,6 +106,17 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 .trend-card{position:relative}.trend-point{cursor:crosshair}.trend-point:hover .trend-marker,.trend-point:focus .trend-marker{r:5}.trend-point:focus{outline:none}.trend-tooltip{position:absolute;z-index:3;pointer-events:none;max-width:calc(100% - 16px);padding:6px 9px;border-radius:5px;background:#253934;color:#fff;font-size:12px;line-height:1.4;box-shadow:0 2px 8px #0002}
 
 .prototype-prd .prd-key,.modal-context-prd .prd-key{color:#c62828;font-weight:700}
+
+/* Review annotations identify changes beside the corresponding business controls. */
+.change-tag{display:inline-flex;align-items:center;vertical-align:middle;flex:none;padding:2px 7px;border:1px solid #efaa9c;border-radius:4px;background:#fff0eb;color:#b42318;font-size:11px;font-weight:750;line-height:1.5;white-space:nowrap}
+.change-tag.adjusted{background:#fff7df;border-color:#e4c576;color:#865b00}
+th>.change-tag{margin-left:6px}
+.change-control{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.heading h1 .change-tag,.modal-head h2 .change-tag{margin-left:9px}
+.change-caption{display:flex;align-items:center;gap:7px;flex-basis:100%;margin:0 0 3px;font-size:12px;color:#606266}
+.risk-nav>summary{flex-wrap:wrap;gap:5px}
+.risk-nav .change-tag{font-size:10px;padding:1px 4px}
+.change-column-note{display:block;margin-top:4px}
 </style>
 </head>
 <body>
@@ -124,7 +135,7 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 <div class="appbody">
 <aside class="appnav" id="opsNav" aria-label="后台菜单位置"><div>◷　数据</div><div>▣　营销中心</div><div>♧　活动管理</div><div>◎　首页与页面配置</div><div>▤　分类管理</div><div>⊙　全局内容　⌃</div><div class="appsub">帮助中心</div><div class="appsub">页面banner设置</div><div class="appsub">注解设置</div><div class="appsub">商家流量分配</div><div class="appsub">派单规则设置</div>
 <details class="risk-nav" open>
-  <summary><span aria-hidden="true">◇</span>风控设置</summary>
+  <summary><span aria-hidden="true">◇</span>风控设置<span class="change-tag adjusted" aria-hidden="true">本次调整</span></summary>
   <button class="appsub" type="button" data-view="quick-risk">雕马快租平台风控</button>
   <button class="appsub" type="button" data-view="flash-risk">雕马闪租平台风控</button>
   <button class="appsub" type="button" data-view="quick-material">雕马快租补充资料</button>
@@ -140,7 +151,7 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 <aside class="prototype-prd"><div class="prd-panel-head"><h2>需求说明 · PRD</h2><button class="prd-toggle" id="prdToggle" aria-controls="prd" aria-expanded="true">收起</button></div><div class="prd-panel-content" id="prd"></div></aside>
 </div></div>
 <dialog id="detail" aria-labelledby="modalTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="modalTitle"></h2><button aria-label="关闭详情" data-close>×</button></div><div id="modalBody"></div><div class="modal-foot"><button data-close>关闭</button></div></section><aside class="modal-context-prd" id="modalPrd"></aside></div></dialog>
-<dialog id="priceDialog" aria-labelledby="priceTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="priceTitle">配置产品单价</h2><button aria-label="关闭单价配置" data-close>×</button></div><p id="priceProduct"></p><form id="priceForm"><div class="filters"><label>生效日期<input type="date" name="date" required></label><label>单价（元/次）<input name="unit" inputmode="decimal" placeholder="例如 0.35" required></label></div><p id="priceHint" class="muted"></p><p id="priceError" class="error" role="alert" hidden></p><div class="modal-foot"><button type="button" data-close>取消</button><button class="primary" type="submit">保存单价</button></div></form></section><aside class="modal-context-prd"><h2>配置产品单价 · 弹窗说明</h2><h3>一、字段说明</h3><ul><li>产品与厂商由所选行带入。</li><li>生效日期按北京时间自然日，从该日零点开始适用。</li><li>单价单位为元/次，支持 0 至 99999.99，最多 2 位小数。0 表示免费。</li></ul><h3>二、按钮与计费规则</h3><ul><li>保存新增生效版本。同一产品和日期已有单价时，以最后保存的价格计费，旧值保留在历史表，并重算该版本覆盖期间的估算费用。</li><li>取消、× 或 Esc 关闭弹窗，放弃本次编辑。</li></ul></aside></div></dialog>
+<dialog id="priceDialog" aria-labelledby="priceTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="priceTitle">配置产品单价<span class="change-tag" aria-hidden="true">本次新增</span></h2><button aria-label="关闭单价配置" data-close>×</button></div><p id="priceProduct"></p><form id="priceForm"><div class="filters"><label>生效日期<input type="date" name="date" required></label><label>单价（元/次）<input name="unit" inputmode="decimal" placeholder="例如 0.35" required></label></div><p id="priceHint" class="muted"></p><p id="priceError" class="error" role="alert" hidden></p><div class="modal-foot"><button type="button" data-close>取消</button><button class="primary" type="submit">保存单价</button></div></form></section><aside class="modal-context-prd"><h2>配置产品单价 · 弹窗说明</h2><h3>一、字段说明</h3><ul><li>产品与厂商由所选行带入。</li><li>生效日期按北京时间自然日，从该日零点开始适用。</li><li>单价单位为元/次，支持 0 至 99999.99，最多 2 位小数。0 表示免费。</li></ul><h3>二、按钮与计费规则</h3><ul><li>保存新增生效版本。同一产品和日期已有单价时，以最后保存的价格计费，旧值保留在历史表，并重算该版本覆盖期间的估算费用。</li><li>取消、× 或 Esc 关闭弹窗，放弃本次编辑。</li></ul></aside></div></dialog>
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
@@ -255,8 +266,16 @@ const field = (name,label,values,placeholder='全部') => '<label>'+label+'<sele
 const button = (label,action,cls='') => '<button type="button" class="'+cls+'" data-action="'+action+'">'+label+'</button>';
 const table = (cols,rows) => '<div class="scroll" tabindex="0" aria-label="横向滚动查看完整表格"><table><thead><tr>'+cols.map(c=>'<th scope="col">'+c+'</th>').join('')+'</tr></thead><tbody>'+(rows||'<tr><td class="empty" colspan="'+cols.length+'">暂无符合条件的数据</td></tr>')+'</tbody></table></div>';
 const row = (cells,cls='')=>'<tr class="'+cls+'">'+cells.map(c=>'<td>'+c+'</td>').join('')+'</tr>';
+function changeTag(kind='新增'){
+  return '<span class="change-tag'+(kind==='调整'?' adjusted':'')+'" aria-hidden="true">本次'+kind+'</span>';
+}
+function changeControl(control,kind='新增'){
+  return '<span class="change-control">'+control+changeTag(kind)+'</span>';
+}
 function title(name,description,action=''){
-  return '<div class="heading"><div><h1>'+name+'</h1><p class="muted">'+description+'</p></div>'+action+'</div>';
+  const addedPages=['产品单价配置','调用费用分析','每日调用费用对比','调用明细','规则命中订单费用'];
+  const annotation=addedPages.includes(name)?changeTag():'';
+  return '<div class="heading"><div><h1>'+name+annotation+'</h1><p class="muted">'+description+'</p></div>'+action+'</div>';
 }
 function comparisonMonthField(value='',baseline=false){
   return '<div class="comparison-month"><label>'+ (baseline?'基准月':'对比月份')+
@@ -624,7 +643,7 @@ function commerce(){
     '<div class="rule-inputs" '+(showShopFilters?'':'hidden')+'>'+referenceFields(['派单状态'])+'</div>'+
     '<div class="rule-actions"><button type="button" aria-disabled="true" class="added">订单分组管理</button><button type="submit" class="primary">查询</button>'+button('重置','shop-reset')+
     '<button type="button" aria-disabled="true">导出</button>'+
-    '<button type="button" data-action="shop-export" '+(matched.length?'':'disabled')+'>导出风控数据</button>'+
+    changeControl('<button type="button" data-action="shop-export" '+(matched.length?'':'disabled')+'>导出风控数据</button>','调整')+
     button(showShopFilters?'收起筛选':'更多筛选','shop-more')+'</div></form>';
   const cards=matched.slice((shopPage-1)*pageSize,shopPage*pageSize).map(order=>{
     const route='#report/'+order.id;
@@ -738,8 +757,8 @@ function base(){
     field('biz','适用业务',bizs,'请选择适用业务')+field('state','规则状态',['启用','停用'],'请选择规则状态')+'</div>'+
     '<div class="rule-actions"><button type="submit" class="primary">查询</button>'+button('重置','rule-reset')+
     button('新建风控规则','original','primary')+button('操作日志','original')+
-    '<button type="button" class="added" data-view="prices">产品单价配置</button>'+
-    '<button type="button" class="added" data-view="overview">每日调用费用对比</button></div></form>';
+    changeControl('<button type="button" class="added" data-view="prices">产品单价配置</button>')+
+    changeControl('<button type="button" class="added" data-view="overview">每日调用费用对比</button>')+'</div></form>';
   const rows=ruleRows.map((rule,id)=>[...rule.slice(0,8),rule[8],id]).filter(([name,biz,,,,enabled])=>
     name.includes(ruleFilters.name)&&(!ruleFilters.biz||bizs[biz]===ruleFilters.biz)&&(!ruleFilters.state||(enabled?'启用':'停用')===ruleFilters.state)
   ).map(([name,biz,products,priority,cost,enabled,time,conditions,report=[0,0,0,0,0,0],id])=>{
@@ -750,7 +769,7 @@ function base(){
       time,reports+button('预览报告','original','link'),button('编辑','original','link')+button('删除','original','link danger')]);
   });
   return form+'<p id="ruleNotice" role="status" class="muted" hidden></p><div class="rule-table">'+table(
-    ['规则名称','适用业务','命中规则','调用产品','优先级','预估单次成本','状态','更新时间','风控报告展示','操作'],
+    ['规则名称','适用业务','命中规则','调用产品','优先级','预估单次成本<span class="change-column-note">'+changeTag()+' 历史估算</span>','状态','更新时间','风控报告展示','操作'],
     rows.join(''))+'</div><div class="pager">共 '+rows.length+' 条 · 10条/页</div>';
 }
 
@@ -983,7 +1002,7 @@ function overview(){
     '<button type="button" data-action="mode:'+mode+'" aria-pressed="'+(comparisonMode===mode)+'">'+(mode==='product'?'按产品':'按风控规则')+'</button>').join('')+'</div>';
   const periods='<div class="segments" aria-label="统计方式">'+Object.entries({single:'单月查看',month:'多月对比',day:'自定义日期'}).map(([mode,label])=>
     '<button type="button" data-action="time:'+mode+'" aria-pressed="'+(timeMode===mode)+'">'+label+'</button>').join('')+'</div>';
-  const actions='<div>'+button('导出费用数据','cost-export')+button('返回风控基座','base')+'</div>';
+  const actions='<div>'+changeControl(button('导出费用数据','cost-export'))+button('返回风控基座','base')+'</div>';
   const coverage='模拟数据截至 '+demoEnd+'（北京时间）';
   if(timeMode==='single')return title('调用费用分析',coverage,actions)+periods+modes+filterForm()+
     '<p id="costExportStatus" class="muted" role="status"></p>'+trendChart()+singleMonthView();
@@ -1100,7 +1119,7 @@ function emphasizePrd(panel){
 }
 
 const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'open':'')+'><summary>'+name+'</summary><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></details>';
-const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品价格配置、费用对比与订单风控数据导出。新增的「产品单价配置」「每日调用费用对比」必须从风控基座规则列表工具栏进入，后台实际侧边栏不增加这两个菜单。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','外层「评审导航」仅用于切换原型中的风控基座和订单联动示意，不代表生产后台菜单。产品单价配置与费用对比的真实业务入口均在风控基座工具栏。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
+const reviewNotes=section('原型操作', ['原型中央界面的红色「本次新增」标签标识此次新增入口与功能区域，橙色「本次调整」标签标识菜单层级及既有导出功能的变更。标签用于开发评审定位。','点击页头「播放操作演示」自动串联产品价格配置、费用对比与订单风控数据导出。新增的「产品单价配置」「每日调用费用对比」必须从风控基座规则列表工具栏进入，后台实际侧边栏不增加这两个菜单。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','外层「评审导航」仅用于切换原型中的风控基座和订单联动示意，不代表生产后台菜单。产品单价配置与费用对比的真实业务入口均在风控基座工具栏。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
 const fieldGlossary={
   '序号':'产品目录中的展示顺序。',
   '产品名称':'三方产品目录中的名称。',
@@ -1305,9 +1324,9 @@ function prices(){
   const vendors=[...new Set(products.map(p=>p.vendor))];
   const vendorOptions=['<option value="">全部厂商</option>',...vendors.map(v=>'<option value="'+v+'">'+v+'</option>')].join('');
   return title('产品单价配置','33 个产品 · 列表展示截至 '+demoEnd+' 生效的单价','<div>'+button('返回风控基座','base')+button('查看费用对比','return')+'</div>')+
-    '<div class="filters price-filters"><label class="price-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span><input id="productNameFilter" type="search" placeholder="搜索产品名称" aria-label="搜索产品名称"></label><label class="price-vendor"><select id="productVendorFilter" aria-label="按厂商筛选">'+vendorOptions+'</select></label></div>'+
+    '<div class="filters price-filters"><div class="change-caption">'+changeTag()+'产品名称与厂商筛选</div><label class="price-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span><input id="productNameFilter" type="search" placeholder="搜索产品名称" aria-label="搜索产品名称"></label><label class="price-vendor"><select id="productVendorFilter" aria-label="按厂商筛选">'+vendorOptions+'</select></label></div>'+
     '<p class="muted">初始单价为演示值。自定义单价按生效日期用于预估费用，并保存在当前浏览器。</p>'+
-    table(['厂商','产品名称','单价（元/次）','生效日期','价格历史','操作'],priceRows()).replace('<tbody>','<tbody id="priceRows">');
+    table(['厂商','产品名称','单价（元/次）','生效日期','价格历史'+changeTag(),'操作'],priceRows()).replace('<tbody>','<tbody id="priceRows">');
 }
 let editingProduct;
 function showPrice(id){
@@ -1410,6 +1429,10 @@ function switchView(next,overrides){
 }
 function infoDialog(name,body,notes){
   $('modalTitle').textContent=name;
+  const addedDialogs=['产品单价历史','规则历史估算'];
+  if(addedDialogs.includes(name)||name==='导出风控数据'){
+    $('modalTitle').insertAdjacentHTML('beforeend',changeTag(name==='导出风控数据'?'调整':'新增'));
+  }
   $('modalBody').innerHTML=body;
   $('modalPrd').innerHTML='<h2>'+name+' · 弹窗说明</h2>'+notes;
   emphasizePrd($('modalPrd'));
