@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-17T11:32:39+08:00",
+  "updatedAt": "2026-11-18T09:55:13+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -41,6 +41,14 @@
       "path": "previews/fdd-notarization/",
       "updatedAt": "2026-11-12T19:54:24+08:00",
       "createdAt": "2026-11-12T19:54:24+08:00"
+    },
+    {
+      "slug": "risk-report-scoring",
+      "name": "风控报告 · 评分明细",
+      "summary": "在订单风控报告中查看评分规则、判断条件、订单情况、命中状态和计入分，支持基础及复合规则、数据更新与待返回场景，附页面 PRD。",
+      "path": "previews/risk-report-scoring/",
+      "updatedAt": "2026-11-18T09:55:13+08:00",
+      "createdAt": "2026-11-18T09:55:13+08:00"
     }
   ]
 }
