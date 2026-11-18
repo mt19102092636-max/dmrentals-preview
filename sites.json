@@ -1,13 +1,13 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-18T15:14:20+08:00",
+  "updatedAt": "2026-11-18T15:37:53+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
       "name": "本管家客户掉落与公海管理",
-      "summary": "配置本管家店铺及客户专属掉落周期，区分公海业务线并查看归属操作记录，附联动 PRD 说明。",
+      "summary": "配置本管家店铺及客户专属掉落周期，区分公海业务线、查看表格式操作记录；附变更标签、重点PRD及导出字段说明。",
       "path": "previews/butler-customer-drop-pool/",
-      "updatedAt": "2026-11-04T18:13:20+08:00",
+      "updatedAt": "2026-11-18T15:37:53+08:00",
       "createdAt": "2026-11-04T18:13:20+08:00"
     },
     {

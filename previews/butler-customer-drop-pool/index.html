@@ -43,6 +43,39 @@ dialog.review-dialog.compact{width:min(960px,calc(100vw - 64px))}
 @media(max-width:900px){dialog.review-dialog,dialog.review-dialog.compact{width:calc(100vw - 28px);max-height:calc(100vh - 28px);overflow:auto}.review-dialog-pair{grid-template-columns:minmax(0,1fr);max-height:none;gap:12px}.review-dialog-product{min-height:0}.review-dialog-product>.mask{max-height:70vh}.review-dialog-product .drawer,.review-dialog-product .store-customer-modal,.review-dialog-product .store-rule-dialog,.review-dialog-product .operation-record-modal{max-height:70vh}.review-dialog-note{max-height:45vh;padding:18px!important}}
 
 .mask{position:absolute;inset:0}.drawer{height:100%;max-height:100%;min-height:0;max-width:100%;overflow:hidden}.drawer-head,.drawer-foot{flex-shrink:0}.drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}.drawer-body .key-values{grid-template-columns:100px minmax(0,1fr)}.key-values b{min-width:0;overflow-wrap:anywhere}.store-customer-modal{max-height:100%;min-height:0}.store-rule-dialog{max-height:100%;min-height:0}.store-customer-body,.store-rule-body{min-height:0}.toast{position:absolute;top:20px}}
+/* Embed these review annotations in the prototype's existing style block. */
+.change-tag {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  padding: 2px 7px;
+  border: 1px solid #efaa9c;
+  border-radius: 4px;
+  background: #fff0eb;
+  color: #b42318;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.change-tag.adjusted {
+  border-color: #e4c576;
+  background: #fff7df;
+  color: #865b00;
+}
+button .change-tag,
+h1 .change-tag,
+h2 .change-tag {
+  margin-left: 7px;
+}
+.prototype-prd .prd-key,
+.modal-context-prd .prd-key {
+  color: #c62828;
+  font-weight: 700;
+}
+
+.prototype-prd .prd-key,.review-dialog-note .prd-key{color:#c62828;font-weight:700}.pool-business-tabs>.change-tag{align-self:flex-start;margin:0 5px 10px 0}.store-ops .change-tag{font-size:9px;padding:1px 3px;margin-left:4px}.store-table{min-width:1380px}.store-user-phone>span{white-space:nowrap}.workflow-export-prd{border:1px solid #e4e9e5;border-radius:5px;padding:10px;margin-top:14px}.workflow-export-prd summary{color:#28634e;font-size:12px;font-weight:600;cursor:pointer}.workflow-export-prd>.prd-section{padding:12px 0}.review-dialog-note h2 .change-tag{font-size:10px}.review-dialog-product h2 .change-tag{margin-left:8px}
+@scope (#productFrame){@container product (max-width:700px){.shell{grid-template-columns:minmax(0,1fr)}.shell>#sidebar{display:none}.pool-toolbar{display:flex;flex-wrap:wrap;gap:10px}.claim-quota{white-space:normal}}}
 </style></head><body><div class="prototype-shell"><header class="prototype-topbar"><div class="prototype-brand"><span class="prototype-mark">雕</span><div><strong>客户归属掉落 · 产品原型与PRD</strong><small>OPERATIONS & CRM · INTERACTIVE REVIEW</small></div></div><div class="prototype-status">静态演示　·　不连接真实后台</div></header><div class="prototype-workspace"><aside class="prototype-rail"><div class="prototype-rail-label">系统 / 页面切换</div><div class="prototype-role-nav" role="group" aria-label="系统与页面"><button class="prototype-role active" data-view="stores"><span class="prototype-role-icon">▦</span><span><strong>运营后台</strong><small>本管家店铺列表</small></span></button><button class="prototype-role" data-view="pool"><span class="prototype-role-icon">▤</span><span><strong>CRM后台</strong><small>公海客户列表</small></span></button><button class="prototype-role" data-view="logs"><span class="prototype-role-icon">≡</span><span><strong>运营后台</strong><small>操作与配置日志</small></span></button></div><div class="prototype-rail-note">选择页面后，中间原型与右侧说明同步切换。<br><br>打开弹窗，右侧只展示当前弹窗PRD。<br><br>用户手机号可输入尾号2591演示。</div></aside><section class="prototype-stage"><div class="prototype-stage-head"><div><h1 id="prototypeStageTitle">运营后台 · 本管家店铺列表</h1><p id="prototypeStageDesc">分销商 / 本管家店铺列表</p></div><span>复用现有后台组件结构</span></div><div class="prototype-layout"><div class="prototype-board" id="prototypeBoard"><div class="product-frame" id="productFrame" role="region" aria-label="客户掉落与公海交互原型"><div class="product-scroll">
 <header><div class="brand"><span class="mark">♞</span><span id="brandName">运营后台管理系统</span></div><nav><button id="navOps" class="active" onclick="go('stores')">分销</button><button id="navCrm" onclick="go('pool')">CRM</button><button id="navSpec" onclick="go('spec')">需求说明</button></nav><div class="account">消息中心　 <span class="tag blue">管</span>　运营管理员　⌄</div></header>
 <div class="demo-bar"><span>交互原型 · 演示数据　｜　仅运营可维护掉落规则，内部销售原有掉落规则独立执行</span><button onclick="resetDemo()">重置演示</button></div>
@@ -85,7 +118,7 @@ function openCustomers(i){
 }
 function customerRows(){
   const s=stores[storeIndex],rows=getStoreCustomers(storeIndex);
-  return rows.filter(c=>!filteredCustomers||(!filteredCustomers.phone||matchesUserPhone(c,filteredCustomers.phone))&&(!filteredCustomers.sales||c.sales.includes(filteredCustomers.sales))&&(!filteredCustomers.from||c.bound.slice(0,10)>=filteredCustomers.from)&&(!filteredCustomers.to||c.bound.slice(0,10)<=filteredCustomers.to)).map(c=>{const ix=customers.indexOf(c),days=effectiveDays(c,s),elapsed=Math.max(0,Math.floor((new Date('2026-11-03T00:00:00+08:00')-new Date(c.bound.replace(' ','T')+'+08:00'))/86400000));const check=c.status==='订单待明确'?`订单待明确（0/${days}）`:['已掉落','已解绑','已保护'].includes(c.status)?'—':`${dateAdd(c.bound,days)}（${Math.min(elapsed,days)}/${days}）`;return `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.sales}</td><td>支付宝</td><td>${c.phone}</td><td>${c.bound}</td><td>${check}</td><td>${c.unbound}</td><td><button class="link green" onclick="openRule('customer',${storeIndex},${ix})">配置掉落专属规则</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">未找到符合条件的客户</td></tr>';
+  return rows.filter(c=>!filteredCustomers||(!filteredCustomers.phone||matchesUserPhone(c,filteredCustomers.phone))&&(!filteredCustomers.sales||c.sales.includes(filteredCustomers.sales))&&(!filteredCustomers.from||c.bound.slice(0,10)>=filteredCustomers.from)&&(!filteredCustomers.to||c.bound.slice(0,10)<=filteredCustomers.to)).map(c=>{const ix=customers.indexOf(c),days=effectiveDays(c,s),elapsed=Math.max(0,Math.floor((new Date(WORKFLOW_AS_OF+'T00:00:00+08:00')-new Date(c.bound.replace(' ','T')+'+08:00'))/86400000));const check=c.status==='订单待明确'?`订单待明确（0/${days}）`:['已掉落','已解绑','已保护'].includes(c.status)?'—':`${dateAdd(c.bound,days)}（${Math.min(elapsed,days)}/${days}）`;return `<tr><td>${c.id}</td><td>${c.name}</td><td>${c.sales}</td><td>支付宝</td><td>${c.phone}</td><td>${c.bound}</td><td>${check}</td><td>${c.unbound}</td><td><button class="link green" onclick="openRule('customer',${storeIndex},${ix})">配置掉落专属规则</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">未找到符合条件的客户</td></tr>';
 }
 function drawCustomers(){
   overlayMode='customers';const s=stores[storeIndex];
@@ -207,7 +240,7 @@ function poolFilterField(label,id,options,placeholder=''){
 }
 function poolValue(p,k){
   const ix=pool.indexOf(p);
-  const defaults={company:'个人',industry:'个人',role:'个人',type:'个人客户',follow:'未跟进',followTime:'',created:'2026-09-01 10:20:00',deal:'否',days:Math.max(1,Math.floor((new Date('2026-11-03T00:00:00+08:00')-new Date(p.time.replace(' ','T')+'+08:00'))/86400000)),orders:p.order==='无订单'?0:p.order==='全部取消'?2:3,remark:'—',risk:'无风险',demand:'—',purpose:'—',boundOrderUser:'—'};
+  const defaults={company:'个人',industry:'个人',role:'个人',type:'个人客户',follow:'未跟进',followTime:'',created:'2026-09-01 10:20:00',deal:'否',days:Math.max(1,Math.floor((new Date(WORKFLOW_AS_OF+'T00:00:00+08:00')-new Date(p.time.replace(' ','T')+'+08:00'))/86400000)),orders:p.order==='无订单'?0:p.order==='全部取消'?2:3,remark:'—',risk:'无风险',demand:'—',purpose:'—',boundOrderUser:'—'};
   if(k==='created')return ['2026-09-01 10:20:00','2026-08-17 15:32:00','2026-07-29 17:46:44','2026-08-29 12:08:02','2026-09-19 10:20:00','2026-07-10 10:20:00'][ix];
   return p[k]??defaults[k];
 }
@@ -353,13 +386,92 @@ render=function(){
 const originalReviewCloseDrawer=closeDrawer;
 closeDrawer=function(){originalReviewCloseDrawer();syncReviewContext()};
 function syncReviewContext(){
- const confirm=document.querySelector('#confirm .dialog'),rule=document.querySelector('#storeRuleLayer .store-rule-dialog'),overlay=document.querySelector('#overlay [role="dialog"]');const active=confirm||rule||overlay;let dialog=active?.querySelector('h2')?.textContent||'',kind='page';if(rule)kind='rule';else if(overlay?.classList.contains('store-customer-modal'))kind='customers';else if(active)kind='modal';
+ const confirm=document.querySelector('#confirm .dialog'),rule=document.querySelector('#storeRuleLayer .store-rule-dialog'),overlay=document.querySelector('#overlay [role="dialog"]');const active=confirm||rule||overlay;let dialog=Array.from(active?.querySelector('h2')?.childNodes||[]).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent).join('').trim(),kind='page';if(rule)kind='rule';else if(overlay?.classList.contains('store-customer-modal'))kind='customers';else if(active)kind='modal';
  const context={view:page,dialog,kind,ruleMode,store:stores[storeIndex]?.name,customer:customers[customerIndex]?.name};
  const key=JSON.stringify(context);if(syncReviewContext.last===key){syncModalPair(context);return}syncReviewContext.last=key;updatePrd(context);
 }
 new MutationObserver(syncReviewContext).observe(document.getElementById('productFrame'),{subtree:true,childList:true});
 render();
 
+
+/* WORKFLOW01_START */
+const WORKFLOW_AS_OF='2026-11-18';
+function workflowMark(target,adjusted=false){
+  if(!target||target.querySelector(':scope > .change-tag'))return;
+  const badge=document.createElement('span');badge.className='change-tag'+(adjusted?' adjusted':'');badge.textContent=adjusted?'本次调整':'本次新增';badge.setAttribute('aria-hidden','true');target.appendChild(badge);
+}
+function workflowMarkStore(){
+  workflowMark(document.querySelector('.store-user-phone>span'));
+  const first=document.querySelector('.store-table tbody tr:first-child');
+  first?.querySelectorAll('.store-ops button').forEach(button=>{if(button.textContent.startsWith('查看客户')||button.textContent==='配置统一掉落规则')workflowMark(button)});
+}
+function workflowMarkPool(){
+  workflowMark(document.querySelector('.new-filter-start>span'));
+  const tabs=document.querySelector('.pool-business-tabs');if(tabs&&!tabs.querySelector(':scope>.change-tag')){const badge=document.createElement('span');badge.className='change-tag';badge.textContent='本次新增';badge.setAttribute('aria-hidden','true');tabs.prepend(badge)}
+  const heads=document.querySelectorAll('.pool-grouped thead th');[1,3,4].forEach(i=>workflowMark(heads[i],true));
+  document.querySelectorAll('.pool-toolbar button').forEach(button=>{if(button.textContent==='导出当前清单')workflowMark(button)});
+}
+const workflowStoreRenderer=renderStores;renderStores=function(){workflowStoreRenderer();workflowMarkStore()};
+const workflowPoolRenderer=renderPool;renderPool=function(){workflowPoolRenderer();workflowMarkPool()};
+const workflowCustomerRenderer=drawCustomers;drawCustomers=function(){workflowCustomerRenderer();const heads=document.querySelectorAll('.store-customer-table th');[6,7].forEach(i=>workflowMark(heads[i],true));workflowMark(document.querySelector('.store-customer-table tbody tr:first-child .link'))};
+const workflowCustomerQuery=queryCustomers;queryCustomers=function(){workflowCustomerQuery();workflowMark(document.querySelector('.store-customer-table tbody tr:first-child .link'))};
+
+const WORKFLOW_KEYS=[
+  '客户专属规则优先于店铺统一规则','每行一名当前公海客户','只导出当前Tab及已应用筛选命中的客户','本次绑定成功时间+生效周期','按原绑定时间重新核验','首次核验日=本次绑定时间+生效周期',
+  '完整11位手机号或后4位','完整11位或后4位','默认45天','默认45','1～365整数','不设置固定延期天数','无任何有效订单','只有取消单','任一有效订单最终完结','全部取消且无其他有效订单才掉落',
+  '不通过改周期恢复归属','已解除关系只读','已被其他销售或分销商绑定','必须仍在公海','不覆盖现有绑定','确认才改变归属','取消不改变数据','无匹配时仅导出表头','空值导出为空单元格',
+  '授权时间是否等同绑定成功时间','待接口确认','待确认','同一掉落事件不重复展示','按时间倒序','默认100条/页','仅保存在当前页面内存','不连接真实后台'
+].sort((a,b)=>b.length-a.length);
+function workflowEmphasize(root){
+  if(!root)return;const nodes=[],walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  while(walker.nextNode()){const node=walker.currentNode;if(node.parentElement?.closest('h2,h3,h4,dt,.prd-key,script,style'))continue;if(WORKFLOW_KEYS.some(key=>node.textContent.includes(key)))nodes.push(node)}
+  for(const node of nodes){const text=node.textContent,fragment=document.createDocumentFragment();let index=0,plain='';while(index<text.length){const key=WORKFLOW_KEYS.find(value=>text.startsWith(value,index));if(!key){plain+=text[index++];continue}if(plain){fragment.append(plain);plain=''}const strong=document.createElement('strong');strong.className='prd-key';strong.textContent=key;fragment.appendChild(strong);index+=key.length}if(plain)fragment.append(plain);node.replaceWith(fragment)}
+}
+function workflowExportPrd(){
+  return `<details class="workflow-export-prd"><summary>导出字段定义（13列）</summary>${section('范围与粒度',para('只导出当前Tab及已应用筛选命中的客户，每行一名当前公海客户，顺序与列表一致。CSV为UTF-8编码，手机号保持脱敏，空值导出为空单元格；无匹配时仅导出表头。'))}${fields(
+    ['客户ID','客户唯一编号；第一列，来自客户主档，不因多次入海重复生成。'],
+    ['客户名称','客户主档的名称或昵称；第二列，与当前列表一致。'],
+    ['手机号','客户授权手机号；第三列，维持列表脱敏形式，不导出完整号码。'],
+    ['入海业务线','第四列，取本次入海前归属快照：内部销售、本管家、合伙人分销或待核实。'],
+    ['前归属对象','第五列，本次入海前对象名称及ID，沿用当前快照。'],
+    ['入海方式','第六列，本次规则掉落、销售规则掉落、人工解绑或历史数据治理方式。'],
+    ['适用规则','第七列，本次生效规则及周期；人工解绑按列表显示不适用。'],
+    ['来源渠道','第八列，保留首次获客来源，不被后续归属变更覆盖。'],
+    ['绑定渠道','第九列，取本次绑定方式，与来源渠道和入海业务线分别保留。'],
+    ['订单情况','第十列，为当前样例订单状态摘要，不等同于有效订单数量。'],
+    ['入海原因','第十一列，取本次入海核验或人工操作原因。'],
+    ['入海时间','第十二列，本次实际入海时间，格式YYYY-MM-DD HH:mm:ss。'],
+    ['批次号','第十三列，本次执行批次，按历史原值保留。']
+  )}</details>`;
+}
+function workflowPageNotes(view){
+  const markerExplanation=view==='logs'?'此页为本期新增页面，仅在主标题标一次“本次新增”，覆盖页内全部字段与功能。':'红色“本次新增”标识新增入口或字段区域；橙色“本次调整”标识复用组件中的调整位置。行级入口仅在首条可见样例标一次，覆盖同列全部客户/店铺。';
+  return section('原型操作',bullets(markerExplanation,'标签仅供评审使用，不改变真实业务字段或导出内容。左侧切换系统，新增功能从中间页面的真实行操作进入。','三栏可调宽、收起；弹窗与独立说明白卡并排，关闭或返回时保留原查询条件。',`演示计时基准：${WORKFLOW_AS_OF}（北京时间）；历史绑定和操作日期保留原关联。新操作按当前北京时间记录，数据仅保存在当前页面内存，刷新重置，不连接真实后台。`));
+}
+const workflowPagePrd=updatePrd;
+updatePrd=function(state){
+  workflowPagePrd(state);
+  const content=document.getElementById('prdContent');
+  if(state.view==='pool')content.insertAdjacentHTML('beforeend',workflowExportPrd());
+  content.insertAdjacentHTML('beforeend',workflowPageNotes(state.view));
+  if(state.view==='stores')content.insertAdjacentHTML('afterbegin',section('本期关键规则',bullets('从店铺行操作进入“查看客户”和“配置统一掉落规则”；用户手机号检索关联店铺并带入客户弹层。','默认45天，客户专属规则优先于店铺统一规则。首检无任何有效订单掉落；存在未明确订单持续等待，不设置固定延期天数。')));
+  workflowEmphasize(content);if(state.view==='logs')workflowMark(document.getElementById('prototypeStageTitle'));
+};
+const workflowModalSync=syncModalPair;
+syncModalPair=function(state){
+  workflowModalSync(state);
+  for(const portal of document.querySelectorAll('dialog.review-dialog[open]')){
+    const customerModal=portal.querySelector('.store-customer-modal'),ruleModal=portal.querySelector('.store-rule-dialog'),recordModal=portal.querySelector('.operation-record-modal');
+    if(ruleModal||recordModal)workflowMark((ruleModal||recordModal).querySelector('h2'),true);
+    if(customerModal){[6,7].forEach(index=>workflowMark(customerModal.querySelectorAll('th')[index],true));workflowMark(customerModal.querySelector('tbody tr:first-child .link'))}
+    const note=portal.querySelector('.review-dialog-note');workflowEmphasize(note);
+  }
+};
+const workflowRulePrd=rulePrd;rulePrd=function(state){return workflowRulePrd(state)+section('待确认',bullets('授权时间是否等同绑定成功时间：掉落计算必须取绑定成功时间，接口映射待确认。','已关闭及全额退款未履约的实际订单状态枚举，待接口确认；本次仍按已确认的有效订单定义处理。'))};
+const workflowCustomerPrd=customerPrd;customerPrd=function(){return workflowCustomerPrd()+section('待确认',para('原需求④与⑥均写为“没下过单＋自动掉落”；当前按⑥禁止扫码重新绑定，请确认⑥是否实际指“下过单＋自动掉落”。本轮不新增重新绑定入口。'))};
+render();
+updatePrd({view:page,dialog:'',kind:'page'});
+/* WORKFLOW01_END */
 
 </script></body></html>
 
