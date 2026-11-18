@@ -490,7 +490,7 @@ const PHASE_PRD = {
     <h4>产品来源</h4><p>全部35项覆盖01—30第三方产品及31—35内部风险信息。选择来源只改变当前展示范围。</p>
     <h4>规则状态</h4><p>可筛选全部、已启用、已停用或一票否决规则。重置筛选恢复全部来源和状态，清空搜索条件。</p>
     <h3>三、产品字段</h3><h4>产品名称与来源</h4><p>名称及厂商取产品目录，用于确定可配置字段的归属。第三方和内部信息标识说明取数来源。内部信息从平台业务记录取数。</p>
-    <h4>规则数量与字段数量</h4><p>规则数量统计该产品当前配置的规则条数，包含停用项。字段数量表示该产品已维护的可判断字段数。点击产品名称展开或收起规则。</p>
+    <h4>规则数量</h4><p>统计该产品当前配置的规则条数，包含停用项。点击产品名称展开或收起规则。</p>
     <h4>产品计分</h4><p>「命中规则求和」将该产品已启用且命中的规则分值相加。「命中规则取最高」只保留其中最高分的一条，同分按规则稳定顺序保留首条。无命中时为0分。</p>
     <h4>封顶</h4><p>该产品得分的上限，选填非负整数。留空表示无上限，0表示最多计0分。聚合分超过上限时截到上限，负数按原值保留。</p>
     <h3>四、规则列表字段</h3><h4>启用</h4><p>开关决定规则是否参与计算。停用后保留内容，计算时跳过该规则，包括其一票否决判断。</p>
@@ -702,10 +702,8 @@ function meaningfulRuleNote(note) {
 
 renderProduct = function(product) {
   const template = document.createElement('template');
-  template.innerHTML = legacyRenderProduct(product).replace(
-    /<button class="link field-count"[^>]*>(.*?)<\/button>/,
-    '<span class="hint">$1</span>'
-  );
+  template.innerHTML = legacyRenderProduct(product);
+  template.content.querySelector('.field-count')?.remove();
   const table = template.content.querySelector('.rule-table');
   if (table) {
     table.querySelector('thead tr').children[4].remove();
