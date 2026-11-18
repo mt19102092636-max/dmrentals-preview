@@ -53,6 +53,8 @@ html,body{min-width:0}body{margin:0;background:#f0f2f5;color:#303133;font-family
 .prototype-board .platform-tabs{height:auto;min-height:54px;gap:18px;padding:0 10px;font-size:12px;white-space:nowrap;overflow:auto}.prototype-board .base-panel{padding:16px 12px}.prototype-board .base-filter-box{padding:14px}.prototype-board .base-filter-box .row{gap:12px;flex-wrap:wrap}.prototype-board .base-filter-box label{font-size:12px;gap:7px}.prototype-board .base-filter-box input,.prototype-board .base-filter-box select{width:160px}.prototype-board .base-actions{margin-top:14px}.prototype-board .base-actions button{font-size:12px;padding:5px 10px}.prototype-board .base-table{min-width:850px}.prototype-board .base-pagination{font-size:12px}
 .phase-page-head{background:#fff;padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.phase-page-head h1{font-size:20px;margin:0}.phase-page-head p{margin:6px 0 0;color:#868f98;font-size:12px}.phase-tabs{margin-bottom:12px;gap:25px}.phase-score-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;background:#fff;position:sticky;bottom:0;border-top:1px solid #dce3ee;font-size:12px}
 .prototype-board .rule-toolbar .row{flex-wrap:wrap}.prototype-board .rule-toolbar .search{min-width:140px;width:190px}.prototype-board .rule-toolbar{align-items:start;gap:12px}.prototype-board .product-head{flex-wrap:wrap}.prototype-board .product-title{flex:1}.prototype-board .product-title small{white-space:nowrap}.prototype-board .product-head>.row{margin-left:20px}.prototype-board .rule-table{min-width:850px}.prototype-board table th,.prototype-board table td{overflow-wrap:anywhere}.prototype-board .product-title{margin:0;border-bottom:0;color:inherit;padding:0}.prototype-board .filter-row>.row{flex-wrap:wrap}
+.prototype-board .rule-table{min-width:730px}.prototype-board .rule-table td:nth-child(5){width:145px}.prd-fields{border-top:1px solid #e5e9ed;padding:8px 0}.prd-fields>summary{cursor:pointer;font-weight:600;color:#435361}.prd-field{padding:5px 0 8px;border-bottom:1px solid #edf0f3}.prd-field h4{margin-top:5px}.prd-field p{margin:3px 0}.prd-formula{padding:8px 10px;background:#f5f8f5;border-radius:4px}
+.prototype-board .product-head>.product-title{flex:1 1 260px;min-width:min(260px,100%)}
 .prototype-prd{background:white;border:1px solid #dfe5eb;border-radius:6px;min-width:0;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}.prototype-prd>header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px;border-bottom:1px solid #e9edf1}.prototype-prd h2{font-size:14px;margin:0}.prototype-prd header button{font-size:12px;padding:4px 7px;white-space:nowrap}.prd-copy{padding:0 14px 16px;font-size:12px;color:#5d6872;line-height:1.85}.prd-copy h3{font-size:13px;color:#34424d;margin:16px 0 5px}.prd-copy h4{font-size:12px;color:#3e4b56;margin:10px 0 3px}.prd-copy p{margin:5px 0}.prd-copy ul{padding-left:18px;margin:5px 0}.prd-copy li{margin:5px 0}.prd-copy strong{color:#40503f}.prd-copy .scope-note{background:#f5f8f5;border-radius:4px;padding:10px;font-size:12px}
 .prototype-resizer{position:relative;align-self:stretch;cursor:col-resize;touch-action:none;min-height:200px}.prototype-resizer:before{content:"";position:sticky;top:43vh;margin:auto;display:block;width:4px;height:52px;border-radius:6px;background:#c8d1d7}.prototype-resizer:focus-visible{outline:2px solid #3a924a}
 .prototype-board{grid-column:1}#pagePrd{grid-column:3}.prototype-resizer{grid-column:2;grid-row:1}
@@ -323,12 +325,157 @@ if(a==='showOrderReport'){const o=activeOrder();modal('订单风控报告 · '+o
 })();
 
 </script><script>
+const SCORE_FIELD_MEANINGS = {
+  f002:'运营商返回的号码当前在网状态，用于判断正常或停机。',
+  f003:'手机号码、姓名及身份信息三要素的核验结果，使用产品返回的整体一致性结论。',
+  f004:'产品返回的实名信息核验结论，按约定的一致或不一致取值判断。',
+  f005:'报告返回的客户年龄，以完整岁数参与数值比较。',
+  f006:'该手机号码持续在网的时长，标准化为月。',
+  f007:'手机号码所属运营商，用联通、电信或移动的明确枚举判断。',
+  f008:'身份证与手机号码归属地的一致性结论，比较地区层级由接口映射确认。',
+  f009:'姓名与身份证号的二要素核验结果。',
+  f010:'产品返回的法院涉诉案件数量，按件统计。',
+  f011:'是否在本产品中命中限制高消费被执行人名单。',
+  f012:'是否在本产品中命中失信被执行人信息。',
+  f013:'以身份证为查询维度，统计近12个月3C租赁申请次数。',
+  f014:'以手机号为查询维度，统计近12个月3C租赁申请次数。',
+  f015:'以身份证为查询维度，统计近1个月3C租赁申请次数。',
+  f016:'以手机号为查询维度，统计近1个月3C租赁申请次数。',
+  f017:'产品返回的周末3C租赁申请占比，输入20表示20%。统计周期及分母以字段映射为准。',
+  f018:'产品返回的夜间3C租赁申请占比，输入20表示20%。夜间时段定义以产品口径为准。',
+  f019:'本产品返回的3C租赁风险等级。无返回时作为缺失值。',
+  f020:'身份证侧与手机号侧申请次数的差距倍数。原材料未定义分子、分母及零分母处理，须先确认标准化口径再配置。',
+  f021:'借贷意向产品返回的借贷申请风险等级。',
+  f022:'近7天的标准化借贷申请次数。银行与非银行、身份证与手机号侧的合并口径须按接口确认。',
+  f023:'近15天的标准化借贷申请次数，统计口径沿用已确认的字段映射。',
+  f024:'近1个月的标准化借贷申请次数，统计口径沿用已确认的字段映射。',
+  f025:'近3个月的标准化借贷申请次数，统计口径沿用已确认的字段映射。',
+  f026:'近6个月的标准化借贷申请次数，统计口径沿用已确认的字段映射。',
+  f027:'近12个月的标准化借贷申请次数，统计口径沿用已确认的字段映射。',
+  f028:'产品返回的最近一次借贷申请距本次查询的天数。',
+  f029:'近1个月发生申请的机构数量。去重与机构归并口径以供应商返回字段为准。',
+  f030:'产品返回的周末借贷申请占比，输入20表示20%。统计周期及分母需在字段映射时确认。',
+  f031:'产品返回的夜间借贷申请占比，夜间定义和统计周期以供应商口径为准。',
+  f032:'团伙欺诈产品返回的数值风险级别，按1—10级参与比较。等级方向及含义须与供应商确认。',
+  f033:'产品返回的关联团伙人数或规模人数。',
+  f034:'产品返回的高风险平台命中数量，按本字段标准化结果判断。',
+  f035:'产品归类的被起诉案件类型，按已维护的类型枚举判断。',
+  f036:'被起诉案件立案时间距本次查询的月份数，单位按月处理。',
+  f037:'被执行案件立案时间距本次查询的月份数，单位按月处理。',
+  f038:'被执行案件的执行标的金额，使用标准化人民币元值。',
+  f039:'借贷风险勘测产品是否返回有效命中。',
+  f040:'以手机号为查询维度，返回近12个月借贷申请次数。',
+  f041:'以身份证为查询维度，返回近12个月借贷申请次数。',
+  f042:'以手机号为查询维度，返回本字段定义统计期内的申请机构数量，统计期需与接口确认。',
+  f043:'以身份证为查询维度，返回本字段定义统计期内的申请机构数量，统计期需与接口确认。',
+  f044:'偿债压力产品返回的原始评分，用作条件输入。分数方向以供应商定义为准。',
+  f045:'偿债压力产品返回的风险等级。',
+  f046:'报告返回的放款机构总数量，按机构个数计。',
+  f047:'产品记录的最近一次放款日期，按有效日历日期比较。',
+  f048:'近12个月的放款金额汇总，以元计。',
+  f049:'近12个月被产品识别为还款异常的次数。',
+  f050:'近12个月的履约次数，履约事件的认定使用供应商口径。',
+  f051:'近12个月履约金额汇总，以元计。',
+  f052:'青云分产品返回的支付能力原始评分，分数方向以该产品定义为准。',
+  f053:'支付能力产品返回的等级或已归一化建议，缺失时留空。',
+  f054:'火眸产品返回的欺诈风险原始评分，分数方向以供应商定义为准。',
+  f055:'欺诈风险产品返回的风险等级。',
+  f056:'产品统计的当日用户申请租机商家数量。',
+  f057:'产品统计的近7日用户申请租机商家数量。',
+  f058:'产品统计的近30日用户申请租机商家数量。',
+  f059:'租赁行业综合评级的原始等级。实际T/S等完整枚举尚待维护，当前字段不可用于新增条件。',
+  f060:'供应商返回的租赁发货建议，用建议发货或不发货枚举参与条件判断。',
+  f061:'产品是否命中公安不良人员名单，名单范围以供应商返回口径为准。',
+  f063:'租赁通用评分产品返回的0—100分原始分值。产品名称及厂商归属以正式接口核对结果为准。',
+  f064:'产品返回的逾期风险百分比，输入20表示20%。正式接口的小数精度及归一化需核对。',
+  f065:'租赁通用评分产品返回的逾期风险等级。',
+  f066:'是否返回限制消费令记录。未返回枚举与请求失败状态分别处理。',
+  f067:'本次查询是否返回企业联系方式，用是或否判断是否有可用结果。',
+  f068:'是否返回终结本次执行程序案件记录。',
+  f069:'是否返回历史被执行人记录。',
+  f070:'企业简易注销的返回结果，以已维护的已注销或未注销枚举判断。',
+  f071:'是否返回现金流量表记录，此字段表示资料返回情况。',
+  f072:'是否返回企业年报记录，此字段表示资料返回情况。',
+  f073:'是否存在立案信息，使用产品返回的是或否结论。',
+  f076:'客户是否命中平台内部有效黑名单。查询异常为已定义的业务枚举时可配置，请求失败仍按取数状态处理。',
+  f077:'客户当前是否存在逾期订单，由内部业务数据返回。',
+  f078:'客户当前逾期订单的数量，订单去重及有效状态以内部业务口径为准。',
+  f079:'客户是否存在历史逾期记录，统计范围以内部业务口径为准。',
+  f080:'客户历史逾期事件的次数，同一订单多次逾期可能形成多个事件，认定口径须由内部业务确认。',
+  f081:'客户历史逾期订单数量，按订单维度统计。',
+  f082:'客户当前在租订单笔数，以内部在租状态定义为准。',
+  f083:'客户当前在租设备总价值，以内部业务定义的设备价值汇总，单位元。',
+  f084:'下单时是否取得定位信息，区分正常取得与为空。',
+  f085:'下单定位城市与收货地址城市的比较结果，未知为明确业务枚举。',
+  f086:'下单定位区县与收货地址区县的比较结果，未知为明确业务枚举。',
+  f087:'收货地址解析的精度类型，用精确或驿站·模糊参与判断。'
+};
+
+function scoreFieldDefinition(field) {
+  const meaning = SCORE_FIELD_MEANINGS[field.id];
+  const type = {enum:'枚举',number:'数值',date:'日期'}[field.type];
+  let allowed;
+  if (field.type === 'enum') {
+    const values = typeof config !== 'undefined' ? enumValues(field,config) : field.values;
+    allowed = values.length ? '可选值为' + values.join('、') + '。支持等于、不等于。' :
+      '实际枚举尚未完整维护，当前禁用。';
+  } else if (field.type === 'date') {
+    allowed = '填写有效日期，支持等于、不等于、大小比较和介于。日期粒度和业务时区须按接口约定。';
+  } else {
+    allowed = '输入' + (field.step === 1 ? '整数' : '最多两位小数') + '，最小值' + field.min +
+      (field.max === null ? '，未设置最大值' : '，最大值' + field.max) +
+      (field.unit ? '，单位' + field.unit : '') + '。支持等于、不等于、大小比较和介于。';
+  }
+  return '<section class="prd-field" data-prd-field="' + E(field.id) + '"><h4>' + E(field.name) +
+    '</h4><p>' + E(meaning) + '</p><p>' + type + ' · ' + E(allowed) +
+    '</p><p>数据为空时不命中任何条件。' + (field.type === 'number' ? '真实0按数值0参与判断。' : '') +
+    '</p></section>';
+}
+
+function productFieldGuide(ids) {
+  return [...new Set(ids)].map(id => {
+    const product = productOf(id);
+    const fields = FIELDS.filter(f => f.product === id);
+    return '<details class="prd-fields"><summary>' + E(productLabel(id)) + '</summary><p>' +
+      E(product?.kind === 'internal' ? '数据来自平台内部业务记录。' : '数据来自该第三方产品返回结果。') +
+      '</p>' + (fields.map(scoreFieldDefinition).join('') ||
+      '<p>当前未提供可用于评分的字段，新增基础规则禁用。</p>') + '</details>';
+  }).join('');
+}
+
+function currentRuleFieldGuide() {
+  if (typeof edit === 'undefined' || !edit) return '';
+  const ids = edit.compound ? edit.rows.map(r => r.product) : [edit.data.product];
+  return '<h3>四、当前产品字段释义</h3>' + productFieldGuide(ids);
+}
+
+function configuredRuleGuide() {
+  const compound = tabName === 'compound';
+  const rules = compound ? config.compounds : config.products.flatMap(p => p.rules);
+  return rules.map(rule => {
+    const product = compound ? null : config.products.find(p => p.id === rule.product);
+    const score = Number.isInteger(rule.score) ? rule.score + '分' : '待填写有效整数分值';
+    const note = meaningfulRuleNote(rule.note);
+    return '<details class="prd-fields"><summary>' + E(rule.name) + '</summary>' +
+      (compound ? '' : '<p>' + E(productLabel(rule.product)) + '</p>') +
+      '<h4>命中逻辑</h4><p>' + E(formatCond(rule.conditions,compound)) + '</p>' +
+      '<h4>计分结果</h4><p>' +
+      (rule.enabled ? '规则启用，整条条件满足后' + (compound ? '附加' : '获得') + E(score) + '，每次计算计入一次。' :
+      '规则已停用，当前计算跳过该规则。') +
+      (product ? '该产品采用' + (product.mode === 'sum' ? '命中规则求和' : '命中规则取最高') +
+        (product.cap === null ? '，封顶留空。' : '，封顶' + E(product.cap) + '分。') : '') +
+      (rule.enabled && rule.veto ? '命中同时触发一票否决，风险等级强制为高风险。' : '') +
+      '</p>' + (note ? '<h4>业务备注</h4><p>' + E(note) + '</p>' : '') + '</details>';
+  }).join('') || '<p>当前尚未配置规则。</p>';
+}
+
+</script><script>
 const PHASE_PRD = {
   base: {
     title:'风控基座 · 需求说明',
     body:`<h3>一、需求背景</h3><p>现有风控基座按订单业务条件决定调用哪些第三方产品。评分标准需要集中维护，审核人员也需要在报告里看到每条规则的计分依据。</p>
     <h3>二、需求目标</h3><p>在原系统增加评分机制入口，贯通产品规则配置、订单取数、规则计分和报告展示。相同配置与数据得到相同结果，调整内容能从操作日志追溯。</p>
-    <h3>三、本期需求内容</h3><ul><li>在「新建风控规则」与「操作日志」之间增加「评分机制」。</li><li>按35项产品及内部信息分别配置基础规则，支持复合场景加权。</li><li>在原风控报告基础信息之后、产品风控结论之前增加五列评分明细。</li><li>配置保存、启停、删除及发布的内容进入原操作日志。</li></ul>
+    <h3>三、本期需求内容</h3><ul><li>在「新建风控规则」与「操作日志」之间增加「评分机制」。</li><li>按35项产品及内部信息分别配置基础规则，支持复合场景加权。</li><li>在原风控报告基础信息之后、产品风控结论之前增加五列评分明细。</li><li>配置启停、删除及发布的内容进入原操作日志。</li></ul>
     <div class="scope-note">本期提供规则配置与复合场景加权。等级与强制规则、产品字段字典管理、模拟试算、版本与日志管理页签安排在后续阶段。原有操作日志入口沿用。字段类型及合法值仍作为规则编辑的输入约束。</div>
     <h3>四、列表与字段</h3><p>规则名称标识业务策略。适用业务限定业务线。命中规则展示业务条件摘要。调用产品数量可点击查看。优先级1—999，数值小的先匹配。状态控制是否参与订单匹配。更新时间记录最近保存时间。</p>
     <h3>五、操作与反馈</h3><ul><li>查询使用名称、业务及状态筛选，重置恢复列表。</li><li>新建或编辑打开原纵向表单，维护基础信息、判断规则和调用产品。</li><li>评分机制进入统一配置，适用于各条基座所调用的产品。</li><li>操作日志打开原风格弹窗，查询并展开本机变化记录。</li><li>停用规则后可删除，删除前确认。</li></ul>
@@ -337,16 +484,42 @@ const PHASE_PRD = {
     <h3>八、评审布局</h3><p>可拖动分隔条或用左右方向键调整两侧宽度。双击或按0恢复默认比例，当前浏览器保存比例。右上角可收起或展开说明。弹窗打开时显示对应的独立说明卡。</p>`
   },
   scoring: {
-    title:'评分机制 · 需求说明',
-    body:`<h3>一、需求背景</h3><p>评分条件、分值及多产品组合需要由系统按固定规则执行。每个产品返回字段不同，运营配置时需要受到字段归属、类型和合法值约束。</p>
-    <h3>二、需求目标</h3><p>集中维护统一产品评分标准。业务策略继续负责确定调用产品，订单使用实际取得的有效结果评分。</p>
-    <h3>三、规则配置</h3><p>01—30为第三方产品，31—35为内部信息，平级展示。按名称、字段或规则检索，支持来源及启用状态筛选、全部展开或收起。</p>
-    <h4>规则字段</h4><ul><li>规则名称用于报告解释及日志定位。</li><li>所属产品限定基础规则可使用的字段。</li><li>分值为整数，支持负数、0和正数。</li><li>备注说明业务含义，最多500字。</li><li>启用开关控制是否计算。一票否决沿用已确认的规则级开关，命中直接定高风险。</li><li>判断条件逐行配置字段、运算符和内容，行间选择且或。</li></ul>
-    <h4>计分与字段限制</h4><p>同产品按求和或取最高聚合，可配置非负整数封顶。负分保留。空值不命中任何比较，真实0正常判断。枚举可选等于与不等于，数值和日期支持比较及开闭区间。21号产品暂无字段，新增规则禁用；枚举未维护的字段不可使用。</p>
-    <h3>四、复合场景加权</h3><p>填写规则名称、非负整数附加分、备注、启用状态。每个条件先选产品，再选字段、运算符和值，至少涉及两个不同产品或内部信息项。且优先于或。所需产品均取得有效结果后判断，每条复合规则命中加一次。</p>
-    <h3>五、编辑与生效</h3><ul><li>保存规则将弹窗内容写入当前草稿。</li><li>复制生成独立规则，删除前确认，开关与分值变更标为待保存。</li><li>保存草稿记录变化，后续可继续编辑。</li><li>发布评分机制校验全部规则并记录调整说明，后续新订单使用生效配置。原订单保留建立时的配置快照。</li><li>有未保存修改时返回或切换页面会提示保存或放弃。</li></ul>
-    <h3>六、第一期范围</h3><p>等级阈值管理、字典维护、模拟试算及版本管理页签后续建设。原有等级展示按示例固定基线演示，正式口径待确认。操作记录通过风控基座原日志入口查看。</p>
-    <h3>七、验收</h3><p>切换产品后条件重置。非法字段、无效区间及非整数分值阻止保存。报告中条件、本单结果、命中状态及计入分可逐项核对。真实接口接入及权限由正式系统实现。</p>`
+    title:'评分机制 · 基础规则说明',
+    body:`<h3>一、需求背景与目标</h3><p>运营需要将每个风控产品的返回结果转换为确定的风险分数。评分条件按产品维护，订单只使用本单取得的有效结果计分。业务策略负责调用哪些产品，评分机制负责这些结果如何得分。</p>
+    <h3>二、筛选字段</h3><h4>搜索产品 / 规则 / 字段</h4><p>按产品名称、规则名称或字段名称进行模糊查询，输入后点击查询更新列表。空搜索展示全部产品。</p>
+    <h4>产品来源</h4><p>全部35项覆盖01—30第三方产品及31—35内部风险信息。选择来源只改变当前展示范围。</p>
+    <h4>规则状态</h4><p>可筛选全部、已启用、已停用或一票否决规则。重置筛选恢复全部来源和状态，清空搜索条件。</p>
+    <h3>三、产品字段</h3><h4>产品名称与来源</h4><p>名称及厂商取产品目录，用于确定可配置字段的归属。第三方和内部信息标识说明取数来源。内部信息从平台业务记录取数。</p>
+    <h4>规则数量与字段数量</h4><p>规则数量统计该产品当前配置的规则条数，包含停用项。字段数量表示该产品已维护的可判断字段数。点击产品名称展开或收起规则。</p>
+    <h4>产品计分</h4><p>「命中规则求和」将该产品已启用且命中的规则分值相加。「命中规则取最高」只保留其中最高分的一条，同分按规则稳定顺序保留首条。无命中时为0分。</p>
+    <h4>封顶</h4><p>该产品得分的上限，选填非负整数。留空表示无上限，0表示最多计0分。聚合分超过上限时截到上限，负数按原值保留。</p>
+    <h3>四、规则列表字段</h3><h4>启用</h4><p>开关决定规则是否参与计算。停用后保留内容，计算时跳过该规则，包括其一票否决判断。</p>
+    <h4>规则ID / 名称</h4><p>ID为自动生成的稳定标识，便于日志关联。名称用于运营识别和报告展示，可在编辑窗修改。复制后产生新ID，两条规则分别生效。</p>
+    <h4>判断条件 / 备注</h4><p>展示配置的字段、比较符和目标值，通过且或连接。备注为运营填写的业务解释，填写后展示实际内容，未填写时留空。</p>
+    <h4>分值</h4><p>整条规则命中后的风险分，为必填整数，支持正数、0和负数。正数增加风险总分，负数抵扣。多条判断条件同时命中时，按整条规则分值计一次。</p>
+    <h4>操作</h4><p>编辑打开当前规则。复制生成独立副本。删除打开针对该规则的确认，确认后加入待发布调整。</p>
+    <h3>五、条件与输入约束</h3><p>基础规则中的全部判断字段属于同一产品。枚举支持等于和不等于，数值及日期还支持大小比较和介于。介于需填写有效上下限并指定是否包含边界。</p><p>条件关系为「且」时需全部满足，「或」时任意满足即可。混合关系先且后或，例如A或B且C等价于A或（B且C）。空值不命中任何比较，包括不等于，真实0正常参与判断。</p>
+    <h3>六、计分顺序与示例</h3><ol><li>确认本单有效产品和内部信息，将返回值转换为已定义类型。</li><li>判断已启用规则，记录命中情况和一票否决。</li><li>同产品按所选方式聚合，再执行产品封顶。</li><li>各产品分相加，再叠加命中的复合附加分。</li></ol>
+    <p class="prd-formula">产品分＝min（聚合分，封顶值），封顶留空时产品分＝聚合分。<br>订单总分＝各产品分之和＋各命中复合附加分。</p>
+    <p>例一，同产品两条规则得5分、3分，求和为8分，取最高为5分。求和且封顶6分时最终产品分为6分。例二，仅命中−3分和−2分时，取最高为−2分。</p><p>一票否决在规则编辑窗配置，已启用且命中时强制定高风险。即使该规则分值为0、被产品取最高排除，或总分经抵扣为负数，否决仍有效。报告保留实际分数及原因。</p>
+    <h3>七、编辑与发布</h3><p>新增或编辑弹窗点击保存规则后，内容进入当前待发布配置。取消、关闭和Escape直接退出该规则表单，舍弃表单内尚未提交的编辑，回到列表。</p><p>列表分值、启停、复制、删除、聚合和封顶的调整均通过「发布评分机制」统一生效。发布前全量校验并填写调整说明，确认后记录前后差异及操作者。后续订单采用生效配置，已建立订单沿用自身快照。</p><p>切换页面时，存在待发布调整会提示其影响。刷新页面或放弃调整后重新进入，加载生效配置。</p>
+    <h3>八、按钮事件</h3><p>查询和重置控制筛选。全部展开和全部收起调整产品明细。新增规则打开空表单，产品内新增默认选中该产品。返回风控基座回到原列表。</p>
+    <h3>九、本期范围与验收</h3><p>本期提供基础规则及复合加权，等级、字典管理、模拟试算和版本管理页签后续建设。原操作日志集中记录发布内容和订单重算。21号无可用字段产品禁用新增，实际枚举未完整维护的字段禁用选择。</p><p>验收覆盖非法输入阻止提交、同产品字段限制、多条件按一次规则计分、负分及封顶、规则退出直接关闭、发布后新订单采用新配置和日志可追溯。</p>`
+  },
+  compound: {
+    title:'评分机制 · 复合加权说明',
+    body:`<h3>一、需求背景与目标</h3><p>两个或多个产品共同出现风险信号时，需在各产品基础分之外配置一笔附加分，表达多种风险共同存在时的影响。</p>
+    <h3>二、列表字段</h3><h4>启用</h4><p>控制该复合规则是否参与订单计算，停用后保留配置内容。</p><h4>规则名称 / 备注</h4><p>名称用于识别复合场景，并在报告上显示「复合规则」标签。备注解释场景的业务含义，填写后展示真实内容，未填写时留空。</p>
+    <h4>命中条件</h4><p>展示每项条件所属产品、字段、运算符及目标值，并保留且或关系。复合规则至少涉及两个不同产品或内部信息项。</p>
+    <h4>附加分</h4><p>整条复合规则命中后追加的分值，必填非负整数，支持0分。该分数在各产品封顶之后加入订单总分。</p>
+    <h4>操作</h4><p>编辑修改当前场景，复制产生独立ID的副本，删除确认后加入待发布调整。新建复合规则打开空表单。</p>
+    <h3>三、条件字段</h3><h4>产品 / 内部信息</h4><p>每一条件先选择数据来源，选择后仅提供该产品支持的字段。</p><h4>可命中的条件</h4><p>选中产品对应的标准化字段。切换产品或字段后联动重置运算符和值，避免错误引用。</p>
+    <h4>运算符与条件内容</h4><p>按字段类型选择合法比较符，条件值按枚举、日期或数值输入。数值遵守字段单位、精度和范围。</p><h4>判断条件关系符</h4><p>相邻行之间选择且或。且要求相连条件同时满足，或允许任一分支满足。混合关系先且后或。命中说明同步展示完整表达式。</p>
+    <h3>四、参与条件与计算</h3><p>整条规则已启用，并且其引用的所有产品或内部项都取得有效结果后执行判断。所需来源未取得有效结果时，报告将整条规则列为未参与并说明原因。</p>
+    <p>每条规则命中后加一次附加分，多条命中的复合规则累加。产品封顶只作用于基础产品分。</p>
+    <p class="prd-formula">例，三要素不一致计5分，近1个月借贷申请超过10次计5分，复合场景命中另加4分。这三个贡献合计14分。三要素更新为一致后，基础5分和复合4分同时取消，合计变为5分。</p>
+    <h3>五、编辑与发布</h3><p>保存规则将表单内容加入待发布配置。取消、关闭和Escape直接返回列表，舍弃当前表单未提交内容。通过发布评分机制使调整生效并记录日志。</p>
+    <h3>六、报告呈现与验收</h3><p>复合规则与基础规则共用同一张报告评分表。各条件对应展示产品、实际值及命中状态。规则名称和附加分只显示一次。缺少有效来源时计入分显示—。</p><p>验收至少两个产品限制、混合且或、所需产品未返回、停用跳过、多条复合分累加和数据更新后自动重算。</p>`
   },
   report: {
     title:'风控报告 · 需求说明',
@@ -361,15 +534,33 @@ const PHASE_PRD = {
   }
 };
 function phaseModalCopy(title) {
-  if (/基础评分规则|复合场景加权/.test(title)) return `<h3>一、字段说明</h3><ul><li>规则名称必填，最多60字。基础规则选择所属产品，复合规则逐条件选择产品。</li><li>分值必填整数。基础规则允许负分，复合附加分为非负整数。</li><li>备注最多500字。启用控制是否参与计分，基础规则支持一票否决。</li></ul><h3>二、条件与校验</h3><p>字段、运算符和内容按产品联动。切换产品时清空原条件。枚举使用已知合法值，数值按单位和范围校验。添加条件后选择且或，且先于或。介于支持含上下限。</p><p>复合规则至少涉及两个产品。错误在当前弹窗展示并保留输入。</p><h3>三、按钮事件</h3><p>添加条件增加一行，×移除对应行。保存规则写入当前草稿并关闭弹窗。取消或关闭时有修改则提示放弃，确认后恢复页面。</p>`;
+  if (/基础评分规则|复合场景加权/.test(title)) {
+    const compound = /复合场景加权/.test(title);
+    return `<h3>一、字段释义</h3>
+      <h4>规则名称</h4><p>识别本条评分规则，显示在报告和日志中，必填，最多60字。</p>
+      ${compound ? '<h4>条件所属产品</h4><p>每项条件选择一个第三方产品或内部信息项，决定该条件的数据来源。整条规则至少引用两个不同来源。</p>' : '<h4>所属产品模块</h4><p>本条基础规则所属的数据产品，必填。全部条件只能引用此产品字段。切换后重置条件。</p>'}
+      <h4>${compound ? '复合附加分' : '分值'}</h4><p>${compound ? '整条场景命中后在产品分之和上追加的分值，必填非负整数。' : '整条规则命中后的分值，必填整数，可为正数、0和负数。多条条件满足时按整条规则计一次。'}</p>
+      <h4>备注</h4><p>填写规则的业务目的、适用情况或调整依据，选填，最多500字。</p>
+      <h4>启用此规则</h4><p>选中后参与计算，停用时保留配置并跳过计算。</p>
+      ${compound ? '' : '<h4>一票否决</h4><p>已启用且命中时直接定高风险。分值保留用于解释，否决不受聚合方式、封顶或负分抵扣影响。</p>'}
+      <h4>可命中的条件</h4><p>产品返回结果中的标准化字段。取值含义、单位和合法范围见下方当前产品字段释义。</p>
+      <h4>运算符</h4><p>枚举支持等于、不等于。数值和日期支持大于、大于等于、小于、小于等于、等于、不等于及介于。</p>
+      <h4>条件内容</h4><p>与订单实际值比较的配置值。枚举从已维护选项选择，数值和日期按类型填写。</p>
+      <h4>条件上限、含下限、含上限</h4><p>选择介于时填写下限和上限，分别控制边界值是否命中。下限须小于上限，相等时仅双闭区间有效。</p>
+      <h4>判断条件关系符</h4><p>且要求全部满足，或允许任一分支满足。混合时先且后或，例如A且B或C表示（A且B）或C。</p>
+      <h4>命中说明</h4><p>随编辑实时更新完整条件表达式，用于核对真实执行关系。</p>
+      <h3>二、判定与异常</h3><p>至少配置一条条件，产品归属、枚举值、数值精度及区间都必须合法。空值不命中任何比较，真实0按数值0判断。${compound ? '至少涉及两个不同产品或内部信息项，所需来源全部取得有效结果后执行。' : ''}</p>
+      <h3>三、按钮事件</h3><p>添加条件增加一行，×移除当前行。保存规则校验并写入待发布配置，随后关闭弹窗。取消、关闭和Escape直接返回列表，舍弃当前表单未提交的编辑。发布入口统一使调整生效。</p>
+      ${currentRuleFieldGuide()}`;
+  }
   if (/编辑风控规则/.test(title)) return `<h3>一、基础信息</h3><p>规则名称必填，最多50字。适用业务编辑时只读。优先级为1—999整数，数字小的优先匹配。</p><h3>二、判断规则</h3><p>沿用商品价值、商品品类、创单日期、商品租期、商品新旧及客户类型。各启用类型之间为且，多选内部为或。范围下限不大于上限，日期与时间段须有效。</p><h3>三、调用产品</h3><p>按产品和厂商搜索，加入或移除、上下调整调用顺序。显示已选数量和示例成本，至少选择一项才能发布。</p><h3>四、按钮事件</h3><p>发布并生效先校验再打开确认。确认后保存业务规则和调用清单并记日志。取消放弃本次修改，有改动时先确认。</p>`;
   if (/发布风控规则/.test(title)) return '<h3>一、确认内容</h3><p>核对当前规则的基础信息、业务命中条件及调用数量。</p><h3>二、按钮事件</h3><p>确认发布并生效保存规则并记录变化，随后返回列表。取消或关闭返回原风控规则编辑窗。</p>';
-  if (/发布评分机制/.test(title)) return '<h3>一、字段说明</h3><p>调整说明必填，说明本次修改原因。发布前全量校验条件归属、合法值、聚合及封顶。</p><h3>二、生效规则</h3><p>确认后将评分草稿作为生效配置。后续新建订单风控实例使用该配置，已有订单保留快照。</p><h3>三、按钮事件</h3><p>确认发布保存配置并生成操作记录。取消或关闭返回原评分页面。失败保留原生效配置和已填写内容。</p>';
+  if (/发布评分机制/.test(title)) return '<h3>一、字段说明</h3><p>调整说明必填，说明本次修改原因。发布前全量校验条件归属、合法值、聚合及封顶。</p><h3>二、生效规则</h3><p>确认后将待发布配置作为生效配置。后续新建订单风控实例使用该配置，已有订单保留快照。</p><h3>三、按钮事件</h3><p>确认发布保存配置并生成操作记录。取消或关闭返回原评分页面。失败保留原生效配置和已填写内容。</p>';
   if (/更新本单结果/.test(title)) return '<h3>一、字段说明</h3><p>返回状态可选已返回、明确无数据、获取失败和等待返回。字段使用订单评分快照的合法枚举和数值约束。更新说明必填。</p><h3>二、计算规则</h3><p>有效值替换本单上次结果后全量重算。失败或无数据状态不继续使用旧字段。未变化的保存不重复计分或记分差。</p><h3>三、按钮事件</h3><p>保存结果并自动重算刷新当前报告及日志。取消返回原报告。表单模拟接口回调，正式系统以可信结果为来源。</p>';
   if (/操作日志/.test(title)) return '<h3>一、记录字段</h3><p>操作时间、操作人、动作、规则与变更摘要。新增评分规则、条件、分值、启停、一票否决、复合加权、发布及订单重算变化均记录前后内容。</p><h3>二、查询与展开</h3><p>按时间、操作人、类型及关键字查询。起始时间不得晚于结束时间。重置清空条件，展开可查看全部差异。</p><h3>三、按钮事件</h3><p>查询刷新结果，重置恢复全部本机记录，关闭返回原页面。日志为空时提示暂无记录。</p>';
   if (/新建风控规则/.test(title)) return '<h3>一、字段说明</h3><p>规则名称必填，适用业务选择快租或闪租。</p><h3>二、按钮事件</h3><p>创建并配置打开原纵向风控编辑表单。完成判断规则和调用产品后再发布。取消退出新建。</p>';
-  if (/放弃|保存并返回|切换页面/.test(title)) return '<h3>一、确认范围</h3><p>当前存在待保存或编辑中的内容。确认框说明本次是放弃编辑还是保存草稿后返回。</p><h3>二、按钮事件</h3><p>确认执行提示的动作，取消回到原编辑状态并保留输入。</p>';
-  if (/删除/.test(title)) return '<h3>一、删除范围</h3><p>删除当前草稿的指定规则，或删除已停用的风控策略。历史订单评分快照保留。</p><h3>二、按钮事件</h3><p>确认后从当前列表移除，评分草稿需发布后对后续订单生效。取消保持原内容。</p>';
+  if (/放弃|保存并返回|切换页面/.test(title)) return '<h3>一、确认范围</h3><p>当前存在待保存或编辑中的内容。确认框说明本次影响范围。</p><h3>二、按钮事件</h3><p>确认执行提示的动作，取消回到原编辑状态并保留输入。</p>';
+  if (/删除/.test(title)) return '<h3>一、删除范围</h3><p>删除当前待发布配置中的指定规则，或删除已停用的风控策略。历史订单评分快照保留。</p><h3>二、按钮事件</h3><p>确认后从当前列表移除，评分调整发布后对后续订单生效。取消保持原内容。</p>';
   return '<h3>一、说明内容</h3><p>当前窗口展示对应操作的结果或校验问题，错误定位到相关规则和字段。</p><h3>二、按钮事件</h3><p>关闭返回原页面，有输入时保留编辑上下文。确认类操作以当前窗口的具体提示为准。</p>';
 }
 
@@ -500,17 +691,65 @@ const legacyAction = action;
 const legacyCloseModal = closeModal;
 const legacyPublishVersion = publishVersion;
 const legacyRenderProduct = renderProduct;
+const legacyRenderRules = renderRules;
+const legacyRenderCompounds = renderCompounds;
+const legacyRenderRuleEditor = renderRuleEditor;
+
+function meaningfulRuleNote(note) {
+  const text = String(note || '').trim();
+  return /^交互示例[，：:]/.test(text) ? '' : text;
+}
+
 renderProduct = function(product) {
-  return legacyRenderProduct(product).replace(
+  const template = document.createElement('template');
+  template.innerHTML = legacyRenderProduct(product).replace(
     /<button class="link field-count"[^>]*>(.*?)<\/button>/,
     '<span class="hint">$1</span>'
   );
+  const table = template.content.querySelector('.rule-table');
+  if (table) {
+    table.querySelector('thead tr').children[4].remove();
+    table.querySelectorAll('tbody tr').forEach(row => {
+      if (row.children.length === 6) row.children[4].remove();
+      else row.querySelector('[colspan]')?.setAttribute('colspan','5');
+    });
+  }
+  template.content.querySelectorAll('.rule-note').forEach(note => {
+    const text = meaningfulRuleNote(note.textContent);
+    if (!text || text === '未填写备注') note.remove();
+  });
+  template.content.querySelector('.product-add .hint')?.remove();
+  return template.innerHTML;
+};
+renderRules = function() {
+  return legacyRenderRules().replace(/<span class="muted">按Excel产品顺序显示[^<]*<\/span>/,'');
+};
+renderCompounds = function() {
+  const template = document.createElement('template');
+  template.innerHTML = legacyRenderCompounds();
+  template.content.querySelectorAll('tbody tr td:nth-child(2) small').forEach(note => {
+    if (!meaningfulRuleNote(note.textContent) || note.textContent === '未填写备注') note.remove();
+  });
+  return template.innerHTML;
+};
+renderRuleEditor = function() {
+  if (edit) edit.data.note = meaningfulRuleNote(edit.data.note);
+  legacyRenderRuleEditor();
+};
+mark = function() {
+  dirty = true;
+  testResult = null;
+  if ($('#draftState')) $('#draftState').textContent = '有待发布调整';
+  if ($('#configuredRuleGuide')) $('#configuredRuleGuide').innerHTML = configuredRuleGuide();
 };
 
 function setPhasePrd(view) {
-  const prd = PHASE_PRD[view];
+  const prd = PHASE_PRD[view === 'scoring' && tabName === 'compound' ? 'compound' : view];
   $('#pagePrdTitle').textContent = prd.title;
-  $('#pagePrdContent').innerHTML = '<div class="prd-copy">' + prd.body + '</div>';
+  $('#pagePrdContent').innerHTML = '<div class="prd-copy">' + prd.body +
+    (view === 'scoring' ? '<h3>当前配置的规则内容</h3><div id="configuredRuleGuide">' + configuredRuleGuide() +
+      '</div><h3>产品判断字段释义</h3><p>展开产品可查看各字段的业务含义、数据类型、单位及可配置值。</p>' +
+      productFieldGuide(PRODUCTS.map(p => p.id)) : '') + '</div>';
   document.querySelectorAll('[data-phase]').forEach(b => {
     b.classList.toggle('active', b.dataset.phase === view);
     b.setAttribute('aria-current', b.dataset.phase === view ? 'page' : 'false');
@@ -551,7 +790,11 @@ hideModal = function() {
   if (wasOpen) previousFocus?.focus?.();
 };
 closeModal = function() {
-  if (edit) syncEdit();
+  if (edit) {
+    edit = null;
+    hideModal();
+    return;
+  }
   if (page === 'editor' && baseId !== GLOBAL_SCORE_ID && !edit) {
     if (phaseModalTitle !== '编辑风控规则') {
       confirmed = null;
@@ -572,9 +815,9 @@ function pageScoring() {
       '<button data-action="tab" data-id="' + id + '" class="' + (tabName === id ? 'on' : '') +
       '">' + name + '</button>').join('') + '</div>' +
     (tabName === 'compound' ? renderCompounds() : renderRules()) +
-    '<div class="phase-score-footer"><span id="draftState">' + (dirty ? '有未保存修改' : '草稿已保存') +
-    ' · ' + (record.live ? '已有生效配置' : '待发布') + '</span><div class="row">' +
-    '<button data-action="save">保存评分草稿</button><button class="primary" data-action="publish">发布评分机制</button></div></div>';
+    '<div class="phase-score-footer"><span id="draftState">' + (dirty ? '有待发布调整' :
+      record.live ? '当前生效配置' : '待发布') + '</span><div class="row">' +
+    '<button class="primary" data-action="publish">发布评分机制</button></div></div>';
 }
 
 render = function() {
@@ -612,7 +855,7 @@ publishDialog = function() {
     return;
   }
   modalType = 'publish';
-  modal('发布评分机制', '<p>确认使当前评分草稿对后续新订单生效。</p><label class="field">本次调整说明' +
+  modal('发布评分机制', '<p>确认使当前调整对后续新订单生效。</p><label class="field">本次调整说明' +
     '<textarea id="publishNote" rows="3" placeholder="填写调整原因"></textarea></label>',
     '<button data-action="close">取消</button><button class="primary" data-action="publishConfirm">确认发布</button>');
 };
@@ -674,6 +917,8 @@ function preparePhaseExamples() {
   const global = store.bases[GLOBAL_SCORE_ID];
   if (!store.phaseOneInitialized) {
     const scoring = seed();
+    scoring.products.forEach(p => p.rules.forEach(r => { r.note = meaningfulRuleNote(r.note); }));
+    scoring.compounds.forEach(r => { r.note = meaningfulRuleNote(r.note); });
     const network = scoring.products.find(p => p.id === 'p03').rules[0];
     network.name = '联通号码在网满 24 个月';
     network.conditions = tree(condition('f006','≥',24), condition('f007','=','联通'));
@@ -776,6 +1021,7 @@ function generateCurrentReport() {
 }
 
 action = async function(a,id) {
+  if (a === 'save') return;
   if (a === 'orders' || a === 'showOrderReport') {
     requestPhaseView('report');
     return;
@@ -791,6 +1037,7 @@ action = async function(a,id) {
   }
   if (a === 'tab' && !['rules','compound'].includes(id)) return;
   await legacyAction(a,id);
+  if (a === 'saveRule' && !edit) toast('规则已加入待发布调整');
 };
 
 function requestPhaseView(view) {
@@ -814,7 +1061,7 @@ function requestPhaseView(view) {
     window.scrollTo({top:0,behavior:'auto'});
   };
   if (edit || dirty) {
-    confirmDialog('切换页面并放弃未保存修改？','当前未保存内容将放弃，已保存草稿可下次继续编辑。',go);
+    confirmDialog('切换页面并放弃未发布调整？','当前未发布调整将放弃，再次进入时加载生效配置。',go);
   } else go();
 }
 
