@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-18T14:55:55+08:00",
+  "updatedAt": "2026-11-18T15:14:20+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -45,9 +45,9 @@
     {
       "slug": "risk-control-scoring",
       "name": "风控基座 · 评分机制与报告（第一期）",
-      "summary": "基于原风控基座配置评分与复合加权，统一查看订单报告，附字段释义与计分规则，右侧 PRD 重点加粗标红。",
+      "summary": "基于原风控基座配置评分与复合加权，统一查看订单报告，附重点标红 PRD、字段释义及新增与调整标签，方便开发定位变更。",
       "path": "previews/risk-control-scoring/",
-      "updatedAt": "2026-11-18T14:06:34+08:00",
+      "updatedAt": "2026-11-18T15:14:20+08:00",
       "createdAt": "2026-11-18T10:01:46+08:00"
     }
   ]

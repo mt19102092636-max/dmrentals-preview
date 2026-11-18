@@ -71,6 +71,14 @@ body.has-review-modal .prototype-shell{filter:blur(1.5px)}#overlay{position:rela
 /* PRD emphasis only: preserve ordinary copy and the product UI palette. */
 .prototype-prd .prd-copy strong.prd-important{color:#c62828;font-weight:700}
 
+/* Developer review labels are annotations, not production business controls. */
+.prototype-change-tag{display:inline-flex;align-items:center;vertical-align:middle;flex:none;margin-left:8px;padding:2px 7px;border:1px solid #efaa9c;border-radius:4px;background:#fff0eb;color:#b42318;font-size:11px;font-weight:750;line-height:1.5;white-space:nowrap;pointer-events:none}
+.prototype-change-tag.adjusted{background:#fff7df;border-color:#e4c576;color:#865b00}
+.prototype-board .base-actions button{white-space:nowrap}
+.phase-page-head h1,.phase-report .rs-heading h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.phase-page-head h1 .prototype-change-tag,.phase-report .rs-heading h2 .prototype-change-tag{margin-left:0}
+.phase-logs th .prototype-change-tag{margin-left:6px}
+
 </style>
 </head>
 <body>
@@ -488,7 +496,7 @@ const PHASE_PRD = {
     <h3>五、操作与反馈</h3><ul><li>查询使用名称、业务及状态筛选，重置恢复列表。</li><li>新建或编辑打开原纵向表单，维护基础信息、判断规则和调用产品。</li><li>评分机制进入统一配置，适用于各条基座所调用的产品。</li><li>操作日志打开原风格弹窗，查询并展开本机变化记录。</li><li>停用规则后可删除，删除前确认。</li></ul>
     <h3>六、查看报告</h3><p>左侧「风控报告」展示同一HTML里的示例订单。订单按生效评分配置建立快照，产品数据更新后在当前订单内重算。</p>
     <h3>七、验收与待确认</h3><p>确认入口位置、原规则表单、各产品字段限制和报告计分明细。正式产品分值、等级沿用口径及服务端字段映射需业务确认。</p>
-    <h3>八、评审布局</h3><p>可拖动分隔条或用左右方向键调整两侧宽度。双击或按0恢复默认比例，当前浏览器保存比例。右上角可收起或展开说明。弹窗打开时显示对应的独立说明卡。</p>`
+    <h3>八、评审布局</h3><p>「本次新增」「本次调整」为开发评审标记。新增整页只在页面标题标注一次；原有页面仅在新增入口或变更区域标注，正式系统无需展示标签。</p><p>可拖动分隔条或用左右方向键调整两侧宽度。双击或按0恢复默认比例，当前浏览器保存比例。右上角可收起或展开说明。弹窗打开时显示对应的独立说明卡。</p>`
   },
   scoring: {
     title:'评分机制 · 基础规则说明',
@@ -814,7 +822,7 @@ closeModal = function() {
 
 function pageScoring() {
   const record = store.bases[GLOBAL_SCORE_ID];
-  return '<header class="phase-page-head"><div><h1>评分机制</h1><p>按产品配置基础规则与复合加权</p></div>' +
+  return '<header class="phase-page-head"><div><h1>评分机制' + prototypeChangeTag() + '</h1><p>按产品配置基础规则与复合加权</p></div>' +
     '<button data-phase="base">返回风控基座</button></header>' +
     '<div class="tabs phase-tabs">' + Object.entries(labels).map(([id,name]) =>
       '<button data-action="tab" data-id="' + id + '" class="' + (tabName === id ? 'on' : '') +
@@ -823,6 +831,21 @@ function pageScoring() {
     '<div class="phase-score-footer"><span id="draftState">' + (dirty ? '有待发布调整' :
       record.live ? '当前生效配置' : '待发布') + '</span><div class="row">' +
     '<button class="primary" data-action="publish">发布评分机制</button></div></div>';
+}
+
+// Review-only markers: one per new page, or beside the changed area of an existing page.
+function prototypeChangeTag(kind = '新增') {
+  return '<span class="prototype-change-tag' + (kind === '调整' ? ' adjusted' : '') +
+    '" data-review-change="' + kind + '" aria-hidden="true">本次' + kind + '</span>';
+}
+
+function renderPhaseBases() {
+  const template = document.createElement('template');
+  template.innerHTML = renderBases();
+  template.content.querySelector('[data-action="orders"]')?.remove();
+  template.content.querySelector('[data-action="scoreEntry"]')?.insertAdjacentHTML('beforeend', prototypeChangeTag());
+  template.content.querySelector('[data-action="operationLogs"]')?.insertAdjacentHTML('beforeend', prototypeChangeTag('调整'));
+  return template.innerHTML;
 }
 
 render = function() {
@@ -836,7 +859,7 @@ render = function() {
   if (page === 'editor' && baseId !== GLOBAL_SCORE_ID) {
     phaseView = 'base';
     setPhasePrd('base');
-    $('#app').innerHTML = renderBases().replace(/<button data-action="orders">订单评分与报告<\/button>/, '');
+    $('#app').innerHTML = renderPhaseBases();
     const template = document.createElement('template');
     template.innerHTML = businessForm();
     mountPairedModal(template.content.querySelector('section.original-editor').outerHTML, '编辑风控规则');
@@ -850,7 +873,7 @@ render = function() {
   }
   phaseView = 'base';
   setPhasePrd('base');
-  $('#app').innerHTML = renderBases().replace(/<button data-action="orders">订单评分与报告<\/button>/, '');
+  $('#app').innerHTML = renderPhaseBases();
 };
 
 publishDialog = function() {
@@ -892,7 +915,7 @@ operationLogs = function() {
     ['', '评分机制', '风控基座', '订单自动评分'].map(v => opt(v, v || '全部', f.action)).join('') +
     '</select></label><label>关键字<input id="logKeyword" value="' + E(f.keyword) + '"></label>' +
     '<button class="primary" data-action="queryLogs">查询</button><button data-action="resetLogs">重置</button></div>' +
-    '<div class="table-wrap"><table class="phase-logs"><thead><tr><th>操作时间</th><th>操作人</th><th>动作</th><th>规则与变更摘要</th></tr></thead>' +
+    '<div class="table-wrap"><table class="phase-logs"><thead><tr><th>操作时间</th><th>操作人</th><th>动作</th><th>规则与变更摘要' + prototypeChangeTag('调整') + '</th></tr></thead>' +
     '<tbody>' + logs.map(l => '<tr><td>' + E(l.time) + '</td><td>' + E(l.actor) + '</td><td>' + E(l.action) +
       '</td><td><b>' + E(l.baseName) + '</b><p>' + E(l.detail) +
       '</p><details><summary>展开变更</summary>' + (changes(l) || '<p>操作事件，未修改字段</p>') +
@@ -981,6 +1004,7 @@ function paintReport() {
   const o = activeOrder();
   if (!o) return;
   renderReportScoreDetail($('#reportScoreDetail'), orderReportPayload(o));
+  $('#reportScoreHeading')?.insertAdjacentHTML('beforeend', prototypeChangeTag());
   const ids = [...o.called, ...o.supplemental, ...['p31','p32','p33','p34','p35'].filter(id =>
     o.scoringSnapshot.products.some(p => p.id === id && p.rules.some(r => r.enabled)) ||
     o.scoringSnapshot.compounds.some(r => r.enabled && leaves(r.conditions).some(n => n.product === id))
