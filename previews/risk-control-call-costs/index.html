@@ -104,6 +104,8 @@ dialog{border:0;padding:0;background:transparent;width:min(960px,calc(100% - 24p
 .comparison-months{width:100%;display:flex;align-items:end;flex-wrap:wrap;gap:8px;margin-bottom:3px}.comparison-months>div{display:flex;flex-wrap:wrap;gap:8px 13px}.comparison-month{display:flex;align-items:end;gap:4px}.comparison-month button{font-size:12px;padding:4px 7px}.comparison-table th:not(:first-child){min-width:150px}.comparison-table th:first-child,.comparison-table td:first-child{position:sticky;left:0;background:#f5f7f7;z-index:1}.comparison-table td small{display:inline-block}.comparison-delta{color:#426b61}
 .trend-card{margin:12px 0;padding:12px;border:1px solid #dce6e2;border-radius:6px}.trend-card header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.trend-card h2{margin:0;font-size:15px}.trend-legend{display:flex;gap:6px 14px;flex-wrap:wrap;margin:6px 0;color:#51635d;font-size:12px}.trend-legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:middle}.trend-chart{display:block;width:100%;height:auto;min-height:155px}.trend-chart text{fill:#596963;font-size:11px}.trend-chart circle:hover,.trend-chart circle:focus{r:5;outline:none}.trend-card .muted{margin:4px 0}
 .trend-card{position:relative}.trend-point{cursor:crosshair}.trend-point:hover .trend-marker,.trend-point:focus .trend-marker{r:5}.trend-point:focus{outline:none}.trend-tooltip{position:absolute;z-index:3;pointer-events:none;max-width:calc(100% - 16px);padding:6px 9px;border-radius:5px;background:#253934;color:#fff;font-size:12px;line-height:1.4;box-shadow:0 2px 8px #0002}
+
+.prototype-prd .prd-key,.modal-context-prd .prd-key{color:#c62828;font-weight:700}
 </style>
 </head>
 <body>
@@ -1003,6 +1005,100 @@ function records(){
     table(['调用时间','订单号','适用业务','厂商','产品','接口','结果','请求类型','计费判定','预估费用'],rows)+
     '<div class="pager"><span>共 '+num(list.length)+' 条 · 第 '+page+' / '+count+' 页</span><button data-action="prev" '+(page===1?'disabled':'')+'>上一页</button><button data-action="next" '+(page===count?'disabled':'')+'>下一页</button></div>';
 }
+
+// Emphasize selected requirement phrases within the PRD panels.
+const prdKeyPhrases = [
+  "「风控设置」设为独立一级菜单",
+  "「风控设置 / 风控基座」规则列表工具栏",
+  "「产品单价配置」",
+  "「每日调用费用对比」",
+  "「配置单价」",
+  "「搜索产品名称」",
+  "「全部厂商」",
+  "「价格历史」",
+  "0 至 99999.99",
+  "最多 2 位小数",
+  "最多两位小数",
+  "0 表示免费",
+  "从当日零点起适用",
+  "从该日零点开始适用",
+  "从北京时间当日零点起适用",
+  "同一生效日以最后一次保存为准",
+  "同一产品和日期已有单价时，以最后保存的价格计费",
+  "前值保留在历史中",
+  "旧值保留在历史表",
+  "按调用日匹配最近的已生效价格",
+  "重算其覆盖区间",
+  "重新计算该版本覆盖期间的估算费用",
+  "「单月查看」",
+  "「多月对比」",
+  "「自定义日期」",
+  "默认选中北京时间当前月",
+  "当日数据随调用记录入库更新",
+  "至少选择两个且不可重复",
+  "基准月固定在首列",
+  "左移、右移按钮可调整顺序",
+  "所有月份均按截至日对齐",
+  "表头和 CSV 按新顺序输出",
+  "开始日期不得晚于结束日期",
+  "开始不得晚于结束",
+  "开始日期不能晚于结束日期",
+  "失败或重试是否计费按厂商规则判定",
+  "各计费请求对应产品单价之和",
+  "调用费用除以命中订单数",
+  "包含未发请求的命中订单",
+  "单个请求只计一次",
+  "重试单独计一次",
+  "待核价",
+  "未配置时留空",
+  "「导出费用数据」",
+  "「导出风控数据」",
+  "按当前已查询的区间和筛选",
+  "按当前已查询范围与状态导出全部匹配订单",
+  "跨分页",
+  "一单一行",
+  "一次外发一行",
+  "按订单号关联",
+  "调用费用按计费次数乘以单价计算",
+  "应计费但缺少单价时留空",
+  "对比月减基准月",
+  "变化率为差额除以基准月费用",
+  "基准费用为零时，变化率显示「—」",
+  "待确认"
+];
+const prdKeyPattern = new RegExp(
+  prdKeyPhrases.sort((a,b)=>b.length-a.length)
+    .map(text=>text.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|'),
+  'g'
+);
+function emphasizePrd(panel){
+  const walker=document.createTreeWalker(panel,NodeFilter.SHOW_TEXT);
+  const textNodes=[];
+  while(walker.nextNode()){
+    const node=walker.currentNode;
+    if(node.parentElement.closest('li')&&!node.parentElement.closest('.prd-key')){
+      textNodes.push(node);
+    }
+  }
+  for(const node of textNodes){
+    prdKeyPattern.lastIndex=0;
+    const matches=[...node.textContent.matchAll(prdKeyPattern)];
+    if(!matches.length)continue;
+    const fragment=document.createDocumentFragment();
+    let cursor=0;
+    for(const match of matches){
+      fragment.append(document.createTextNode(node.textContent.slice(cursor,match.index)));
+      const emphasis=document.createElement('strong');
+      emphasis.className='prd-key';
+      emphasis.textContent=match[0];
+      fragment.append(emphasis);
+      cursor=match.index+match[0].length;
+    }
+    fragment.append(document.createTextNode(node.textContent.slice(cursor)));
+    node.replaceWith(fragment);
+  }
+}
+
 const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'open':'')+'><summary>'+name+'</summary><ul>'+items.map(i=>'<li>'+i+'</li>').join('')+'</ul></details>';
 const reviewNotes=section('原型操作', ['点击页头「播放操作演示」自动串联产品价格配置、费用对比与订单风控数据导出。新增的「产品单价配置」「每日调用费用对比」必须从风控基座规则列表工具栏进入，后台实际侧边栏不增加这两个菜单。演示目录可单独播放章节并查看步骤。播放中可暂停、继续、重新播放或结束；结束时保留当前业务页面。','外层「评审导航」仅用于切换原型中的风控基座和订单联动示意，不代表生产后台菜单。产品单价配置与费用对比的真实业务入口均在风控基座工具栏。收起后点击「展开 PRD」恢复。','桌面可拖动中间分隔条，或聚焦后用左右方向键调整。双击或按 Home 恢复默认比例，宽度记录在本地浏览器。窄屏时需求说明排在页面下方。'],false);
 const fieldGlossary={
@@ -1306,6 +1402,7 @@ function switchView(next,overrides){
     view=next;
     const notes=prds[view]||section('菜单调整',['「'+otherRiskViews[view]+'」归入一级菜单「风控设置」。本次业务功能演示在「风控基座」。']);
     $('prd').innerHTML=notes+reviewNotes;
+    emphasizePrd($('prd'));
     $('prd').parentElement.scrollTop=0;
   }
   page=1;
@@ -1315,6 +1412,7 @@ function infoDialog(name,body,notes){
   $('modalTitle').textContent=name;
   $('modalBody').innerHTML=body;
   $('modalPrd').innerHTML='<h2>'+name+' · 弹窗说明</h2>'+notes;
+  emphasizePrd($('modalPrd'));
   $('detail').showModal();
 }
 function showPriceHistory(id){
@@ -1512,6 +1610,8 @@ function syncShopRoute(){
 }
 window.addEventListener('hashchange',syncShopRoute);
 $('prd').innerHTML=prds.base+reviewNotes;
+emphasizePrd($('prd'));
+emphasizePrd(document.querySelector('#priceDialog .modal-context-prd'));
 render();
 syncShopRoute();
 
