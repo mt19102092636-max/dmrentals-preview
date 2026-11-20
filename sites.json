@@ -1,6 +1,6 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-20T11:15:13+08:00",
+  "updatedAt": "2026-11-20T14:10:55+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
@@ -21,9 +21,9 @@
     {
       "slug": "risk-control-call-costs",
       "name": "风控基座 · 产品单价与调用导出",
-      "summary": "按会议结论保留产品单价配置，在独立风控记录页按日期与快租、闪租归属筛选，导出合计及第三方逐条对账明细。",
+      "summary": "维护产品调用单价，在风控基座弹窗选择合计或明细及筛选条件，导出第三方对账记录。",
       "path": "previews/risk-control-call-costs/",
-      "updatedAt": "2026-11-20T11:15:13+08:00",
+      "updatedAt": "2026-11-20T14:10:55+08:00",
       "createdAt": "2026-11-07T17:27:39+08:00"
     },
     {

@@ -82,12 +82,22 @@ button .change-tag{margin-left:7px}
 .risk-nav>summary:after{position:absolute;right:7px;top:12px;margin-left:0}
 .risk-nav .change-tag{font-size:9px;padding:1px 3px}
 
-.record-actions{display:flex;gap:8px;flex-wrap:wrap}
 .record-note{margin:12px 0;padding:10px 12px;background:#fff8e9;border:1px solid #f0dfbc;border-radius:5px;color:#735b2f;font-size:12px;line-height:1.7}
-.records-table table{min-width:1430px}
-.records-table td,.records-table th{padding:10px 9px}
-.record-source{font-size:11px;color:#8a5b20}
 .operation-callout{pointer-events:none}
+
+.export-form{margin-top:12px}
+.export-kinds{border:0;margin:0 0 15px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.export-kinds legend{font-weight:600;margin-bottom:8px}
+.export-kinds label{display:flex;align-items:flex-start;gap:6px;padding:10px;border:1px solid #d9e3dd;border-radius:5px;cursor:pointer}
+.export-kinds label:has(input:checked){border-color:#65a957;background:#f2f8ef}
+.export-kinds input{margin-top:5px}
+.export-kinds small{display:block;font-size:11px;line-height:1.5;margin-top:2px}
+.export-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.export-filters label{display:grid;gap:5px;font-size:13px}
+.export-filters input,.export-filters select{width:100%;min-width:0;border:1px solid #d8dedc;border-radius:4px;padding:6px;height:36px;background:#fff;color:#243532}
+.export-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+.export-footer>div{display:flex;gap:8px}
+@media(max-width:500px){.export-kinds,.export-filters{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -111,7 +121,6 @@ button .change-tag{margin-left:7px}
   <button class="appsub" type="button" data-view="flash-risk">雕马闪租平台风控</button>
   <button class="appsub" type="button" data-view="quick-material">雕马快租补充资料</button>
   <button class="appsub" type="button" data-view="base" aria-current="page">风控基座</button>
-  <button class="appsub" type="button" data-view="records">风控记录</button>
 </details>
 <div>☏　消息中心</div><div>♙　权限管理</div><div>⚙　系统管理</div><div>✧　AI管理</div></aside>
 
@@ -124,6 +133,7 @@ button .change-tag{margin-left:7px}
 </div></div>
 <dialog id="detail" aria-labelledby="modalTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="modalTitle"></h2><button aria-label="关闭详情" data-close>×</button></div><div id="modalBody"></div><div class="modal-foot"><button data-close>关闭</button></div></section><aside class="modal-context-prd" id="modalPrd"></aside></div></dialog>
 <dialog id="priceDialog" aria-labelledby="priceTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="priceTitle">配置产品单价<span class="change-tag" aria-hidden="true">本次新增</span></h2><button aria-label="关闭单价配置" data-close>×</button></div><p id="priceProduct"></p><form id="priceForm"><div class="filters"><label>生效日期<input type="date" name="date" required></label><label>单价（元/次）<input name="unit" inputmode="decimal" placeholder="例如 0.35" required></label></div><p id="priceHint" class="muted"></p><p id="priceError" class="error" role="alert" hidden></p><div class="modal-foot"><button type="button" data-close>取消</button><button class="primary" type="submit">保存单价</button></div></form></section><aside class="modal-context-prd"><h2>配置产品单价 · 弹窗说明</h2><h3>一、字段说明</h3><ul><li>产品与厂商由所选行带入。</li><li>生效日期按北京时间自然日，从该日零点开始适用。</li><li>单价单位为元/次，支持 0 至 99999.99，最多 2 位小数。0 表示免费。</li></ul><h3>二、按钮与计费规则</h3><ul><li>保存新增生效版本。同一产品和日期已有单价时，以最后保存的价格计费，旧值保留在历史表，并更新覆盖区间内导出采用的单价。</li><li>取消、× 或 Esc 关闭弹窗，放弃本次编辑。</li></ul></aside></div></dialog>
+<dialog id="exportDialog" aria-labelledby="exportTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="exportTitle">导出风控记录<span class="change-tag" aria-hidden="true">本次新增</span></h2><button type="button" aria-label="关闭导出弹窗" data-close>×</button></div><div id="exportDialogBody"></div></section><aside class="modal-context-prd" id="exportDialogPrd"></aside></div></dialog>
 <script>
 
 'use strict';
@@ -204,7 +214,7 @@ const otherRiskViews={
   'flash-risk':'雕马闪租平台风控',
   'quick-material':'雕马快租补充资料'
 };
-let view='base',filters={...initial},page=1;
+let view='base',filters={...initial},exportKind='detail';
 let ruleFilters={name:'',biz:'',state:''};
 
 const money = (units,precision=2) => units===null?'待核价':'¥'+(units/10000).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:precision});
@@ -225,7 +235,7 @@ function changeControl(control,kind='新增'){
   return control.replace('</button>',changeTag(kind)+'</button>');
 }
 function title(name,description,action=''){
-  const annotation=name==='产品单价配置'?changeTag():name==='风控记录'?changeTag('调整'):'';
+  const annotation=name==='产品单价配置'?changeTag():'';
   return '<div class="heading"><div><h1>'+name+annotation+'</h1><p class="muted">'+description+'</p></div>'+action+'</div>';
 }
 
@@ -565,7 +575,7 @@ function base(){
     '<div class="rule-actions"><button type="submit" class="primary">查询</button>'+button('重置','rule-reset')+
     button('新建风控规则','original','primary')+button('操作日志','original')+
     changeControl('<button type="button" class="added" data-view="prices">产品单价配置</button>')+
-    changeControl('<button type="button" class="added" data-view="records">风控记录</button>')+'</div></form>';
+    changeControl('<button type="button" class="added" data-action="records">风控记录</button>')+'</div></form>';
   const rows=ruleRows.map((rule,id)=>[...rule.slice(0,8),rule[8],id]).filter(([name,biz,,,,enabled])=>
     name.includes(ruleFilters.name)&&(!ruleFilters.biz||bizs[biz]===ruleFilters.biz)&&(!ruleFilters.state||(enabled?'启用':'停用')===ruleFilters.state)
   ).map(([name,biz,products,priority,cost,enabled,time,conditions,report=[0,0,0,0,0,0],id])=>{
@@ -689,7 +699,7 @@ const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'ope
 const key=text=>'<strong class="prd-key">'+text+'</strong>';
 const reviewNotes=section('原型操作',[
   '整页新增只在主标题标一次。原有页面的新增按钮在按钮内标注「本次新增」，功能调整标注「本次调整」。',
-  '左侧为评审导航。实际业务在「风控设置 / 风控基座」维护单价，在独立的「风控设置 / 风控记录」页面查询并导出。原横向页签调整为独立页面入口。',
+  '左侧为评审导航。实际业务在「风控设置 / 风控基座」维护单价，在风控基座点击「风控记录」弹窗筛选并导出。原横向页签调整为独立页面入口。',
   '操作演示支持分段播放、暂停、继续、重播和退出。拖动中央与 PRD 的分隔条调整宽度，双击或按 Home 恢复默认。窄屏时 PRD 排在内容下方。'
 ],false);
 const priceFields=[
@@ -724,72 +734,78 @@ const prds={
  base:section('一、本次需求范围',[
    key('本期保留产品单价配置，费用统计先做导出。'),
    '三方记录按身份查询并可复用，当前示例有效期为 30 天，实际有效期可配置。底层记录缺少风控规则、订单的可靠关联，本期按记录导出调用与计费信息。',
-   '新增「风控记录」独立页面入口，用于自定义日期、快租或闪租归属筛选，以及合计和明细导出。'
+   '「风控记录」按钮直接打开导出选择弹窗，选择合计或明细并设置筛选条件后确认导出。'
  ])+section('二、入口与流程',[
-   '在「风控设置 / 风控基座」点击「产品单价配置」维护单价，点击「风控记录」进入导出页面。也可从左侧独立菜单「风控记录」进入。',
+   '在「风控设置 / 风控基座」点击「产品单价配置」维护单价，点击「风控记录」直接打开导出选择弹窗，原规则列表的筛选与位置保留。',
    '原有横向页签按独立页面导航。返回风控基座保留此前规则筛选条件。'
  ]),
  prices:section('一、单价配置',[
    '单价配置继续实施。按产品名称与厂商组合筛选，配置单价和生效日，价格历史采用表格展示。',
    '价格用于调用记录导出。正式合同价、价格修改权限、历史快照及已出账数据的重算规则需确认。'
  ])+section('二、字段与校验',priceFields)+section('三、按钮事件',[
-   '「返回风控基座」回到规则列表；「查看风控记录」进入独立记录页面。',
+   '「返回风控基座」回到规则列表；「导出调用记录」打开同一导出弹窗。',
    '保存前校验单价非负、最多两位小数及日期必填。保存成功更新版本，重复保存相同生效日保留旧版本。'
  ]),
- records:section('一、需求与归属规则',[
+ export:section('一、需求与归属规则',[
    key('费用统计本期先做合计、明细导出，明细用于第三方逐条对账。'),
    '同一身份的产品查询结果在有效期内可以跨订单复用，示例为 30 天。复用不再次调用三方，也不增加计费次数。',
    '记录按'+key('首次调用方')+'归属快租或闪租，后续复用沿用该归属。当前无法区分时'+key('暂归闪租')+'。筛选使用记录归属，区别于本次调用所在订单的业务。'
- ])+section('二、查询与导出',[
+ ])+section('二、筛选与导出',[
    '<b>开始日期、结束日期</b> 按调用时间的北京时间自然日筛选，包含首尾日期。'+key('开始日期不得晚于结束日期')+'，两项必填。',
    '<b>归属业务</b> 全部、雕马快租、雕马闪租，按首次调用归属规则过滤。',
    '<b>三方产品</b> 按产品唯一标识筛选，重名产品通过厂商区分。',
    '<b>记录类型</b> 全部、三方请求、记录复用。对账时可筛选三方请求，复用行没有新的外发信息。',
-   '「查询」应用筛选并回到第一页；「重置」恢复本月起至今天及全部筛选。',
-   key('「导出合计」「导出明细」均导出当前已查询条件下的全部匹配记录，跨分页。')+'点击后下载 UTF-8 CSV，正式文件格式需业务确认。',
-   '无记录时导出按钮禁用，查询后显示空态。尚未提交的新筛选条件不影响导出，需先点击查询。'
- ])+section('三、合计字段',summaryFields)+section('四、明细字段',detailFields)+section('五、对账及待确认',[
+   '<b>导出内容</b> 合计、明细单选，默认明细。合计按天和产品汇总，明细逐次导出。',
+   '「重置」恢复明细、本月起至今天、全部业务、全部产品与全部记录类型。',
+   key('「确认导出」按弹窗当前选择的内容与筛选条件生成全部匹配记录。')+'点击后下载 UTF-8 CSV，正式文件格式需业务确认。',
+   '无匹配记录时在弹窗提示并保留条件。日期倒置时提示校验错误。',
+   '确认导出后下载文件并在弹窗反馈生成行数，可调整条件再次导出。取消、右上角关闭或 Esc 回到原页面。仅确认导出的条件在本次会话记忆，取消未确认的编辑。'
+ ])+section('三、合计字段',summaryFields,false)+section('四、明细字段',detailFields,false)+section('五、对账及待确认',[
    key('厂商可能 T+1 更新，当前计费次数用于核对，最终以厂商账单确认。')+'通过第三方请求号及请求时间与 Excel 逐条比对。缺号、缺时间情况应保留明细。',
    '待确认调用次数是否包含缓存命中、正式计费状态来源及更新机制、第三方时间戳格式、业务归属字段的采集方案。',
    key('底层目前缺订单关联，订单号的来源及补采范围待研发确认。')+'原型仅演示部分来源携带订单号的情况。',
    '当前单价、调用与第三方请求号均为模拟数据。原型按打开时的北京时间生成样例，不读取实际厂商数据。'
- ])
+ ],false)
 };
 
 
-function recordFilterForm(){
-  return '<form id="recordFilters" class="filters">'+
-    '<label>开始日期<input type="date" name="from" required value="'+filters.from+'"></label>'+
-    '<label>结束日期<input type="date" name="to" required value="'+filters.to+'"></label>'+
+
+function exportForm(){
+  return '<form id="exportForm" class="export-form">'+
+    '<fieldset class="export-kinds"><legend>导出内容</legend>'+
+    '<label><input type="radio" name="exportType" value="summary"'+(exportKind==='summary'?' checked':'')+'> <span><b>合计</b><small>按日期、产品、单价及业务汇总次数</small></span></label>'+
+    '<label><input type="radio" name="exportType" value="detail"'+(exportKind==='detail'?' checked':'')+'> <span><b>明细</b><small>每次调用一行，包含第三方对账字段</small></span></label></fieldset>'+
+    '<div class="export-filters">'+
+    '<label>开始日期<input type="date" name="from" value="'+filters.from+'" required></label>'+
+    '<label>结束日期<input type="date" name="to" value="'+filters.to+'" required></label>'+
     field('biz','归属业务',bizs)+
     field('product','三方产品',products.map(product=>[String(product.id),productLabel(product)]),'全部产品')+
-    field('kind','记录类型',['三方请求','记录复用'])+
-    '<button type="submit" class="primary">查询</button>'+button('重置','record-reset')+
-    '</form><p id="recordError" class="error" role="alert" hidden></p>';
-}
-function records(){
-  const matches=filteredRecords().sort((a,b)=>b.time.localeCompare(a.time)||b.id.localeCompare(a.id));
-  const pages=Math.max(1,Math.ceil(matches.length/10));
-  page=Math.min(page,pages);
-  const visible=matches.slice((page-1)*10,page*10);
-  const rows=visible.map(record=>row([
-    record.time,record.business+'<br><small class="record-source">'+record.attribution+'</small>',
-    productLabel(record.product),record.kind,record.thirdPartyNumber||'—',record.thirdPartyTime||'—',
-    unitMoney(record.unit),'1',String(record.billed),record.status,record.order||'—'
-  ])).join('');
-  const exportDisabled=matches.length?'':' disabled';
-  const actions='<div class="record-actions">'+
-    '<button type="button" data-action="export-summary"'+exportDisabled+'>导出合计'+changeTag()+'</button>'+
-    '<button type="button" data-action="export-detail" class="primary"'+exportDisabled+'>导出明细'+changeTag()+'</button>'+
-    button('返回风控基座','base')+'</div>';
-  return title('风控记录','按调用日期查询 · 模拟数据截至 '+demoEnd,actions)+recordFilterForm()+
-    '<div class="record-note">归属按首次调用方，无法识别暂归闪租。复用不增加计费次数。第三方可能 T+1 更新，请使用请求号与请求时间核对账单。</div>'+
+    field('kind','记录类型',['三方请求','记录复用'])+'</div>'+
+    '<p class="record-note">归属按首次调用方，无法区分暂归闪租。复用不增加计费次数。第三方可能 T+1 更新，请通过请求号与请求时间对账。</p>'+
+    '<p id="exportError" class="error" role="alert" hidden></p>'+
     '<p id="exportStatus" class="muted" role="status"></p>'+
-    '<div class="records-table">'+table(['调用时间','归属业务','产品名称｜厂商','记录类型','第三方请求号','第三方请求时间','单价（元/次）','调用次数','计费次数','调用结果','订单号'],rows)+'</div>'+
-    '<div class="pager"><span>共 '+num(matches.length)+' 条 · 第 '+page+' / '+pages+' 页</span>'+
-    '<button data-action="prev"'+(page===1?' disabled':'')+'>上一页</button>'+
-    '<button data-action="next"'+(page===pages?' disabled':'')+'>下一页</button></div>';
+    '<div class="export-footer">'+button('重置','export-reset')+
+    '<div><button type="button" data-close>取消</button><button type="submit" class="primary">确认导出</button></div></div></form>';
 }
+function showExportDialog(){
+  $('exportDialogBody').innerHTML=exportForm();
+  const form=$('exportForm');
+  for(const control of form.elements){
+    if(control.name in filters)control.value=filters[control.name];
+  }
+  $('exportDialogPrd').innerHTML='<h2>导出风控记录 · 弹窗说明</h2>'+prds.export;
+  emphasizePrd($('exportDialogPrd'));
+  $('exportDialog').showModal();
+  moveDemoOverlay($('exportDialog'));
+}
+function resetExportForm(){
+  const form=$('exportForm');
+  for(const [name,value] of Object.entries(initial))form.elements[name].value=value;
+  form.querySelector('input[value="detail"]').checked=true;
+  $('exportError').hidden=true;
+  $('exportStatus').textContent='';
+}
+
 function exportRecords(kind){
   const matches=filteredRecords().sort((a,b)=>a.time.localeCompare(b.time)||a.id.localeCompare(b.id));
   if(!matches.length)return;
@@ -817,7 +833,7 @@ function exportRecords(kind){
   }
   const label=kind==='detail'?'风控调用明细':'风控调用合计';
   downloadCsv(label+'_'+filters.from+'_'+filters.to,headers,rows);
-  $('exportStatus').textContent='已按当前查询条件生成'+(kind==='detail'?'明细':'合计')+' '+num(rows.length)+' 行，覆盖 '+num(matches.length)+' 次查询。';
+  $('exportStatus').textContent='已按当前筛选条件生成'+(kind==='detail'?'明细':'合计')+' '+num(rows.length)+' 行，覆盖 '+num(matches.length)+' 次查询。';
 }
 
 let priceNameFilter='', priceVendorFilter='';
@@ -836,7 +852,7 @@ function priceRows(){
 function prices(){
   const vendors=[...new Set(products.map(p=>p.vendor))];
   const vendorOptions=['<option value="">全部厂商</option>',...vendors.map(v=>'<option value="'+v+'">'+v+'</option>')].join('');
-  return title('产品单价配置','33 个产品 · 列表展示截至 '+demoEnd+' 生效的单价','<div>'+button('返回风控基座','base')+button('查看风控记录','records')+'</div>')+
+  return title('产品单价配置','33 个产品 · 列表展示截至 '+demoEnd+' 生效的单价','<div>'+button('返回风控基座','base')+button('导出调用记录','records')+'</div>')+
     '<div class="filters price-filters"><label class="price-search"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></span><input id="productNameFilter" type="search" placeholder="搜索产品名称" aria-label="搜索产品名称"></label><label class="price-vendor"><select id="productVendorFilter" aria-label="按厂商筛选">'+vendorOptions+'</select></label></div>'+
     '<p class="muted">初始单价为演示值。自定义单价按生效日期用于调用记录导出，并保存在当前浏览器。</p>'+
     table(['厂商','产品名称','单价（元/次）','生效日期','价格历史','操作'],priceRows()).replace('<tbody>','<tbody id="priceRows">');
@@ -890,7 +906,7 @@ $('priceForm').addEventListener('submit',e=>{
 
 
 function render(){
-  const names={base:'风控基座',prices:'产品单价配置',records:'风控记录',...otherRiskViews};
+  const names={base:'风控基座',prices:'产品单价配置',...otherRiskViews};
   document.title='风控基座 · '+names[view];
   $('crumbRoot').textContent='风控设置 / '+(view==='prices'?'风控基座':names[view]);
   $('crumb').textContent=view==='prices'?' / 产品单价配置':'';
@@ -901,8 +917,8 @@ function render(){
     else button.removeAttribute('aria-current');
   });
   $('content').innerHTML=otherRiskViews[view]
-    ? title(names[view],'')+'<p class="empty">本次评审展示菜单入口。请进入风控基座或风控记录查看本期功能。</p>'
-    : ({base,prices,records}[view])();
+    ? title(names[view],'')+'<p class="empty">本次评审展示菜单入口。请进入风控基座查看本期功能。</p>'
+    : ({base,prices}[view])();
   if(view==='prices'){
     $('productNameFilter').value=priceNameFilter;
     $('productVendorFilter').value=priceVendorFilter;
@@ -913,16 +929,12 @@ function render(){
       priceVendorFilter=event.target.value;$('priceRows').innerHTML=priceRows();
     });
   }
-  if(view==='records'){
-    for(const control of $('recordFilters').elements)if(control.name)control.value=filters[control.name];
-  }
   if(view==='base'){
     for(const control of $('ruleFilters').elements)if(control.name)control.value=ruleFilters[control.name];
   }
 }
 function switchView(next){
   view=next;
-  page=1;
   const notes=prds[view]||section('菜单调整',['该项归入「风控设置」独立页面，当前展示导航位置。']);
   $('prd').innerHTML=notes+reviewNotes;
   emphasizePrd($('prd'));
@@ -972,15 +984,11 @@ document.addEventListener('click',event=>{
     return;
   }
   if(action==='base'){switchView('base');return}
-  if(action==='records'){switchView('records');return}
+  if(action==='records'){showExportDialog();return}
   if(action==='price'){showPrice(Number(value));return}
   if(action==='price-history'){showPriceHistory(Number(value));return}
-  if(action==='export-summary'){exportRecords('summary');return}
-  if(action==='export-detail'){exportRecords('detail');return}
   if(action==='rule-reset'){ruleFilters={name:'',biz:'',state:''};render();return}
-  if(action==='record-reset'){filters={...initial};page=1;render();return}
-  if(action==='prev'){page--;render()}
-  if(action==='next'){page++;render()}
+  if(action==='export-reset'){resetExportForm();return}
 });
 $('content').addEventListener('submit',event=>{
   if(event.target.id==='ruleFilters'){
@@ -990,18 +998,30 @@ $('content').addEventListener('submit',event=>{
     render();
     return;
   }
-  if(event.target.id!=='recordFilters')return;
+});
+
+$('exportDialog').addEventListener('submit',event=>{
+  if(event.target.id!=='exportForm')return;
   event.preventDefault();
   const data=Object.fromEntries(new FormData(event.target));
+  const error=$('exportError');
+  error.hidden=true;
+  $('exportStatus').textContent='';
   if(data.from>data.to){
-    $('recordError').textContent='开始日期不得晚于结束日期';
-    $('recordError').hidden=false;
+    error.textContent='开始日期不得晚于结束日期';
+    error.hidden=false;
     return;
   }
-  filters=data;
-  page=1;
-  render();
-  $('recordFilters').querySelector('[type="submit"]').focus({preventScroll:true});
+  const previousFilters=filters;
+  filters={from:data.from,to:data.to,biz:data.biz,product:data.product,kind:data.kind};
+  if(!filteredRecords().length){
+    filters=previousFilters;
+    error.textContent='当前筛选没有可导出的记录，请调整条件。';
+    error.hidden=false;
+    return;
+  }
+  exportKind=data.exportType;
+  exportRecords(exportKind);
 });
 
 const layout=$('layout'), divider=$('divider'), defaultRatio=72;
@@ -1034,15 +1054,16 @@ $('prdToggle').addEventListener('click',e=>{
 });
 
 
-// Empty legacy report routes now resolve to the independent records page.
+// Clear legacy demo routes before returning to the base page.
 if(location.hash.startsWith('#report/')||location.hash==='#commerce'){
   history.replaceState(null,'',location.pathname+location.search);
-  view='records';
+  view='base';
 }
 $('prd').innerHTML=prds[view]+reviewNotes;
 emphasizePrd($('prd'));
 emphasizePrd(document.querySelector('#priceDialog .modal-context-prd'));
 render();
+
 
 
 const operationChapters=[
@@ -1052,16 +1073,17 @@ const operationChapters=[
     {selector:'#priceRows [data-action="price-history:1"]',action:'click',text:'点击「查看历史」。',result:'展示价格版本、日期及状态。'},
     {selector:'#detail [data-close]',action:'click',anchorAfter:'#productNameFilter',text:'关闭价格历史。',result:'返回产品单价目录。'}
   ]},
-  {title:'风控记录查询与明细导出',summary:'通过独立风控记录页面筛选日期与业务，导出逐条对账明细。',steps:[
-    {selector:'.risk-nav [data-view="records"]',action:'click',anchorAfter:'#recordFilters',text:'打开独立页面「风控记录」。',result:'显示查询条件与调用记录列表。'},
-    {selector:'#recordFilters [name="from"]',text:'按自定义开始和结束日期查询。',result:'导出使用当前已提交的查询条件。'},
-    {selector:'#recordFilters [name="biz"]',text:'筛选记录的归属业务。',result:'按首次调用方归快租或闪租，无法区分暂归闪租。'},
-    {selector:'#recordFilters [type="submit"]',action:'click',anchorAfter:'.record-actions',text:'点击「查询」。',result:'更新当前范围内的记录。'},
-    {selector:'[data-action="export-detail"]',action:'click',anchorAfter:'#exportStatus',text:'点击「导出明细」。',result:'下载含第三方请求号、请求时间及可获取订单号的明细 CSV。'}
+  {title:'弹窗筛选与明细导出',summary:'在风控基座直接打开导出弹窗，设置内容和筛选条件后下载。',steps:[
+    {selector:'#ruleFilters [data-action="records"]',action:'click',anchorAfter:'#exportForm',text:'点击「风控记录」。',result:'打开导出弹窗，当前页面保留。'},
+    {selector:'#exportForm .export-kinds',text:'选择要导出的内容。',result:'支持合计或明细，默认选中明细。'},
+    {selector:'#exportForm [name="from"]',text:'设置开始日期和结束日期。',result:'按北京时间的调用日期筛选，包含起止日。'},
+    {selector:'#exportForm [name="biz"]',text:'选择归属业务。',result:'支持快租、闪租或全部，无法区分的暂归闪租。'},
+    {selector:'#exportForm [type="submit"]',action:'click',anchorAfter:'#exportStatus',text:'点击「确认导出」。',result:'下载明细 CSV，并保留筛选条件。'}
   ]},
-  {title:'合计导出',summary:'在同一已查询范围内导出按日期与产品汇总的调用、计费次数。',steps:[
-    {selector:'[data-action="export-summary"]',action:'click',anchorAfter:'#exportStatus',text:'点击「导出合计」。',result:'按日期、产品、适用单价及归属业务汇总调用和计费次数。'},
-    {selector:'#exportStatus',text:'查看导出反馈。',result:'已按查询条件导出全部匹配记录，覆盖其他分页。'}
+  {title:'合计导出',summary:'从同一弹窗选择合计，导出按日与产品汇总的调用、计费次数。',steps:[
+    {selector:'#ruleFilters [data-action="records"]',action:'click',anchorAfter:'#exportForm',text:'点击「风控记录」打开导出弹窗。',result:'直接选择内容和范围。'},
+    {selector:'#exportForm input[value="summary"]',action:'click',text:'选择「合计」。',result:'按日期、产品、单价和归属业务汇总。'},
+    {selector:'#exportForm [type="submit"]',action:'click',anchorAfter:'#exportStatus',text:'点击「确认导出」。',result:'下载合计 CSV。'}
   ]}
 ];
 
@@ -1166,13 +1188,9 @@ function finishOperationDemo(){
 function prepareDemoChapter(chapter){
   document.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());
   document.querySelector('.risk-nav').open=true;
-  if(chapter===0){
-    priceNameFilter='';priceVendorFilter='';
-    switchView('base');
-  }else{
-    filters={...initial};
-    switchView('records');
-  }
+  if(chapter===0){priceNameFilter='';priceVendorFilter=''}
+  else{filters={...initial};exportKind='detail'}
+  switchView('base');
 }
 function startOperationDemo(chapter=0,playAll=false){
   clearOperationTimers();if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
