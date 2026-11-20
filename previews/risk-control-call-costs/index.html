@@ -133,7 +133,7 @@ button .change-tag{margin-left:7px}
 </div></div>
 <dialog id="detail" aria-labelledby="modalTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="modalTitle"></h2><button aria-label="关闭详情" data-close>×</button></div><div id="modalBody"></div><div class="modal-foot"><button data-close>关闭</button></div></section><aside class="modal-context-prd" id="modalPrd"></aside></div></dialog>
 <dialog id="priceDialog" aria-labelledby="priceTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="priceTitle">配置产品单价<span class="change-tag" aria-hidden="true">本次新增</span></h2><button aria-label="关闭单价配置" data-close>×</button></div><p id="priceProduct"></p><form id="priceForm"><div class="filters"><label>生效日期<input type="date" name="date" required></label><label>单价（元/次）<input name="unit" inputmode="decimal" placeholder="例如 0.35" required></label></div><p id="priceHint" class="muted"></p><p id="priceError" class="error" role="alert" hidden></p><div class="modal-foot"><button type="button" data-close>取消</button><button class="primary" type="submit">保存单价</button></div></form></section><aside class="modal-context-prd"><h2>配置产品单价 · 弹窗说明</h2><h3>一、字段说明</h3><ul><li>产品与厂商由所选行带入。</li><li>生效日期按北京时间自然日，从该日零点开始适用。</li><li>单价单位为元/次，支持 0 至 99999.99，最多 2 位小数。0 表示免费。</li></ul><h3>二、按钮与计费规则</h3><ul><li>保存新增生效版本。同一产品和日期已有单价时，以最后保存的价格计费，旧值保留在历史表，并更新覆盖区间内导出采用的单价。</li><li>取消、× 或 Esc 关闭弹窗，放弃本次编辑。</li></ul></aside></div></dialog>
-<dialog id="exportDialog" aria-labelledby="exportTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="exportTitle">导出风控记录<span class="change-tag" aria-hidden="true">本次新增</span></h2><button type="button" aria-label="关闭导出弹窗" data-close>×</button></div><div id="exportDialogBody"></div></section><aside class="modal-context-prd" id="exportDialogPrd"></aside></div></dialog>
+<dialog id="exportDialog" aria-labelledby="exportTitle"><div class="modal-context-layout"><section class="modal"><div class="modal-head"><h2 id="exportTitle">导出风控调用记录<span class="change-tag" aria-hidden="true">本次新增</span></h2><button type="button" aria-label="关闭导出弹窗" data-close>×</button></div><div id="exportDialogBody"></div></section><aside class="modal-context-prd" id="exportDialogPrd"></aside></div></dialog>
 <script>
 
 'use strict';
@@ -575,7 +575,7 @@ function base(){
     '<div class="rule-actions"><button type="submit" class="primary">查询</button>'+button('重置','rule-reset')+
     button('新建风控规则','original','primary')+button('操作日志','original')+
     changeControl('<button type="button" class="added" data-view="prices">产品单价配置</button>')+
-    changeControl('<button type="button" class="added" data-action="records">风控记录</button>')+'</div></form>';
+    changeControl('<button type="button" class="added" data-action="records">风控调用记录</button>')+'</div></form>';
   const rows=ruleRows.map((rule,id)=>[...rule.slice(0,8),rule[8],id]).filter(([name,biz,,,,enabled])=>
     name.includes(ruleFilters.name)&&(!ruleFilters.biz||bizs[biz]===ruleFilters.biz)&&(!ruleFilters.state||(enabled?'启用':'停用')===ruleFilters.state)
   ).map(([name,biz,products,priority,cost,enabled,time,conditions,report=[0,0,0,0,0,0],id])=>{
@@ -596,7 +596,7 @@ const prdKeyPhrases = [
   "「风控设置」设为独立一级菜单",
   "「风控设置 / 风控基座」规则列表工具栏",
   "「产品单价配置」",
-  "「风控记录」",
+  "「风控调用记录」",
   "「导出合计」",
   "「导出明细」",
   "第三方请求号",
@@ -699,7 +699,7 @@ const section=(name,items,open=true)=>'<details class="prd-section" '+(open?'ope
 const key=text=>'<strong class="prd-key">'+text+'</strong>';
 const reviewNotes=section('原型操作',[
   '整页新增只在主标题标一次。原有页面的新增按钮在按钮内标注「本次新增」，功能调整标注「本次调整」。',
-  '左侧为评审导航。实际业务在「风控设置 / 风控基座」维护单价，在风控基座点击「风控记录」弹窗筛选并导出。原横向页签调整为独立页面入口。',
+  '左侧为评审导航。实际业务在「风控设置 / 风控基座」维护单价，在风控基座点击「风控调用记录」弹窗筛选并导出。原横向页签调整为独立页面入口。',
   '操作演示支持分段播放、暂停、继续、重播和退出。拖动中央与 PRD 的分隔条调整宽度，双击或按 Home 恢复默认。窄屏时 PRD 排在内容下方。'
 ],false);
 const priceFields=[
@@ -734,9 +734,9 @@ const prds={
  base:section('一、本次需求范围',[
    key('本期保留产品单价配置，费用统计先做导出。'),
    '三方记录按身份查询并可复用，当前示例有效期为 30 天，实际有效期可配置。底层记录缺少风控规则、订单的可靠关联，本期按记录导出调用与计费信息。',
-   '「风控记录」按钮直接打开导出选择弹窗，选择合计或明细并设置筛选条件后确认导出。'
+   '「风控调用记录」按钮直接打开导出选择弹窗，选择合计或明细并设置筛选条件后确认导出。'
  ])+section('二、入口与流程',[
-   '在「风控设置 / 风控基座」点击「产品单价配置」维护单价，点击「风控记录」直接打开导出选择弹窗，原规则列表的筛选与位置保留。',
+   '在「风控设置 / 风控基座」点击「产品单价配置」维护单价，点击「风控调用记录」直接打开导出选择弹窗，原规则列表的筛选与位置保留。',
    '原有横向页签按独立页面导航。返回风控基座保留此前规则筛选条件。'
  ]),
  prices:section('一、单价配置',[
@@ -793,7 +793,7 @@ function showExportDialog(){
   for(const control of form.elements){
     if(control.name in filters)control.value=filters[control.name];
   }
-  $('exportDialogPrd').innerHTML='<h2>导出风控记录 · 弹窗说明</h2>'+prds.export;
+  $('exportDialogPrd').innerHTML='<h2>导出风控调用记录 · 弹窗说明</h2>'+prds.export;
   emphasizePrd($('exportDialogPrd'));
   $('exportDialog').showModal();
   moveDemoOverlay($('exportDialog'));
@@ -980,7 +980,7 @@ document.addEventListener('click',event=>{
   const [action,value]=String(control.dataset.action||'').split(':');
   if(action==='original'){
     $('ruleNotice').hidden=false;
-    $('ruleNotice').textContent='该按钮为现有规则维护功能。本期新增产品单价配置与风控记录导出。';
+    $('ruleNotice').textContent='该按钮为现有规则维护功能。本期新增产品单价配置与风控调用记录导出。';
     return;
   }
   if(action==='base'){switchView('base');return}
@@ -1074,14 +1074,14 @@ const operationChapters=[
     {selector:'#detail [data-close]',action:'click',anchorAfter:'#productNameFilter',text:'关闭价格历史。',result:'返回产品单价目录。'}
   ]},
   {title:'弹窗筛选与明细导出',summary:'在风控基座直接打开导出弹窗，设置内容和筛选条件后下载。',steps:[
-    {selector:'#ruleFilters [data-action="records"]',action:'click',anchorAfter:'#exportForm',text:'点击「风控记录」。',result:'打开导出弹窗，当前页面保留。'},
+    {selector:'#ruleFilters [data-action="records"]',action:'click',anchorAfter:'#exportForm',text:'点击「风控调用记录」。',result:'打开导出弹窗，当前页面保留。'},
     {selector:'#exportForm .export-kinds',text:'选择要导出的内容。',result:'支持合计或明细，默认选中明细。'},
     {selector:'#exportForm [name="from"]',text:'设置开始日期和结束日期。',result:'按北京时间的调用日期筛选，包含起止日。'},
     {selector:'#exportForm [name="biz"]',text:'选择归属业务。',result:'支持快租、闪租或全部，无法区分的暂归闪租。'},
     {selector:'#exportForm [type="submit"]',action:'click',anchorAfter:'#exportStatus',text:'点击「确认导出」。',result:'下载明细 CSV，并保留筛选条件。'}
   ]},
   {title:'合计导出',summary:'从同一弹窗选择合计，导出按日与产品汇总的调用、计费次数。',steps:[
-    {selector:'#ruleFilters [data-action="records"]',action:'click',anchorAfter:'#exportForm',text:'点击「风控记录」打开导出弹窗。',result:'直接选择内容和范围。'},
+    {selector:'#ruleFilters [data-action="records"]',action:'click',anchorAfter:'#exportForm',text:'点击「风控调用记录」打开导出弹窗。',result:'直接选择内容和范围。'},
     {selector:'#exportForm input[value="summary"]',action:'click',text:'选择「合计」。',result:'按日期、产品、单价和归属业务汇总。'},
     {selector:'#exportForm [type="submit"]',action:'click',anchorAfter:'#exportStatus',text:'点击「确认导出」。',result:'下载合计 CSV。'}
   ]}
@@ -1181,7 +1181,7 @@ function finishOperationDemo(){
   clearOperationTimers();operationState.active=false;operationState.paused=false;operationState.finished=true;
   if(operationState.target)operationState.target.classList.remove('operation-target-highlight');
   operationState.target=null;$('operationCallout').hidden=true;
-  $('demoResult').hidden=false;$('demoResult').textContent=operationState.playAll?'演示完成，已生成风控记录明细和合计导出。':'「'+operationChapters[operationState.chapter].title+'」演示完成，当前页面已保留，可继续查看或重播。';
+  $('demoResult').hidden=false;$('demoResult').textContent=operationState.playAll?'演示完成，已生成风控调用记录明细和合计导出。':'「'+operationChapters[operationState.chapter].title+'」演示完成，当前页面已保留，可继续查看或重播。';
   setDemoStatus('操作演示已完成');
 }
 
