@@ -78,6 +78,20 @@ h2 .change-tag {
 @scope (#productFrame){@container product (max-width:700px){.shell{grid-template-columns:minmax(0,1fr)}.shell>#sidebar{display:none}.pool-toolbar{display:flex;flex-wrap:wrap;gap:10px}.claim-quota{white-space:normal}}}
 .prd-rule-map{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}.prd-rule-map th,.prd-rule-map td{padding:8px 6px;border:1px solid #dfe5ee;vertical-align:top;line-height:1.8;overflow-wrap:anywhere}.prd-rule-map th{background:#f5f7fa;text-align:left;color:#344353}.prd-rule-map th:first-child{width:31%}.review-dialog-product input,.review-dialog-product select,.review-dialog-product textarea{box-sizing:border-box}
 
+
+dialog.review-dialog.rebind-confirm{width:min(768px,calc(100vw - 64px))}
+dialog.rebind-confirm .review-dialog-pair{grid-template-columns:minmax(0,420px) minmax(0,330px);align-items:start}
+dialog.rebind-confirm .review-dialog-product{min-height:0}
+dialog.rebind-confirm .review-dialog-product>.mask{height:auto;align-items:flex-start}
+.rebind-confirm-box{padding:15px 16px 10px!important}
+.rebind-confirm-head{display:flex;justify-content:space-between;align-items:center}
+.rebind-confirm-head h2{font-size:18px;font-weight:400;margin:0!important}
+.rebind-confirm-head .close{padding:0;font-size:18px;line-height:22px;color:#909399}
+.rebind-confirm-box .rebind-message{display:flex;align-items:center;gap:12px;margin:18px 0;color:#606266;font-size:14px;line-height:24px}
+.rebind-warning{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex:0 0 20px;border-radius:50%;background:#e6a23c;color:white;font-size:16px;font-weight:700}
+.rebind-confirm-box footer{margin-top:16px!important}
+.rebind-confirm-box footer .btn{font-size:12px;padding:7px 15px;min-height:32px}
+@media(max-width:900px){dialog.review-dialog.rebind-confirm{width:calc(100vw - 28px)}dialog.rebind-confirm .review-dialog-pair{grid-template-columns:minmax(0,1fr)}}
 </style></head><body><div class="prototype-shell"><header class="prototype-topbar"><div class="prototype-brand"><span class="prototype-mark">雕</span><div><strong>客户归属掉落 · 产品原型与PRD</strong><small>OPERATIONS & CRM · INTERACTIVE REVIEW</small></div></div><div class="prototype-status">静态演示　·　不连接真实后台</div></header><div class="prototype-workspace"><aside class="prototype-rail"><div class="prototype-rail-label">系统 / 页面切换</div><div class="prototype-role-nav" role="group" aria-label="系统与页面"><button class="prototype-role active" data-view="stores"><span class="prototype-role-icon">▦</span><span><strong>运营后台</strong><small>本管家店铺列表</small></span></button><button class="prototype-role" data-view="pool"><span class="prototype-role-icon">▤</span><span><strong>CRM后台</strong><small>公海客户列表</small></span></button></div><div class="prototype-rail-note">选择页面后，中间原型与右侧说明同步切换。<br><br>打开弹窗，右侧只展示当前弹窗PRD。<br><br>用户手机号可输入尾号2591演示。</div></aside><section class="prototype-stage"><div class="prototype-stage-head"><div><h1 id="prototypeStageTitle">运营后台 · 本管家店铺列表</h1><p id="prototypeStageDesc">分销商 / 本管家店铺列表</p></div><span>复用现有后台组件结构</span></div><div class="prototype-layout"><div class="prototype-board" id="prototypeBoard"><div class="product-frame" id="productFrame" role="region" aria-label="客户掉落与公海交互原型"><div class="product-scroll">
 <header><div class="brand"><span class="mark">♞</span><span id="brandName">运营后台管理系统</span></div><nav><button id="navOps" class="active" onclick="go('stores')">分销</button><button id="navCrm" onclick="go('pool')">CRM</button><button id="navSpec" onclick="go('spec')">需求说明</button></nav><div class="account">消息中心　 <span class="tag blue">管</span>　运营管理员　⌄</div></header>
 <div class="demo-bar"><span>交互原型 · 演示数据　｜　仅运营可维护掉落规则，内部销售原有掉落规则独立执行</span><button onclick="resetDemo()">重置演示</button></div>
@@ -256,24 +270,23 @@ function rebind(id,index=storeIndex){
  if(p.current!=='公海')return confirmBox('客户已被其他业务员绑定',`<p>当前归属：<b>${e(p.current)}</b></p><p>请联系当前归属人解绑，待客户回到公海后，再重新绑定至 ${e(target)}。</p><p class="muted">重新绑定不会覆盖现有归属及历史订单。</p>`,`document.getElementById('confirm').innerHTML=''`);
  if(!Number.isSafeInteger(days)||days<=0)return toast('请先配置目标店铺或客户的掉落周期');
  rebindDraft={id,index,days};
- confirmBox('重新绑定客户',`<div class="key-values"><span>客户</span><b>${e(c.name)}（${e(c.id)}）</b><span>恢复目标</span><b>${e(target)}</b><span>当前归属</span><b>平台公海</b><span>原解除方式</span><b>${e(c.unbound)}</b></div><div class="form-item"><label>本次生效规则</label><b>${c.custom!==null?'客户专属规则':'店铺统一规则'} · ${days} 天</b><small class="help">按重新绑定时的有效配置，从新绑定时间重新计时；原解绑、掉落、订单及佣金记录保留。</small></div><div class="form-item"><label><span class="required">*</span>重新绑定原因</label><textarea id="rebindReason" maxlength="200" placeholder="填写本次重新绑定原因，最多200字"></textarea></div><div class="tip warn">确认时再次校验客户仍在公海、原店铺有效及规则未变化；不覆盖其他销售或分销商的现有绑定。</div>`,`doRebind('${id}')`);
- const dialog=document.querySelector('#confirm .dialog');
- dialog.querySelector('h2').outerHTML=`<div class="drawer-head"><h2>重新绑定客户</h2><button class="close" aria-label="关闭" onclick="document.getElementById('confirm').innerHTML=''">×</button></div>`;
- dialog.querySelector('footer .primary').textContent='确认重新绑定';
+ confirmBox('提示',`<p class="rebind-message"><span class="rebind-warning" aria-hidden="true">!</span><span>确定要重新绑定客户吗？</span></p>`,`doRebind('${id}')`);
+ const dialog=document.querySelector('#confirm .dialog');dialog.dataset.action='rebind';dialog.classList.add('rebind-confirm-box');
+ dialog.querySelector('h2').outerHTML=`<div class="rebind-confirm-head"><h2>提示</h2><button class="close" aria-label="关闭" onclick="document.getElementById('confirm').innerHTML=''">×</button></div>`;
+ dialog.querySelector('footer .primary').textContent='确定';
 }
 function doRebind(id){
- const draft=rebindDraft,reasonField=document.getElementById('rebindReason');
- if(!draft||draft.id!==id||!reasonField)return toast('请从原店铺客户记录发起重新绑定');
+ const draft=rebindDraft,prompt=document.querySelector('#confirm .dialog[data-action="rebind"]');
+ if(!draft||draft.id!==id||!prompt)return toast('请从原店铺客户记录发起重新绑定');
  const context=storeRebindContext(id,draft.index);
  if(!context)return toast('提交失败：店铺或原客户关系已变化，请重新打开');
  const {customer:c,entry:p,days,target}=context;
  if(p.current!=='公海')return toast('提交失败：客户已被其他业务员绑定，请联系当前归属人解绑');
  if(!Number.isSafeInteger(days)||days<=0||days!==draft.days)return toast('掉落规则已变化，请取消后重新确认');
- const reason=reasonField.value.trim();if(!reason||reason.length>200)return toast('请填写200字以内的重新绑定原因');
  const time=now();
  (c.bindingHistory??=[]).push({bound:c.bound,unbound:c.unbound,status:c.status,custom:c.custom,snapshotDays:c.snapshotDays,owner:target});
  p.current=target;c.status='正常';c.bound=time;c.unbound='—';c.snapshotDays=days;
- logs.unshift({time,action:'客户重新绑定',object:p.name+'（'+id+'）',before:'平台公海',after:target,reason:reason+'；本次生效规则 '+(c.custom!==null?'客户专属':'店铺统一')+' '+days+' 天；新绑定时间 '+time,actor:'运营管理员'});
+ logs.unshift({time,action:'客户重新绑定',object:p.name+'（'+id+'）',before:'平台公海',after:target,reason:'手动重新绑定；本次生效规则 '+(c.custom!==null?'客户专属':'店铺统一')+' '+days+' 天；新绑定时间 '+time,actor:'运营管理员'});
  rebindDraft=null;document.getElementById('confirm').innerHTML='';
  if(overlayMode==='customers')drawCustomers();else render();
  toast('已重新绑定至原店铺，从新绑定时间重新计算核验日');
@@ -348,7 +361,7 @@ function modalNoteMarkup(state){
   }
   if(events.length)chunks.push({title:'按钮事件',items:events});
   const numbers=['一','二','三','四','五','六','七'];
-  return `<h2>${h(state.dialog)} · 弹窗说明</h2>${chunks.map((chunk,index)=>`<section><h3>${numbers[index]||index+1}、${h(chunk.title)}</h3><ul>${chunk.items.map(item=>`<li>${item}</li>`).join('')}</ul></section>`).join('')}`;
+  return `<h2>${h(state.action==='rebind'?'重新绑定':state.dialog)} · 弹窗说明</h2>${chunks.map((chunk,index)=>`<section><h3>${numbers[index]||index+1}、${h(chunk.title)}</h3><ul>${chunk.items.map(item=>`<li>${item}</li>`).join('')}</ul></section>`).join('')}`;
 }
 function closePairedModal(host){
   if(host.id==='storeRuleLayer')closeStoreRule();else if(host.id==='confirm')host.innerHTML='';else closeDrawer();
@@ -368,6 +381,7 @@ function syncModalPair(state){
     portal.addEventListener('cancel',event=>{event.preventDefault();closePairedModal(host)});
     portal.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closePairedModal(host)}});
   }
+  portal.classList.toggle('rebind-confirm',state.action==='rebind');
   portal.classList.toggle('compact',state.kind==='rule'||host.id==='confirm'||state.dialog.startsWith('备注'));
   const signature=JSON.stringify(state);if(portal.dataset.noteSignature!==signature){portal.querySelector('.review-dialog-note').innerHTML=modalNoteMarkup(state);portal.dataset.noteSignature=signature;}
   document.querySelectorAll('dialog.review-dialog[open]').forEach(other=>{if(other!==portal)other.close()});
@@ -398,7 +412,7 @@ function modalPrd(s){
  if(t.startsWith('备注'))return section('备注字段',fields(['备注内容','当前客户备注，最多200字；清空后列表显示—。']))+section('按钮事件',bullets('保存：更新当前客户备注，追加客户操作记录，返回公海列表。','取消/关闭：丢弃草稿，返回列表。'));
  if(t.startsWith('跟进情况'))return section('字段',fields(['跟进状态','CRM当前跟进状态。'],['最近跟进时间','最近一条跟进的实际时间，无记录显示—。'],['跟进记录','保留历史跟进人、时间与内容；本样例无记录，显示明确空状态。']))+section('关闭',para('关闭后恢复公海页PRD，不改变跟进或归属。'));
  if(t.startsWith('交易信息'))return section('字段',fields(['订单总数','客户历史订单数量，包含取消单。'],['订单情况','当前样例的无订单、待发货、全部取消、进行中或已下过单说明；按当前客户实际订单状态展示。'],['核验口径','内部销售按状态高于待发货的成交订单数与两项实际期限判断；本管家/分销按当前归属周期内绑定人名下的有效订单核验，二者分别执行。']))+section('规则',para('订单总数不等于销售成交订单数，也不等于分销有效订单数。销售待发货订单不计成交，订单数大于0仍可能未成交到期；分销全部取消时无有效订单。关闭返回公海页面。'));
- if(t.includes('重新绑定'))return section('字段与校验',fields(['入口与状态','原常规租赁店铺的查看客户弹窗中，已解绑或已掉落记录显示重新绑定；正常绑定客户不显示。'],['客户','准备重新绑定的客户名称与ID。'],['恢复目标','本次历史记录对应的原归属对象。'],['当前归属','必须仍在公海；已被其他销售或分销商绑定时阻断。'],['本次生效规则','采用重新绑定时的客户专属规则，未配置专属则使用店铺当前统一规则，从新绑定时间重新计时；不沿用旧绑定周期的计时起点。'],['重新绑定原因','必填，记录至操作日志。']))+section('确认与取消',bullets('确认重新绑定：再次检查原店铺及客户记录有效、客户仍在公海、配置与确认时一致；失败停留并提示，不改归属。成功建立新绑定、按当前生效周期生成核验日，从公海当前列表移出，保留原解绑及掉落历史并追加操作记录。','被其他业务员绑定：提示联系现归属人解绑，不覆盖归属。','取消/关闭或Esc：不改变当前归属，返回原客户列表并保留筛选。'));
+ if(s.action==='rebind')return section('确认提示',fields(['标题','提示。'],['提示内容','黄色警示图标及确定要重新绑定客户吗？'],['操作控件','取消、确定及右上角关闭；不展示额外表单，无需填写原因。']))+section('入口与处理',bullets('原常规租赁店铺的查看客户弹窗中，已解绑或已掉落记录显示重新绑定，正常绑定客户不显示。直接以点击行的客户与原店铺为重绑对象，不需要再次选择。','点击确定时检查原店铺及客户记录有效、客户必须仍在公海，且生效规则未变化；已被其他销售或分销商绑定时提示联系现归属人解绑，不覆盖归属。','成功建立新绑定，采用当时客户专属规则，未配置专属则使用店铺当前统一规则，从新绑定时间重新计时、生成核验日并更新公海数量；保留原解绑及掉落历史，自动追加操作记录。'))+section('按钮事件',bullets('确定：无需填写原因，校验成功后完成重绑并返回客户列表；失败停留并提示，不改变归属。','取消、右上角关闭或Esc：关闭确认框，返回原客户列表并保留筛选，不改变数据。'));
  if(t.includes('已被其他'))return section('归属冲突',para('客户已由其他销售或分销商绑定。展示当前归属，提示联系现归属人解绑，待回到公海后再重新绑定。确认只关闭提示，不转移归属。'));
  return section('当前视图',para(h(t)))+section('交互',para('当前为复用组件的说明弹层；关闭后恢复列表PRD。'));
 }
@@ -435,7 +449,7 @@ const originalReviewCloseDrawer=closeDrawer;
 closeDrawer=function(){originalReviewCloseDrawer();syncReviewContext()};
 function syncReviewContext(){
  const confirm=document.querySelector('#confirm .dialog'),rule=document.querySelector('#storeRuleLayer .store-rule-dialog'),overlay=document.querySelector('#overlay [role="dialog"]');const active=confirm||rule||overlay;let dialog=Array.from(active?.querySelector('h2')?.childNodes||[]).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent).join('').trim(),kind='page';if(rule)kind='rule';else if(active===overlay&&overlay?.classList.contains('store-customer-modal'))kind='customers';else if(active)kind='modal';
- const context={view:page,dialog,kind,ruleMode,store:stores[storeIndex]?.name,customer:customers[customerIndex]?.name};
+ const context={view:page,dialog,kind,action:confirm?.dataset.action||'',ruleMode,store:stores[storeIndex]?.name,customer:customers[customerIndex]?.name};
  const key=JSON.stringify(context);if(syncReviewContext.last===key){syncModalPair(context);return}syncReviewContext.last=key;updatePrd(context);
 }
 new MutationObserver(syncReviewContext).observe(document.getElementById('productFrame'),{subtree:true,childList:true});
@@ -556,7 +570,6 @@ syncModalPair=function(state){
   for(const portal of document.querySelectorAll('dialog.review-dialog[open]')){
     const customerModal=portal.querySelector('.store-customer-modal'),ruleModal=portal.querySelector('.store-rule-dialog'),recordModal=portal.querySelector('.operation-record-modal');
     if(ruleModal||recordModal)workflowMark((ruleModal||recordModal).querySelector('h2'),true);
-    const rebindTitle=portal.querySelector('.dialog h2');if(rebindTitle?.textContent==='重新绑定客户')workflowMark(rebindTitle,true);
     if(customerModal){[6,7].forEach(index=>workflowMark(customerModal.querySelectorAll('th')[index],true));workflowMark(customerModal.querySelector('tbody tr:first-child .link'));workflowMark(customerModal.querySelector('.rebind-customer'),true)}
     const note=portal.querySelector('.review-dialog-note');workflowEmphasize(note);
   }
