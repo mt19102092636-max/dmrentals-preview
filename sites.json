@@ -1,13 +1,13 @@
 {
   "repository": "mt19102092636-max/dmrentals-preview",
-  "updatedAt": "2026-11-24T19:28:33+08:00",
+  "updatedAt": "2026-11-25T13:57:54+08:00",
   "sites": [
     {
       "slug": "butler-customer-drop-pool",
       "name": "本管家客户掉落与公海管理",
-      "summary": "常规租赁掉落配置与公海管理；本管家和分销手动解绑不进入公海，保留自动掉落、销售现有入海流程及历史数据查询。",
+      "summary": "常规租赁掉落配置与公海管理；支持完整手机号精确查询，公海按当前筛选导出10列，附规则对照及操作记录。",
       "path": "previews/butler-customer-drop-pool/",
-      "updatedAt": "2026-11-24T19:28:33+08:00",
+      "updatedAt": "2026-11-25T13:57:54+08:00",
       "createdAt": "2026-11-04T18:13:20+08:00"
     },
     {
