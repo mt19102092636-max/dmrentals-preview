@@ -32,13 +32,18 @@
 .rs-total{white-space:nowrap;color:var(--rs-green)}.rs-total span{color:var(--rs-muted);margin-right:8px}.rs-total strong{font-size:23px;line-height:1}
 .rs-footer{display:flex;gap:8px 24px;flex-wrap:wrap;padding:12px 18px;background:#fafbfc;justify-content:flex-end;border-top:1px solid var(--rs-line)}
 .rs-footer span{color:var(--rs-muted)}.rs-footer b{color:#293930;margin-left:4px}
-.rs-table-wrap{overflow:auto}.rs-table{border-collapse:collapse;table-layout:fixed;width:100%;min-width:660px;font-size:inherit}
-.rs-rule-col,.rs-condition-col{width:28%}.rs-order-col{width:17%}.rs-hit-col{width:12%}.rs-score-col{width:15%}
+.rs-table-wrap{overflow:auto}.rs-table{border-collapse:collapse;table-layout:fixed;width:100%;min-width:840px;font-size:inherit}
+.rs-product-col{width:16%}.rs-rule-col{width:20%}.rs-condition-col{width:23%}.rs-order-col{width:12%}.rs-hit-col{width:9%}.rs-score-col,.rs-product-total-col{width:10%}
 .rs-table thead{background:#f3f5f7}.rs-table th,.rs-table td{padding:0 13px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
 .rs-table thead th,.rs-table tbody tr:first-child>*{padding-top:10px}
 .rs-table thead th,.rs-table tbody tr:last-child>*,.rs-table tbody [rowspan]{padding-bottom:10px}
 .rs-table thead,.rs-table tbody{border-block:1px solid var(--rs-line)}
-.rs-table tbody th{font-weight:400}.rs-table thead th:last-child,.rs-table .rs-points{text-align:right}.rs-points{font-weight:650}
+.rs-table tbody th{font-weight:400;white-space:normal}.rs-table thead th:last-child,.rs-table .rs-points{text-align:right}.rs-points{font-weight:650}
+.rs-table .rs-product-name{background:#fafbfc;border-right:1px solid var(--rs-line)}
+.rs-table .rs-product-total{background:#fafbfc;border-left:1px solid var(--rs-line);text-align:right;font-weight:650;white-space:nowrap}
+.rs-table .rs-rule-start:not(:first-child)>*,.rs-table .rs-cap-adjustment>*{border-top:1px solid var(--rs-line);padding-top:10px}
+.rs-table .rs-rule-name{padding-bottom:10px}.rs-table .rs-cap-adjustment>*{padding-bottom:10px}
+.rs-table thead th:nth-last-child(-n+2){white-space:nowrap;text-align:right}
 .rs-table td small,.rs-table th small{display:block;color:var(--rs-muted);font-size:11px;font-weight:400;white-space:normal;margin-top:3px}
 .rs-condition-status{color:var(--rs-muted)}.rs-condition-status.rs-hit{color:var(--rs-green);font-weight:650}.rs-table .rs-relation{padding-block:3px;font-size:11px;color:#626d78}.rs-nested{border-left:2px solid var(--rs-line);padding-left:9px}
 .rs-label{display:inline-block;border-radius:4px;font-size:11px;margin:3px 0 0 5px;padding:1px 5px;color:#405e99;background:#edf2fd;white-space:nowrap}.rs-label.rs-veto{color:#993a32;background:#fff0eb}
@@ -61,7 +66,7 @@ html,body{min-width:0}body{margin:0;background:#f0f2f5;color:#303133;font-family
 .prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr) 0 55px}.prd-collapsed .prototype-prd h2{display:none}.prd-collapsed .prototype-prd header{padding:8px 3px}.prd-collapsed .prototype-resizer{display:none}
 .review-overlay{position:fixed;inset:0;z-index:120;background:#121c2870;backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}.paired-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start;width:min(1350px,100%);max-height:94vh}.paired-layout>.modal,.paired-layout>.original-editor{width:100%;max-width:100%;max-height:94vh;border-radius:6px;box-shadow:0 18px 65px #0003;background:white}.paired-layout>.modal{display:flex;flex-direction:column}.paired-layout .modal>header{flex:none}.paired-layout .modal-body{min-height:0;overflow:auto}.paired-layout .original-scroll{min-height:0}.paired-layout .modal-prd{position:static;max-height:94vh;background:white}.paired-layout .modal-prd>header{display:block;padding:15px}.paired-layout .modal-prd h2{line-height:1.6}.modal-prd .prd-copy{padding-top:0}
 body.has-review-modal .prototype-shell{filter:blur(1.5px)}#overlay{position:relative;z-index:120}#toast{z-index:150;top:68px}.paired-layout .form-grid .field input,.paired-layout .form-grid .field select{width:100%;max-width:100%}.paired-layout .condition-line{flex-wrap:wrap}.paired-layout .condition-part.field-part{min-width:200px}.paired-layout .compound-line .product-part{width:100%}.paired-layout .product-part select{width:100%}.paired-layout .modal footer{flex-wrap:wrap}.paired-layout .original-editor footer{flex:none}.paired-layout .call-columns{grid-template-columns:1fr 1fr}.paired-layout .original-field select{width:320px}
-.phase-report .report-title{font-size:20px;margin:0}.phase-report .report-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px;background:#fff;border-radius:5px}.phase-report .report-toolbar label{font-size:12px;gap:7px}.phase-report .report-toolbar select{font-size:12px;max-width:220px}.phase-report .report-meta{padding:10px 0;color:#929aa2;font-size:12px}.phase-report .report-basic{border:1px solid #e0e5eb;border-radius:8px;background:white;overflow:hidden}.phase-report h2{font-size:16px}.phase-report .report-basic h2{margin:0;padding:11px 16px;border-bottom:1px solid #e5e8ed}.phase-report .report-basic dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}.phase-report .report-basic dl div{padding:12px;border-right:1px solid #eee}.phase-report dt{font-size:12px;color:#8b949d}.phase-report dd{font-size:13px;margin:6px 0 0;overflow-wrap:anywhere}.phase-report .product-heading{font-size:16px;color:#337e42;padding-bottom:9px;border-bottom:2px solid #dfe5eb;margin:18px 0 12px}.phase-report .product-results{background:white;border:1px solid #dfe5eb;border-radius:6px;padding:16px;margin-bottom:14px}.phase-report .product-results header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.phase-report .product-results h3{font-size:14px;margin:0}.phase-report .product-results dl{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.phase-report .product-results dl div{padding:8px 10px;background:#f7f9fb;border-radius:4px}.phase-report .rs-heading h2{margin:0}.phase-report .report-score-detail{margin-block:16px}.phase-report table.rs-table th,.phase-report table.rs-table td{font-size:12px}.phase-report .rs-table{min-width:650px}
+.phase-report .report-title{font-size:20px;margin:0}.phase-report .report-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px;background:#fff;border-radius:5px}.phase-report .report-toolbar label{font-size:12px;gap:7px}.phase-report .report-toolbar select{font-size:12px;max-width:220px}.phase-report .report-meta{padding:10px 0;color:#929aa2;font-size:12px}.phase-report .report-basic{border:1px solid #e0e5eb;border-radius:8px;background:white;overflow:hidden}.phase-report h2{font-size:16px}.phase-report .report-basic h2{margin:0;padding:11px 16px;border-bottom:1px solid #e5e8ed}.phase-report .report-basic dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}.phase-report .report-basic dl div{padding:12px;border-right:1px solid #eee}.phase-report dt{font-size:12px;color:#8b949d}.phase-report dd{font-size:13px;margin:6px 0 0;overflow-wrap:anywhere}.phase-report .product-heading{font-size:16px;color:#337e42;padding-bottom:9px;border-bottom:2px solid #dfe5eb;margin:18px 0 12px}.phase-report .product-results{background:white;border:1px solid #dfe5eb;border-radius:6px;padding:16px;margin-bottom:14px}.phase-report .product-results header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.phase-report .product-results h3{font-size:14px;margin:0}.phase-report .product-results dl{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.phase-report .product-results dl div{padding:8px 10px;background:#f7f9fb;border-radius:4px}.phase-report .rs-heading h2{margin:0}.phase-report .report-score-detail{margin-block:16px}.phase-report table.rs-table th,.phase-report table.rs-table td{font-size:12px}.phase-report .rs-table{min-width:840px}
 .phase-logs{min-width:720px}.phase-logs td{font-size:12px;vertical-align:top}.phase-logs .change{margin:5px 0;color:#5f6a73}
 @container(max-width:1050px){.prototype-board .rail{width:42px;overflow:hidden}.prototype-board .rail div{overflow:hidden;font-size:0;padding:14px}.prototype-board .rail div:first-letter{font-size:13px}.prototype-board main{margin-left:42px}.prototype-board .top nav span:nth-last-child(-n+3){display:none}}
 @media(max-width:1050px){.prototype-workspace{grid-template-columns:120px minmax(0,1fr)}.prototype-layout,.prototype-layout.prd-collapsed{grid-template-columns:minmax(0,1fr);gap:12px}.prototype-resizer{display:none}.prototype-prd{position:static;max-height:none}.prd-collapsed .prototype-prd h2{display:block}.paired-layout{grid-template-columns:minmax(0,1fr) 280px;gap:10px}}
@@ -254,34 +259,52 @@ if(a==='showOrderReport'){const o=activeOrder();modal('订单风控报告 · '+o
       (node.hit ? ' rs-hit' : '') + '">' + escapeHtml(status) + '</td>';
   }
 
-  function renderRow(row, productNames, fields) {
-    const conditions = evaluationRows(row.eval);
-    if (!conditions.length) conditions.push({});
+  function conditionRows(row) {
+    const rows = evaluationRows(row.eval);
+    return rows.length ? rows : [{}];
+  }
+
+  function renderRuleRows(row, productNames, fields, leading = '', trailing = '') {
+    const conditions = conditionRows(row);
     const span = ' rowspan="' + conditions.length + '"';
-    const name = '<th scope="rowgroup"' + span + '><strong>' + escapeHtml(row.name) + '</strong>' +
+    const name = '<th scope="row" class="rs-rule-name"' + span + '><strong>' + escapeHtml(row.name) + '</strong>' +
       (row.compound ? '<span class="rs-label">复合规则</span>' : '') +
-      (row.veto ? '<span class="rs-label rs-veto">一票否决</span>' : '') +
-      (row.product ? '<small>' + escapeHtml(row.product) + '</small>' : '') +
-      '</th>';
+      (row.veto ? '<span class="rs-label rs-veto">一票否决</span>' : '') + '</th>';
     const score = '<td class="rs-points"' + span + '>' +
       (row.contribution === null ? '—' : points(row.contribution)) +
       (row.explanation ? '<small>' + escapeHtml(row.explanation) + '</small>' : '') + '</td>';
-    return '<tbody>' + conditions.map((condition, index) =>
-      '<tr>' + (index === 0 ? name : '') + renderConditionCells(condition, productNames, fields, row.compound) +
-      (index === 0 ? score : '') + '</tr>'
-    ).join('') + '</tbody>';
+    return conditions.map((condition, index) =>
+      '<tr' + (index === 0 ? ' class="rs-rule-start"' : '') + '>' +
+      (index === 0 ? leading + name : '') + renderConditionCells(condition, productNames, fields, row.compound) +
+      (index === 0 ? score + trailing : '') + '</tr>'
+    ).join('');
   }
 
-  function renderTable(rows, productNames, fields, adjustment = []) {
-    return '<div class="rs-table-wrap"><table class="rs-table"><colgroup><col class="rs-rule-col"><col class="rs-condition-col">' +
-      '<col class="rs-order-col"><col class="rs-hit-col"><col class="rs-score-col"></colgroup>' +
-      '<thead><tr><th scope="col">评分规则名称</th><th scope="col">判断条件</th><th scope="col">订单情况</th>' +
-      '<th scope="col">是否命中</th><th scope="col">计入分</th></tr></thead>' +
-      rows.map(row => renderRow(row, productNames, fields)).join('') +
-      adjustment.map(product => '<tbody><tr><th scope="row">产品封顶调整<small>' + escapeHtml(product.name) +
-        '</small></th><td colspan="3">聚合 ' + points(product.before) + '，封顶后 ' + points(product.score) +
-        '</td><td class="rs-points">' + points(product.score - product.before) + '</td></tr></tbody>').join('') +
-      '</table></div>';
+  function renderGroup(group, productNames, fields) {
+    const adjustment = group.product && group.product.before !== group.product.score;
+    const count = group.rows.reduce((total, row) => total + conditionRows(row).length, 0) + (adjustment ? 1 : 0);
+    const span = ' rowspan="' + count + '"';
+    const productCell = '<th scope="rowgroup" class="rs-product-name"' + span + '><strong>' +
+      escapeHtml(group.name) + '</strong></th>';
+    const totalCell = '<td class="rs-product-total"' + span + '>' +
+      (group.product ? '<strong>' + points(group.product.score) + '</strong>' +
+        (adjustment ? '<small>封顶后得分</small>' : '') :
+        '—<small>附加分单独汇总</small>') + '</td>';
+    return '<tbody data-score-group="' + escapeHtml(group.id) + '">' + group.rows.map((row, index) =>
+      renderRuleRows(row, productNames, fields, index === 0 ? productCell : '', index === 0 ? totalCell : '')
+    ).join('') + (adjustment ? '<tr class="rs-cap-adjustment"><th scope="row">产品封顶调整</th>' +
+      '<td colspan="3">聚合 ' + points(group.product.before) + '，封顶后 ' + points(group.product.score) +
+      '</td><td class="rs-points">' + points(group.product.score - group.product.before) + '</td></tr>' : '') + '</tbody>';
+  }
+
+  function renderTable(groups, productNames, fields) {
+    return '<div class="rs-table-wrap"><table class="rs-table"><colgroup><col class="rs-product-col">' +
+      '<col class="rs-rule-col"><col class="rs-condition-col"><col class="rs-order-col"><col class="rs-hit-col">' +
+      '<col class="rs-score-col"><col class="rs-product-total-col"></colgroup>' +
+      '<thead><tr><th scope="col">产品名称</th><th scope="col">评分规则名称</th><th scope="col">判断条件</th>' +
+      '<th scope="col">订单情况</th><th scope="col">是否命中</th><th scope="col">计入分</th>' +
+      '<th scope="col">产品总分</th></tr></thead>' +
+      groups.map(group => renderGroup(group, productNames, fields)).join('') + '</table></div>';
   }
 
   function renderReportScoreDetail(panel, snapshot) {
@@ -294,27 +317,24 @@ if(a==='showOrderReport'){const o=activeOrder();modal('订单风控报告 · '+o
 
     const productNames = new Map(result.products.map(p => [p.id, displayProductName(p.name)]));
     const fields = snapshot.scoreFields || [];
-    const matched = [];
-    const other = [];
+    const groups = [];
+    const hitFirst = rows => [...rows.filter(row => row.hit), ...rows.filter(row => !row.hit)];
     for (const product of result.products) {
-      for (const rule of product.rows.filter(r => r.enabled)) {
-        const row = {...rule, product: productNames.get(product.id), veto: rule.hit && rule.veto, contribution: rule.kept ? rule.score : 0,
-          explanation: rule.hit ? (rule.kept ? '' : '取最高未计入，配置 ' + points(rule.score)) : '规则未命中'};
-        (rule.hit ? matched : other).push(row);
-      }
+      const rows = product.rows.filter(r => r.enabled).map(rule => ({
+        ...rule, veto: rule.hit && rule.veto, contribution: rule.kept ? rule.score : 0,
+        explanation: rule.hit ? (rule.kept ? '' : '取最高未计入，配置 ' + points(rule.score)) : '规则未命中'
+      }));
+      if (rows.length) groups.push({id: product.id, name: productNames.get(product.id), product, rows: hitFirst(rows)});
     }
-    for (const rule of result.compounds.filter(r => r.enabled)) {
-      const row = {...rule, compound: true, contribution: rule.result,
-        explanation: rule.hit ? '' : '规则未命中'};
-      (rule.hit ? matched : other).push(row);
-    }
+    const compounds = result.compounds.filter(r => r.enabled).map(rule => ({
+      ...rule, compound: true, contribution: rule.result, explanation: rule.hit ? '' : '规则未命中'
+    }));
     for (const rule of snapshot.unavailableCompounds || []) {
-      other.push({...rule, compound: true, contribution: null, explanation: '未参与：所需产品未取得有效结果'});
+      compounds.push({...rule, compound: true, contribution: null, explanation: '未参与：所需产品未取得有效结果'});
     }
-
-    const adjustment = result.products.filter(p => p.before !== p.score)
-      .map(p => ({...p, name: productNames.get(p.id)}));
-    const rows = [...matched, ...other];
+    if (compounds.length) groups.push({id:'compound', name:'跨产品复合加权', rows:hitFirst(compounds)});
+    // Keep each product contiguous, prioritizing groups with a hit and then hit rules within each group.
+    groups.sort((a, b) => Number(b.rows.some(row => row.hit)) - Number(a.rows.some(row => row.hit)));
     const scoreLabel = result.complete ? '综合总分' : '当前暂定得分';
     const pending = result.pending.map(id => productNames.get(id) || id);
     const strategy = snapshot.baseName
@@ -326,7 +346,7 @@ if(a==='showOrderReport'){const o=activeOrder();modal('订单风控报告 · '+o
       (pending.length ? '<p class="rs-notice">待取得有效结果：' + escapeHtml(pending.join('、')) + '</p>' : '') +
       (result.vetoes.length ? '<p class="rs-notice">一票否决：' +
         escapeHtml(result.vetoes.map(v => v.name).join('、')) + '，风险等级定为高风险。</p>' : '') +
-      (rows.length || adjustment.length ? renderTable(rows, productNames, fields, adjustment) :
+      (groups.length ? renderTable(groups, productNames, fields) :
         '<p class="rs-empty">本次暂无评分规则明细</p>') +
       '<div class="rs-footer"><span>产品得分 <b>' + result.base + '</b></span><span>复合附加分 <b>' +
       result.extra + '</b></span><span>' + scoreLabel + ' <b>' + result.total + ' 分</b></span></div>';
@@ -490,7 +510,7 @@ const PHASE_PRD = {
     title:'风控基座 · 需求说明',
     body:`<h3>一、需求背景</h3><p>现有风控基座按订单业务条件决定调用哪些第三方产品。评分标准需要集中维护，审核人员也需要在报告里看到每条规则的计分依据。</p>
     <h3>二、需求目标</h3><p>在原系统增加评分机制入口，贯通产品规则配置、订单取数、规则计分和报告展示。相同配置与数据得到相同结果，调整内容能从操作日志追溯。</p>
-    <h3>三、本期需求内容</h3><ul><li><strong class="prd-important">在「新建风控规则」与「操作日志」之间增加「评分机制」</strong>。</li><li>按35项产品及内部信息分别配置基础规则，支持复合场景加权。</li><li>在原风控报告<strong class="prd-important">基础信息之后、产品风控结论之前</strong>增加五列评分明细。</li><li>配置启停、删除及发布的内容进入原操作日志。</li></ul>
+    <h3>三、本期需求内容</h3><ul><li><strong class="prd-important">在「新建风控规则」与「操作日志」之间增加「评分机制」</strong>。</li><li>按35项产品及内部信息分别配置基础规则，支持复合场景加权。</li><li>在原风控报告<strong class="prd-important">基础信息之后、产品风控结论之前</strong>增加七列评分明细。</li><li>配置启停、删除及发布的内容进入原操作日志。</li></ul>
     <div class="scope-note"><strong class="prd-important">本期提供规则配置与复合场景加权</strong>。等级与强制规则、产品字段字典管理、模拟试算、版本与日志管理页签安排在后续阶段。原有操作日志入口沿用。字段类型及合法值仍作为规则编辑的输入约束。</div>
     <h3>四、列表与字段</h3><p>规则名称标识业务策略。适用业务限定业务线。命中规则展示业务条件摘要。调用产品数量可点击查看。<strong class="prd-important">优先级1—999，数值小的先匹配</strong>。状态控制是否参与订单匹配。更新时间记录最近保存时间。</p>
     <h3>五、操作与反馈</h3><ul><li>查询使用名称、业务及状态筛选，重置恢复列表。</li><li>新建或编辑打开原纵向表单，维护基础信息、判断规则和调用产品。</li><li>评分机制进入统一配置，适用于各条基座所调用的产品。</li><li>操作日志打开原风格弹窗，查询并展开本机变化记录。</li><li>停用规则后可删除，删除前确认。</li></ul>
@@ -540,8 +560,8 @@ const PHASE_PRD = {
     title:'风控报告 · 需求说明',
     body:`<h3>一、需求背景</h3><p>现有报告展示产品返回结论，审核人员需要进一步知道订单命中了哪些评分规则，以及总分由哪些产品分和附加分组成。</p>
     <h3>二、需求目标</h3><p>在原风控报告中补充可解释的评分明细，将规则名称、配置条件、订单取值、命中结果及实际计入分对应起来。</p>
-    <h3>三、位置与字段</h3><p>评分区位于<strong class="prd-important">基础信息之后、产品风控结论之前</strong>。标题旁显示订单命中的风控策略名称，右侧展示综合总分或当前暂定得分。</p><ul><li>评分规则名称取本单快照，附所属产品名称及厂商。复合规则显示标签。</li><li>判断条件显示字段、运算符、阈值或区间。复合条件附产品来源。</li><li>订单情况显示本次实际值和单位，空值显示—。</li><li>是否命中逐条件显示命中、未命中或无可用值。</li><li><strong class="prd-important">计入分属于整条规则，多条件规则的名称与分值合并展示一次</strong>。</li></ul>
-    <h3>四、列表与计分规则</h3><p><strong class="prd-important">命中、未命中及未参与规则在同一张表里展示</strong>，命中规则排在前面。未命中为0分。复合规则因必要产品未返回而未参与时显示—及原因。产品取最高未计入的命中规则为0分并说明。<strong class="prd-important">封顶扣减单列</strong>。</p><p>示例两条条件「在网时长≥24月」且「运营商=联通」均命中，整条规则计−3分。整条规则分值只计一次。综合总分为产品分之和加复合附加分。</p>
+    <h3>三、位置与字段</h3><p>评分区位于<strong class="prd-important">基础信息之后、产品风控结论之前</strong>。标题旁显示订单命中的风控策略名称，右侧展示综合总分或当前暂定得分。</p><ul><li><strong class="prd-important">产品名称独立一列</strong>，取本单产品快照的名称及厂商，不展示产品序号；同一产品多条规则合并单元格，仅显示一次。</li><li>评分规则名称取本单快照，不再附带重复的产品名；复合规则保留「复合规则」标签。</li><li>判断条件显示字段、运算符、阈值或区间。复合条件附各自产品来源。</li><li>订单情况显示本次实际值和单位，空值显示—。</li><li>是否命中逐条件显示命中、未命中或无可用值。</li><li><strong class="prd-important">计入分属于整条规则，多条件规则的名称与分值合并展示一次</strong>，未命中为0分。</li><li><strong class="prd-important">产品总分独立放在最右侧</strong>，同一产品只展示一次，取该产品按求和或取最高聚合、再执行封顶后的实际得分。支持负分，无命中为0分。</li></ul>
+    <h3>四、列表与计分规则</h3><p><strong class="prd-important">命中、未命中及未参与规则仍在同一张表里展示</strong>，同一产品的规则连续排列。含命中规则的产品优先，产品内命中规则在前，其余保持原顺序。产品名称和产品总分跨该产品全部规则及条件行合并，不逐规则重复计入。</p><p>产品取最高时，被排除的命中规则计入分为0并说明原因。<strong class="prd-important">封顶扣减在对应产品内单列</strong>，该产品各规则计入分加封顶调整等于产品总分。</p><p><strong class="prd-important">复合规则不归属某个单独产品</strong>，产品名称列合并显示「跨产品复合加权」，条件仍展示各自来源。产品总分列显示—，附加分只计入底部「复合附加分」，不得重复加入产品总分。必要产品未返回时复合规则的计入分显示—及未参与原因。</p><p>例，同一产品两条规则分别计5分、3分，求和时产品总分8分；取最高时为5分，另一条规则计入分0分；求和并封顶6分时，展示封顶调整−2分，产品总分6分。两条条件「在网时长≥24月」且「运营商=联通」均命中时，整条规则只计−3分。</p><p class="prd-formula"><strong class="prd-important">订单总分＝各产品总分之和＋复合附加分。</strong>示例各产品总分合计7分，复合附加4分，订单总分11分。</p>
     <h3>五、数据更新与状态</h3><p>更新有效产品数据后，<strong class="prd-important">全量重新计算基础分、复合分及总分</strong>，记录变化原因和分差。<strong class="prd-important">必要数据未完成时展示暂定得分</strong>。无数据时按该状态展示，<strong class="prd-important">不能用0代替实际原值</strong>。</p>
     <h3>六、原型操作</h3><p>切换示例订单可查看命中、数据更新后及等待返回场景。「按当前配置生成报告」以当前生效评分和匹配到的风控策略建立新订单。产品区「更新数据」打开模拟回调表单，保存后刷新报告和操作日志。已建立订单保留评分快照。</p>
     <h3>七、正式接入边界</h3><p>当前使用脱敏模拟数据。正式更新来自第三方回调或可信内部数据，字段权限沿用现有系统。报告展示调整独立于计分。分值与现有等级口径在上线前确认。</p>
