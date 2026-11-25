@@ -33,7 +33,7 @@
 .rs-footer{display:flex;gap:8px 24px;flex-wrap:wrap;padding:12px 18px;background:#fafbfc;justify-content:flex-end;border-top:1px solid var(--rs-line)}
 .rs-footer span{color:var(--rs-muted)}.rs-footer b{color:#293930;margin-left:4px}
 .rs-table-wrap{overflow:auto}.rs-table{border-collapse:collapse;table-layout:fixed;width:100%;min-width:840px;font-size:inherit}
-.rs-product-col{width:16%}.rs-rule-col{width:20%}.rs-condition-col{width:23%}.rs-order-col{width:12%}.rs-hit-col{width:9%}.rs-score-col,.rs-product-total-col{width:10%}
+.rs-product-col{width:18%}.rs-rule-col{width:18%}.rs-condition-col{width:21%}.rs-order-col{width:10%}.rs-hit-col{width:9%}.rs-score-col{width:10%}.rs-product-total-col{width:14%}
 .rs-table thead{background:#f3f5f7}.rs-table th,.rs-table td{padding:0 13px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
 .rs-table thead th,.rs-table tbody tr:first-child>*{padding-top:10px}
 .rs-table thead th,.rs-table tbody tr:last-child>*,.rs-table tbody [rowspan]{padding-bottom:10px}
@@ -45,6 +45,9 @@
 .rs-table .rs-rule-name{padding-bottom:10px}.rs-table .rs-cap-adjustment>*{padding-bottom:10px}
 .rs-table thead th:nth-last-child(-n+2){white-space:nowrap;text-align:right}
 .rs-table td small,.rs-table th small{display:block;color:var(--rs-muted);font-size:11px;font-weight:400;white-space:normal;margin-top:3px}
+.rs-product-heading{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px}.rs-product-heading .rs-label{margin:0}
+.rs-table .rs-aggregation{margin-top:9px;line-height:1.7}.rs-aggregation b{font-weight:600}
+.rs-score-formula{line-height:1.65}.rs-product-total>strong{color:#30343a}
 .rs-condition-status{color:var(--rs-muted)}.rs-condition-status.rs-hit{color:var(--rs-green);font-weight:650}.rs-table .rs-relation{padding-block:3px;font-size:11px;color:#626d78}.rs-nested{border-left:2px solid var(--rs-line);padding-left:9px}
 .rs-label{display:inline-block;border-radius:4px;font-size:11px;margin:3px 0 0 5px;padding:1px 5px;color:#405e99;background:#edf2fd;white-space:nowrap}.rs-label.rs-veto{color:#993a32;background:#fff0eb}
 .rs-empty,.rs-notice{margin:0;padding:13px 18px;color:var(--rs-muted)}.rs-notice{color:#80531b;background:#fff8ea}
@@ -268,7 +271,6 @@ if(a==='showOrderReport'){const o=activeOrder();modal('订单风控报告 · '+o
     const conditions = conditionRows(row);
     const span = ' rowspan="' + conditions.length + '"';
     const name = '<th scope="row" class="rs-rule-name"' + span + '><strong>' + escapeHtml(row.name) + '</strong>' +
-      (row.compound ? '<span class="rs-label">复合规则</span>' : '') +
       (row.veto ? '<span class="rs-label rs-veto">一票否决</span>' : '') + '</th>';
     const score = '<td class="rs-points"' + span + '>' +
       (row.contribution === null ? '—' : points(row.contribution)) +
@@ -280,15 +282,33 @@ if(a==='showOrderReport'){const o=activeOrder();modal('订单风控报告 · '+o
     ).join('');
   }
 
+  function productScoreExplanation(product) {
+    const hit = product.rows.filter(rule => rule.enabled && rule.hit);
+    let formula = '无命中规则';
+    let candidates = '';
+    if (hit.length) {
+      const scores = hit.map(rule => rule.score < 0 ? '(' + rule.score + ')' : String(rule.score));
+      formula = product.mode === 'max'
+        ? '取最高：' + product.before + ' 分'
+        : scores.join(' ＋ ') + ' ＝ ' + product.before;
+      if (product.mode === 'max') candidates = '<small>命中分：' + escapeHtml(scores.join('、')) + '</small>';
+    }
+    return candidates + '<small class="rs-score-formula">' + escapeHtml(formula) + '</small>' +
+      (product.cap !== null && product.cap !== undefined ? '<small>封顶 ' + escapeHtml(product.cap) +
+        ' 分' + (product.before !== product.score ? '，已截取' : '，未触发') + '</small>' : '');
+  }
+
   function renderGroup(group, productNames, fields) {
     const adjustment = group.product && group.product.before !== group.product.score;
     const count = group.rows.reduce((total, row) => total + conditionRows(row).length, 0) + (adjustment ? 1 : 0);
     const span = ' rowspan="' + count + '"';
-    const productCell = '<th scope="rowgroup" class="rs-product-name"' + span + '><strong>' +
-      escapeHtml(group.name) + '</strong></th>';
+    const productCell = '<th scope="rowgroup" class="rs-product-name"' + span + '><div class="rs-product-heading"><strong>' +
+      escapeHtml(group.name) + '</strong>' + (!group.product ? '<span class="rs-label">复合规则</span>' : '') +
+      '</div>' + (group.product ? '<small class="rs-aggregation">计分方式<br><b>' +
+        (group.product.mode === 'max' ? '命中规则取最高' : '命中规则求和') + '</b></small>' : '') + '</th>';
     const totalCell = '<td class="rs-product-total"' + span + '>' +
       (group.product ? '<strong>' + points(group.product.score) + '</strong>' +
-        (adjustment ? '<small>封顶后得分</small>' : '') :
+        productScoreExplanation(group.product) :
         '—<small>附加分单独汇总</small>') + '</td>';
     return '<tbody data-score-group="' + escapeHtml(group.id) + '">' + group.rows.map((row, index) =>
       renderRuleRows(row, productNames, fields, index === 0 ? productCell : '', index === 0 ? totalCell : '')
@@ -560,10 +580,10 @@ const PHASE_PRD = {
     title:'风控报告 · 需求说明',
     body:`<h3>一、需求背景</h3><p>现有报告展示产品返回结论，审核人员需要进一步知道订单命中了哪些评分规则，以及总分由哪些产品分和附加分组成。</p>
     <h3>二、需求目标</h3><p>在原风控报告中补充可解释的评分明细，将规则名称、配置条件、订单取值、命中结果及实际计入分对应起来。</p>
-    <h3>三、位置与字段</h3><p>评分区位于<strong class="prd-important">基础信息之后、产品风控结论之前</strong>。标题旁显示订单命中的风控策略名称，右侧展示综合总分或当前暂定得分。</p><ul><li><strong class="prd-important">产品名称独立一列</strong>，取本单产品快照的名称及厂商，不展示产品序号；同一产品多条规则合并单元格，仅显示一次。</li><li>评分规则名称取本单快照，不再附带重复的产品名；复合规则保留「复合规则」标签。</li><li>判断条件显示字段、运算符、阈值或区间。复合条件附各自产品来源。</li><li>订单情况显示本次实际值和单位，空值显示—。</li><li>是否命中逐条件显示命中、未命中或无可用值。</li><li><strong class="prd-important">计入分属于整条规则，多条件规则的名称与分值合并展示一次</strong>，未命中为0分。</li><li><strong class="prd-important">产品总分独立放在最右侧</strong>，同一产品只展示一次，取该产品按求和或取最高聚合、再执行封顶后的实际得分。支持负分，无命中为0分。</li></ul>
+    <h3>三、位置与字段</h3><p>评分区位于<strong class="prd-important">基础信息之后、产品风控结论之前</strong>。标题旁显示订单命中的风控策略名称，右侧展示综合总分或当前暂定得分。</p><ul><li><strong class="prd-important">产品名称独立一列</strong>，取本单产品快照的名称及厂商，不展示产品序号；同一产品多条规则合并单元格，仅显示一次。名称下展示本单快照中的<strong class="prd-important">计分方式：命中规则求和或命中规则取最高</strong>。</li><li>评分规则名称取本单快照，不再附带重复的产品名；<strong class="prd-important">「复合规则」标签移至产品名称列的「跨产品复合加权」旁，仅标一次</strong>。</li><li>判断条件显示字段、运算符、阈值或区间。复合条件附各自产品来源。</li><li>订单情况显示本次实际值和单位，空值显示—。</li><li>是否命中逐条件显示命中、未命中或无可用值。</li><li><strong class="prd-important">计入分属于整条规则，多条件规则的名称与分值合并展示一次</strong>，未命中为0分。取最高时，其余命中规则显示0分及未计入原因。</li><li><strong class="prd-important">产品总分独立放在最右侧</strong>，同一产品只展示一次，取该产品按配置聚合、再执行封顶后的实际得分。分数下展示本次计算过程；有封顶时显示封顶值及是否触发。支持负分，无命中为0分并说明无命中规则。</li></ul>
     <h3>四、列表与计分规则</h3><p><strong class="prd-important">命中、未命中及未参与规则仍在同一张表里展示</strong>，同一产品的规则连续排列。含命中规则的产品优先，产品内命中规则在前，其余保持原顺序。产品名称和产品总分跨该产品全部规则及条件行合并，不逐规则重复计入。</p><p>产品取最高时，被排除的命中规则计入分为0并说明原因。<strong class="prd-important">封顶扣减在对应产品内单列</strong>，该产品各规则计入分加封顶调整等于产品总分。</p><p><strong class="prd-important">复合规则不归属某个单独产品</strong>，产品名称列合并显示「跨产品复合加权」，条件仍展示各自来源。产品总分列显示—，附加分只计入底部「复合附加分」，不得重复加入产品总分。必要产品未返回时复合规则的计入分显示—及未参与原因。</p><p>例，同一产品两条规则分别计5分、3分，求和时产品总分8分；取最高时为5分，另一条规则计入分0分；求和并封顶6分时，展示封顶调整−2分，产品总分6分。两条条件「在网时长≥24月」且「运营商=联通」均命中时，整条规则只计−3分。</p><p class="prd-formula"><strong class="prd-important">订单总分＝各产品总分之和＋复合附加分。</strong>示例各产品总分合计7分，复合附加4分，订单总分11分。</p>
     <h3>五、数据更新与状态</h3><p>更新有效产品数据后，<strong class="prd-important">全量重新计算基础分、复合分及总分</strong>，记录变化原因和分差。<strong class="prd-important">必要数据未完成时展示暂定得分</strong>。无数据时按该状态展示，<strong class="prd-important">不能用0代替实际原值</strong>。</p>
-    <h3>六、原型操作</h3><p>切换示例订单可查看命中、数据更新后及等待返回场景。「按当前配置生成报告」以当前生效评分和匹配到的风控策略建立新订单。产品区「更新数据」打开模拟回调表单，保存后刷新报告和操作日志。已建立订单保留评分快照。</p>
+    <h3>六、原型操作</h3><p>切换示例订单可查看命中、数据更新后及等待返回场景。新增三个计分对比订单：DEMO-SUM展示同产品5分与3分求和得8分，DEMO-MAX展示取最高得5分，DEMO-CAP展示求和8分后封顶得6分。对比订单各自使用演示快照，<strong class="prd-important">不修改当前生效评分配置</strong>。</p><p>「按当前配置生成报告」以当前生效评分和匹配到的风控策略建立新订单。产品区「更新数据」打开模拟回调表单，保存后刷新报告和操作日志。已建立订单保留评分快照。</p>
     <h3>七、正式接入边界</h3><p>当前使用脱敏模拟数据。正式更新来自第三方回调或可信内部数据，字段权限沿用现有系统。报告展示调整独立于计分。分值与现有等级口径在上线前确认。</p>
     <h3>八、验收</h3><p>多条件逐行对齐。总分能从明细复核。失败或等待状态可识别。更新后的规则依据、得分和报告修订一致。后台配置与报告集中在同一HTML里。</p>`
   }
@@ -961,6 +981,21 @@ function exampleResponses(mode) {
   ]));
 }
 
+function aggregationExampleConfig(mode, cap = null) {
+  const scoring = seed();
+  scoring.products.forEach(p => p.rules.forEach(r => { r.note = meaningfulRuleNote(r.note); }));
+  scoring.compounds.forEach(r => { r.note = meaningfulRuleNote(r.note); });
+  const network = scoring.products.find(p => p.id === 'p03').rules[0];
+  network.name = '联通号码在网满 24 个月';
+  network.conditions = tree(condition('f006','≥',24), condition('f007','=','联通'));
+  const product = scoring.products.find(p => p.id === 'p02');
+  product.mode = mode;
+  product.cap = cap;
+  product.rules.push({id:'R009',name:'年龄小于30岁（计分演示）',product:'p02',score:3,note:'',enabled:true,veto:false,
+    conditions:tree(condition('f005','<',30))});
+  return scoring;
+}
+
 function preparePhaseExamples() {
   const global = store.bases[GLOBAL_SCORE_ID];
   if (!store.phaseOneInitialized) {
@@ -995,6 +1030,24 @@ function preparePhaseExamples() {
     global.logs.unshift({stamp:Date.now(),time:new Date().toLocaleString('sv-SE'),actor:'系统',
       module:'评分机制',action:'原型初始化',baseName:'统一产品评分机制',detail:'加载示例配置与脱敏订单，用于评审',
       changes:['已载入基础规则与复合规则示例']});
+    persist();
+  }
+  if (!store.phaseAggregationExamplesInitialized) {
+    const base = {...store.bases.b2,id:'b2',live:cp(store.bases.b2.live || store.bases.b2.draft)};
+    base.live.called = ['p01','p02','p03','p09'];
+    base.live.baseInfo.name = '产品计分方式演示策略';
+    for (const [id,mode,cap,label] of [
+      ['DEMO-SUM','sum',null,'计分演示 · 求和 5＋3＝8'],
+      ['DEMO-MAX','max',null,'计分演示 · 取最高 5'],
+      ['DEMO-CAP','sum',6,'计分演示 · 求和8分后封顶6分']
+    ]) {
+      if (store.orders.some(o => o.id === id)) continue;
+      const o = newReportOrder(id,aggregationExampleConfig(mode,cap),exampleResponses('matched'),base);
+      o.exampleLabel = label;
+      store.orders.push(o);
+      recalcOrder(o,'产品计分方式演示初始化');
+    }
+    store.phaseAggregationExamplesInitialized = true;
     persist();
   }
   selectedOrder = store.orders[0]?.id || null;
